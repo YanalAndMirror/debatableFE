@@ -16,16 +16,16 @@ export default function CardItem({ title }) {
           <p>
             <div class="card-actions">
               <button class="btn btn-outline btn-sm">
-                <AiOutlineEye /> 200
+                <AiOutlineEye className="mr-1" /> 200
               </button>
               <button class="btn btn-outline btn-sm">
-                <FaRegComments /> 64
+                <FaRegComments className="mr-1" /> 64
               </button>
               <button class="btn btn-outline btn-sm">
-                <BsPeople /> 15
+                <BsPeople className="mr-1" /> 15
               </button>
               <button class="btn btn-outline btn-sm">
-                <BsArrowUpDown /> 36
+                <BsArrowUpDown className="mr-1" /> 36
               </button>
             </div>
           </p>
