@@ -4,21 +4,21 @@ import CardList from './CardList';
 export default function Body() {
   return (
     <>
-      <div class="md:container md:mx-auto">
-        <div class="tabs ">
-          <a class="tab tab-bordered">Featured</a>
-          <a class="tab tab-bordered tab-active">Popular</a>
-          <a class="tab tab-bordered">New</a>
+      <div className="md:container md:mx-auto ">
+        <div className="tabs ml-32">
+          <a className="tab tab-bordered">Featured</a>
+          <a className="tab tab-bordered tab-active">Popular</a>
+          <a className="tab tab-bordered">New</a>
         </div>
         <CardList />
       </div>
-      <div class="btn-group justify-center">
-        <button class="btn">Previous</button>
-        <button class="btn">1</button>
-        <button class="btn btn-active">2</button>
-        <button class="btn">3</button>
-        <button class="btn">4</button>
-        <button class="btn">Next</button>
+      <div className="btn-group justify-center">
+        <button className="btn">Previous</button>
+        <button className="btn">1</button>
+        <button className="btn btn-active">2</button>
+        <button className="btn">3</button>
+        <button className="btn">4</button>
+        <button className="btn">Next</button>
       </div>
     </>
   );

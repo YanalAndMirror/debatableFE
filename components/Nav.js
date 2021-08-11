@@ -39,11 +39,11 @@ export default function Nav() {
           </button>
         </div>
         <div className="flex-none">
-          <div class="dropdown dropdown-end">
+          <div className="dropdown dropdown-end">
             <div tabindex="0">
               <button className="btn btn-square btn-ghost">
-                <div class="indicator">
-                  <div class="indicator-item badge badge-secondary badge-xs"></div>
+                <div className="indicator">
+                  <div className="indicator-item badge badge-secondary badge-xs"></div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -62,7 +62,7 @@ export default function Nav() {
             </div>
             <ul
               tabindex="0"
-              class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 text-black"
+              className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 text-black"
             >
               <li>
                 <a>Item 1</a>

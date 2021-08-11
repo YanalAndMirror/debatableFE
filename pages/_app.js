@@ -1,5 +1,4 @@
 import 'tailwindcss/tailwind.css';
-import Header from '../components/Header';
 import Nav from '../components/Nav';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 const client = new ApolloClient({
