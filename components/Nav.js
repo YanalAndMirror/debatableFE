@@ -40,7 +40,7 @@ export default function Nav() {
         </div>
         <div className="flex-none">
           <div className="dropdown dropdown-end">
-            <div tabindex="0">
+            <div tabIndex="0">
               <button className="btn btn-square btn-ghost">
                 <div className="indicator">
                   <div className="indicator-item badge badge-secondary badge-xs"></div>
@@ -61,7 +61,7 @@ export default function Nav() {
               </button>
             </div>
             <ul
-              tabindex="0"
+              tabIndex="0"
               className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 text-black"
             >
               <li>
