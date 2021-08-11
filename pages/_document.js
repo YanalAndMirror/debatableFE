@@ -1,4 +1,4 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document';
+import Document, { Head, Html, Main, NextScript } from "next/document";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -10,7 +10,8 @@ class MyDocument extends Document {
     return (
       <Html data-theme="light">
         <Head />
-        <body style={{ backgroundColor: '#fafcfd' }}>
+        {/* @octowl: Can't this be done in tailwind directly? */}
+        <body style={{ backgroundColor: "#fafcfd" }}>
           <Main />
           <NextScript />
         </body>
