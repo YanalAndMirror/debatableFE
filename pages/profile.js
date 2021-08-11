@@ -1,7 +1,6 @@
 import React from 'react';
-import { GrEdit } from 'react-icons/gr';
-import UserActivitys from '../components/UserActivitys';
-import UserStats from '../components/UserStats';
+import UserActivitys from '../components/UserProfile/UserActivitys';
+import UserStats from '../components/UserProfile/UserStats';
 
 export default function profile() {
   return (
