@@ -1,5 +1,7 @@
 import React from 'react';
 import { GrEdit } from 'react-icons/gr';
+import UserActivitys from '../components/UserActivitys';
+import UserStats from '../components/UserStats';
 
 export default function profile() {
   return (
@@ -15,35 +17,13 @@ export default function profile() {
         <div className="card-body">
           <h2 className="card-title">Joe Doe</h2>
           <p>
-            <div className="w-full shadow stats">
-              <div className="stat place-items-center place-content-center">
-                <div className="stat-title">Debates</div>
-                <div className="stat-value">31</div>
-              </div>
-              <div className="stat place-items-center place-content-center">
-                <div className="stat-title">Argues</div>
-                <div className="stat-value text-success">42</div>
-              </div>
-              <div className="stat place-items-center place-content-center">
-                <div className="stat-title">Votes</div>
-                <div className="stat-value text-error">120</div>
-              </div>
-            </div>
+            <UserStats />
           </p>
         </div>
         <div className="justify-center card-actions rounded-none">
           <button className="btn btn-outline rounded-none">Edit Profile</button>
         </div>
-        <center>
-          Activity
-          <ul className="menu  py-3 bg-base-100 rounded-box ">
-            <li>
-              <a>
-                <GrEdit /> - You posted an argue on : does god exist
-              </a>
-            </li>
-          </ul>
-        </center>
+        <UserActivitys />
       </div>
     </>
   );

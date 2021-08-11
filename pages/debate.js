@@ -1,5 +1,6 @@
 import { FaRegComments } from 'react-icons/fa';
 import { AiFillPlusSquare } from 'react-icons/ai';
+import VotingBar from '../components/VotingBar';
 export default function Debate() {
   return (
     <>
@@ -9,11 +10,7 @@ export default function Debate() {
             <div className="card-actions float-right">
               <FaRegComments /> 64
             </div>
-            <progress
-              className="progress progress-success w-1/6"
-              value="70"
-              max="100"
-            ></progress>
+            <VotingBar />
             <h2 className="card-title">Do God Exist</h2>
             <p>Rerum reiciendis beatae tenetur excepturi</p>
           </div>
