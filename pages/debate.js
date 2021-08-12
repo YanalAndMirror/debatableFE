@@ -1,7 +1,9 @@
 import { FaRegComments } from 'react-icons/fa';
-import { AiFillPlusSquare } from 'react-icons/ai';
-import VotingBar from '../components/VotingBar';
+import VotingBar from '../components/Debate/VotingBar';
+import ArgueModal from '../components/Debate/ArgueModal';
+import { useState } from 'react';
 export default function Debate() {
+  let [isOpen, setIsOpen] = useState(false);
   return (
     <>
       <div className="md:container md:mx-auto">
@@ -20,7 +22,7 @@ export default function Debate() {
                 <div className="justify-between flex">
                   <div>I Agree</div>
                   <div className="mr-2">
-                    <AiFillPlusSquare size="34px" />
+                    <ArgueModal agree="true" />
                   </div>
                 </div>
               </div>
@@ -29,7 +31,7 @@ export default function Debate() {
                 <div className="justify-between flex">
                   <div>I Disagree</div>
                   <div className="mr-2">
-                    <AiFillPlusSquare size="34px" />
+                    <ArgueModal agree="false" />
                   </div>
                 </div>
               </div>

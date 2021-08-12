@@ -1,15 +1,23 @@
 import React from 'react';
+import Link from 'next/link';
 export default function Nav() {
   return (
     <>
       <div className="navbar mb-2 shadow-lg bg-neutral text-neutral-content ">
         <div className="flex-none px-2 mx-2">
-          <span className="text-lg font-bold">Debatable</span>
+          <span className="text-lg font-bold">
+            {' '}
+            <Link href="/">Debatable </Link>
+          </span>
         </div>
         <div className="flex-1 px-2 mx-2">
           <div className="items-stretch hidden lg:flex">
-            <a className="btn btn-ghost btn-sm rounded-btn">Explore</a>
-            <a className="btn btn-ghost btn-sm rounded-btn">Create a debate</a>
+            <a className="btn btn-ghost btn-sm rounded-btn">
+              <Link href="/">Explore</Link>
+            </a>
+            <a className="btn btn-ghost btn-sm rounded-btn">
+              <Link href="/create">Create a debate</Link>
+            </a>
           </div>
         </div>
         <div className="flex-1 lg:flex-none">
@@ -77,9 +85,48 @@ export default function Nav() {
           </div>
         </div>
         <div className="flex-none">
-          <div className="avatar">
-            <div className="rounded-full w-10 h-10 m-1">
-              <img src="https://i.pravatar.cc/500?img=32" />
+          <div class="dropdown dropdown-end">
+            <div className="avatar">
+              <div className="rounded-full w-10 h-10 m-1">
+                <div tabindex="0">
+                  <img src="https://i.pravatar.cc/500?img=32" />
+                </div>
+                <ul
+                  tabindex="0"
+                  class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 text-black"
+                >
+                  <div class="form-control">
+                    <li>
+                      <label class="label">
+                        <span class="label-text">Username</span>
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="username"
+                        name="username"
+                        class="input input-bordered"
+                      />
+                    </li>
+                    <li>
+                      <label class="label">
+                        <span class="label-text">Password</span>
+                      </label>
+                      <input
+                        type="password"
+                        placeholder="password"
+                        name="password"
+                        class="input input-bordered"
+                      />
+                    </li>
+                    <li>
+                      <button className="btn mt-4">Sign in</button>
+                    </li>
+                    <li>
+                      <button className="btn mt-4">Sign up</button>
+                    </li>
+                  </div>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
