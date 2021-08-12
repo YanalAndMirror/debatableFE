@@ -1,12 +1,26 @@
-import { FaRegComments } from 'react-icons/fa';
-import VotingBar from '../components/Debate/VotingBar';
-import ArgueModal from '../components/Debate/ArgueModal';
-import { useState } from 'react';
+import { FaRegComments } from "react-icons/fa";
+import VotingBar from "../components/Debate/VotingBar";
+import ArgueModal from "../components/Debate/ArgueModal";
+import { useState } from "react";
+import { useQuery, gql } from "@apollo/client";
+
+const my_query = gql`
+  query {
+    user @client {
+      _id
+      username
+    }
+  }
+`;
 export default function Debate() {
   let [isOpen, setIsOpen] = useState(false);
+  const { loading, data } = useQuery(my_query);
+  if (data.user) console.log("logged in");
+  if (loading) return <>loading</>;
+  console.log(data);
   return (
     <>
-      <div className="md:container md:mx-auto">
+      <div className="md:container md:mx-auto bg-white">
         <div className="card shadow rounded-none">
           <div className="card-body">
             <div className="card-actions float-right">
@@ -27,7 +41,7 @@ export default function Debate() {
                 </div>
               </div>
               <div className="text-red-600 pl-4">
-                {' '}
+                {" "}
                 <div className="justify-between flex">
                   <div>I Disagree</div>
                   <div className="mr-2">
@@ -38,10 +52,10 @@ export default function Debate() {
             </div>
           </div>
         </div>
-        <table className="table w-full">
+        <table className="table w-full ">
           <tr>
-            <td>
-              <div className="card shadow rounded-none w-3/6">
+            <td style={{ padding: 0, borderRight: 0 }}>
+              <div className="card shadow rounded-none">
                 <div className="card-body">
                   <div className="card-actions float-right">
                     <FaRegComments /> 64
@@ -55,10 +69,8 @@ export default function Debate() {
                 </div>
               </div>
             </td>
-          </tr>
-          <tr>
-            <td>
-              <div className="card shadow rounded-none w-3/6 float-right">
+            <td style={{ padding: 0 }}>
+              <div className="card shadow rounded-none">
                 <div className="card-body">
                   <div className="card-actions">
                     <FaRegComments /> 64

@@ -1,12 +1,52 @@
-import React from 'react';
-import Link from 'next/link';
+import React, { useState } from "react";
+import Link from "next/link";
+import { useMutation, gql } from "@apollo/client";
+import { userVar } from "../providers/vars";
+const query = gql`
+  mutation signin($username: String!, $password: String!) {
+    signin(username: $username, password: $password) {
+      user {
+        _id
+        username
+        photo
+        email
+      }
+      token
+    }
+  }
+`;
 export default function Nav() {
+  const [signIn, { loading, data, error }] = useMutation(query);
+  const [input, setInput] = useState({ username: null, password: null });
+  const handelSubmit = (e) => {
+    e.preventDefault();
+    try {
+      console.log("login");
+      signIn({ variables: input });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  if (!loading && data && input.username) {
+    if (data.signin.token !== null) {
+      console.log(data.signin.token);
+      localStorage.setItem("token", data.signin.token);
+      userVar(data.signin.user);
+      setInput({ username: null, password: null });
+    } else {
+      //error
+    }
+  }
+  console.log(userVar());
+  const handelChange = (e) => {
+    setInput({ ...input, [e.target.name]: e.target.value });
+  };
   return (
     <>
       <div className="navbar mb-2 shadow-lg bg-neutral text-neutral-content ">
         <div className="flex-none px-2 mx-2">
           <span className="text-lg font-bold">
-            {' '}
+            {" "}
             <Link href="/">Debatable </Link>
           </span>
         </div>
@@ -14,6 +54,9 @@ export default function Nav() {
           <div className="items-stretch hidden lg:flex">
             <a className="btn btn-ghost btn-sm rounded-btn">
               <Link href="/">Explore</Link>
+            </a>
+            <a className="btn btn-ghost btn-sm rounded-btn">
+              <Link href="/debate">Debates</Link>
             </a>
             <a className="btn btn-ghost btn-sm rounded-btn">
               <Link href="/create">Create a debate</Link>
@@ -96,34 +139,40 @@ export default function Nav() {
                   class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 text-black"
                 >
                   <div class="form-control">
-                    <li>
-                      <label class="label">
-                        <span class="label-text">Username</span>
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="username"
-                        name="username"
-                        class="input input-bordered"
-                      />
-                    </li>
-                    <li>
-                      <label class="label">
-                        <span class="label-text">Password</span>
-                      </label>
-                      <input
-                        type="password"
-                        placeholder="password"
-                        name="password"
-                        class="input input-bordered"
-                      />
-                    </li>
-                    <li>
-                      <button className="btn mt-4">Sign in</button>
-                    </li>
-                    <li>
-                      <button className="btn mt-4">Sign up</button>
-                    </li>
+                    <form onSubmit={handelSubmit}>
+                      <li>
+                        <label class="label">
+                          <span class="label-text">Username</span>
+                        </label>
+                        <input
+                          value={input.username}
+                          type="text"
+                          placeholder="username"
+                          name="username"
+                          class="input input-bordered"
+                          onChange={handelChange}
+                        />
+                      </li>
+                      <li>
+                        <label class="label">
+                          <span class="label-text">Password</span>
+                        </label>
+                        <input
+                          value={input.password}
+                          type="password"
+                          placeholder="password"
+                          name="password"
+                          class="input input-bordered"
+                          onChange={handelChange}
+                        />
+                      </li>
+                      <li>
+                        <button className="btn mt-4">Sign in</button>
+                      </li>
+                      <li>
+                        <button className="btn mt-4">Sign up</button>
+                      </li>
+                    </form>
                   </div>
                 </ul>
               </div>
