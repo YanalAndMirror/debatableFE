@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Login from "./Login";
-import { userVar } from "../providers/vars";
+import { userVar } from "../providers/apollo/vars";
 import { useQuery, gql } from "@apollo/client";
-const getUser = gql`
-  query getUser {
-    user {
-      _id
-      username
-      email
-      photo
-    }
-  }
-`;
+import { getUser } from "../providers/apollo/queries";
+
 export default function Nav() {
-  const { loading, data } = useQuery(getUser);
+  const { data } = useQuery(getUser);
   useEffect(() => {
     if (data) userVar(data.user);
   }, [data]);

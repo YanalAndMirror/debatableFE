@@ -1,25 +1,15 @@
 import { FaRegComments } from "react-icons/fa";
 import VotingBar from "../components/Debate/VotingBar";
 import ArgueModal from "../components/Debate/ArgueModal";
-import { useState } from "react";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+import { currentUser } from "../providers/apollo/queries";
 
-const my_query = gql`
-  query {
-    currentUser @client {
-      _id
-      username
-    }
-  }
-`;
 export default function Debate() {
-  let [isOpen, setIsOpen] = useState(false);
-  const { loading, data } = useQuery(my_query);
-  if (loading) return <>loading</>;
-  console.log(data);
+  const { data } = useQuery(currentUser);
+  if (!data.currentUser) return <>loading</>;
   return (
     <>
-      {data?.currentUser ? data.currentUser.username : "NOT LOGGED IN"}
+      Hello {data?.currentUser ? data.currentUser.username : "NOT LOGGED IN"}
       <div className="md:container md:mx-auto bg-white">
         <div className="card shadow rounded-none">
           <div className="card-body">

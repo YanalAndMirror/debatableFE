@@ -1,19 +1,8 @@
 import React, { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
-import { userVar } from "../providers/vars";
-const USER_LOGIN = gql`
-  mutation signin($username: String!, $password: String!) {
-    signin(username: $username, password: $password) {
-      user {
-        _id
-        username
-        photo
-        email
-      }
-      token
-    }
-  }
-`;
+import { userVar } from "../providers/apollo/vars";
+import { USER_LOGIN } from "../providers/apollo/mutations";
+
 export default function Login() {
   const [signIn, { loading, data, error }] = useMutation(USER_LOGIN);
   const [input, setInput] = useState({ username: "", password: "" });
