@@ -1,46 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useMutation, gql } from "@apollo/client";
+import Login from "./Login";
 import { userVar } from "../providers/vars";
-const query = gql`
-  mutation signin($username: String!, $password: String!) {
-    signin(username: $username, password: $password) {
-      user {
-        _id
-        username
-        photo
-        email
-      }
-      token
+import { useQuery, gql } from "@apollo/client";
+const getUser = gql`
+  query getUser {
+    user {
+      _id
+      username
+      email
+      photo
     }
   }
 `;
 export default function Nav() {
-  const [signIn, { loading, data, error }] = useMutation(query);
-  const [input, setInput] = useState({ username: null, password: null });
-  const handelSubmit = (e) => {
-    e.preventDefault();
-    try {
-      console.log("login");
-      signIn({ variables: input });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  if (!loading && data && input.username) {
-    if (data.signin.token !== null) {
-      console.log(data.signin.token);
-      localStorage.setItem("token", data.signin.token);
-      userVar(data.signin.user);
-      setInput({ username: null, password: null });
-    } else {
-      //error
-    }
-  }
-  console.log(userVar());
-  const handelChange = (e) => {
-    setInput({ ...input, [e.target.name]: e.target.value });
-  };
+  const { loading, data } = useQuery(getUser);
+  useEffect(() => {
+    if (data) userVar(data.user);
+  }, [data]);
   return (
     <>
       <div className="navbar mb-2 shadow-lg bg-neutral text-neutral-content ">
@@ -139,40 +116,7 @@ export default function Nav() {
                   class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 text-black"
                 >
                   <div class="form-control">
-                    <form onSubmit={handelSubmit}>
-                      <li>
-                        <label class="label">
-                          <span class="label-text">Username</span>
-                        </label>
-                        <input
-                          value={input.username}
-                          type="text"
-                          placeholder="username"
-                          name="username"
-                          class="input input-bordered"
-                          onChange={handelChange}
-                        />
-                      </li>
-                      <li>
-                        <label class="label">
-                          <span class="label-text">Password</span>
-                        </label>
-                        <input
-                          value={input.password}
-                          type="password"
-                          placeholder="password"
-                          name="password"
-                          class="input input-bordered"
-                          onChange={handelChange}
-                        />
-                      </li>
-                      <li>
-                        <button className="btn mt-4">Sign in</button>
-                      </li>
-                      <li>
-                        <button className="btn mt-4">Sign up</button>
-                      </li>
-                    </form>
+                    <Login />
                   </div>
                 </ul>
               </div>

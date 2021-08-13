@@ -6,7 +6,7 @@ import { useQuery, gql } from "@apollo/client";
 
 const my_query = gql`
   query {
-    user @client {
+    currentUser @client {
       _id
       username
     }
@@ -15,11 +15,11 @@ const my_query = gql`
 export default function Debate() {
   let [isOpen, setIsOpen] = useState(false);
   const { loading, data } = useQuery(my_query);
-  if (data.user) console.log("logged in");
   if (loading) return <>loading</>;
   console.log(data);
   return (
     <>
+      {data?.currentUser ? data.currentUser.username : "NOT LOGGED IN"}
       <div className="md:container md:mx-auto bg-white">
         <div className="card shadow rounded-none">
           <div className="card-body">

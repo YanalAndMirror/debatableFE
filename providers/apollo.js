@@ -28,7 +28,7 @@ export default function Apollo({ children }) {
       typePolicies: {
         Query: {
           fields: {
-            user: {
+            currentUser: {
               read() {
                 return userVar();
               },
