@@ -21,15 +21,16 @@ export default function Nav() {
         </div>
         <div className="flex-1 px-2 mx-2">
           <div className="items-stretch hidden lg:flex">
-            <a className="btn btn-ghost btn-sm rounded-btn">
+            <span className="btn btn-ghost btn-sm rounded-btn">
               <Link href="/">Explore</Link>
-            </a>
-            <a className="btn btn-ghost btn-sm rounded-btn">
-              <Link href="/debate">Debates</Link>
-            </a>
-            <a className="btn btn-ghost btn-sm rounded-btn">
+            </span>
+
+            <span className="btn btn-ghost btn-sm rounded-btn">
               <Link href="/create">Create a debate</Link>
-            </a>
+            </span>
+            <span className="btn btn-ghost btn-sm rounded-btn">
+              <Link href="/debate">Debates</Link>
+            </span>
           </div>
         </div>
         <div className="flex-1 lg:flex-none">

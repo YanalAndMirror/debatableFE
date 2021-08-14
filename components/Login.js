@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import { userVar } from "../providers/apollo/vars";
 import { USER_LOGIN } from "../providers/apollo/mutations";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const [signIn, { loading, data, error }] = useMutation(USER_LOGIN);
@@ -18,7 +19,7 @@ export default function Login() {
   if (!loading && data && input.username) {
     if (data.signin.token !== null) {
       console.log(data.signin.token);
-      localStorage.setItem("token", data.signin.token);
+      Cookies.set("token", data.signin.token);
       userVar(data.signin.user);
       setInput({ username: null, password: null });
     } else {
