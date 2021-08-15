@@ -1,27 +1,44 @@
-import React, { useState } from 'react';
-import DropzoneUtil from '../components/utils/Dropzone';
-import { CREATE_DEBATE } from '../providers/apollo/mutations';
-import { useMutation, gql, useQuery } from '@apollo/client';
-import { currentUser } from '../providers/apollo/queries';
-import { useRouter } from 'next/router';
+import React, { useState } from "react";
+import DropzoneUtil from "../components/utils/Dropzone";
+import { CREATE_DEBATE } from "../providers/apollo/mutations";
+import { useMutation, gql, useQuery } from "@apollo/client";
+import { currentUser, getDebates, getUser } from "../providers/apollo/queries";
+import { useRouter } from "next/router";
+import axios from "axios";
 export default function create() {
   const router = useRouter();
-  const [debate, setDebate] = useState({
-    photo: 'test',
-  });
+  const [debate, setDebate] = useState({ photo: null });
   const { data } = useQuery(currentUser);
 
-  const [createDebate, { loading, data2, error }] = useMutation(CREATE_DEBATE);
+  const [createDebate] = useMutation(CREATE_DEBATE);
 
   const handleChange = (event) => {
     setDebate({ ...debate, [event.target.name]: event.target.value });
   };
+  const uploadImage = async (e) => {
+    const formData = new FormData();
+    formData.append("file", e.target?.files[0]);
+    const res = await axios.post(`http://localhost:4000/uploadImage`, formData);
+    setDebate({ ...debate, photo: res.data });
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     try {
-      console.log('post');
-      createDebate({ variables: debate });
-      router.push('/');
+      createDebate({
+        variables: debate,
+        update: (cache, { data: { createDebate } }) => {
+          const data = cache.readQuery({
+            query: getDebates,
+          });
+          if (data) {
+            cache.writeQuery({
+              query: getDebates,
+              data: { debates: [...data.debates, createDebate] },
+            });
+          }
+        },
+      });
+      router.push("/");
     } catch (e) {
       console.log(e);
     }
@@ -49,7 +66,7 @@ export default function create() {
       </label>
       <textarea
         class="textarea h-24 textarea-bordered"
-        style={{ width: '100%' }}
+        style={{ width: "100%" }}
         placeholder="argue"
         onChange={handleChange}
         name="argue"
@@ -58,7 +75,11 @@ export default function create() {
         <span class="label-text">Image</span>
       </label>
 
-      <DropzoneUtil setDebate={setDebate} debate={debate} />
+      {debate.photo ? (
+        <img src={debate.photo} width="200px" />
+      ) : (
+        <input type="file" onChange={uploadImage} />
+      )}
       <br />
       {/* <div className="float-right bg-gray-50"> */}
       <button class="btn ml-2 mb-36 float-right">Cancel</button>

@@ -1,17 +1,41 @@
-import React, { useState } from 'react';
-import { useMutation, gql } from '@apollo/client';
-import { userVar } from '../providers/apollo/vars';
-import { USER_LOGIN } from '../providers/apollo/mutations';
-import { USER_SIGNUP } from '../providers/apollo/mutations';
+import React, { useState } from "react";
+import { useMutation, gql } from "@apollo/client";
+import { userVar } from "../providers/apollo/vars";
+import { USER_LOGIN } from "../providers/apollo/mutations";
+import { USER_SIGNUP } from "../providers/apollo/mutations";
 
-import Cookies from 'js-cookie';
-import { Tab } from '@headlessui/react';
+import Cookies from "js-cookie";
+import { Tab } from "@headlessui/react";
 
 export default function Login() {
-  const [signIn, { loading, data, error }] = useMutation(USER_LOGIN);
-  const [signup, { _loading, _data, _error }] = useMutation(USER_SIGNUP);
+  const [signIn] = useMutation(USER_LOGIN, {
+    onCompleted(data) {
+      console.log(data);
+      if (data.signin !== null) {
+        Cookies.set("token", data.signin.token);
+        userVar(data.signin.user);
+        setInput({ username: null, password: null });
+      } else {
+        alert("error");
+      }
+    },
+  });
 
-  const [input, setInput] = useState({ username: '', password: '' });
+  const [signup] = useMutation(USER_SIGNUP, {
+    onCompleted(data) {
+      console.log(data);
+
+      if (data.signup !== null) {
+        Cookies.set("token", data.signup.token);
+        userVar(data.signup.user);
+        setInput({ username: null, password: null });
+      } else {
+        alert("error");
+      }
+    },
+  });
+
+  const [input, setInput] = useState({ username: "", password: "" });
 
   const handelSignin = (e) => {
     e.preventDefault();
@@ -29,26 +53,6 @@ export default function Login() {
       console.log(e);
     }
   };
-  // we gonna change it pls ignore this part
-  if (!_loading && _data && input.username) {
-    if (_data.signup.token !== null) {
-      Cookies.set('token', _data.signup.token);
-      userVar(_data.signup.user);
-      setInput({ username: null, password: null });
-    } else {
-      //error
-    }
-  }
-
-  if (!loading && data && input.username) {
-    if (data.signin.token !== null) {
-      Cookies.set('token', data.signin.token);
-      userVar(data.signin.user);
-      setInput({ username: null, password: null });
-    } else {
-      //error
-    }
-  }
 
   const handelChangeSignin = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -63,14 +67,14 @@ export default function Login() {
         <Tab.List>
           <Tab
             className={({ selected }) =>
-              selected ? 'tab tab-bordered tab-active' : 'tab tab-bordered'
+              selected ? "tab tab-bordered tab-active" : "tab tab-bordered"
             }
           >
             Login
           </Tab>
           <Tab
             className={({ selected }) =>
-              selected ? 'tab tab-bordered tab-active' : 'tab tab-bordered'
+              selected ? "tab tab-bordered tab-active" : "tab tab-bordered"
             }
           >
             Signup
@@ -111,7 +115,7 @@ export default function Login() {
             </form>
           </Tab.Panel>
           <Tab.Panel>
-            {' '}
+            {" "}
             <form onSubmit={handelSignup}>
               <li>
                 <label class="label">

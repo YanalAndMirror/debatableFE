@@ -9,6 +9,7 @@
     "@apollo/client": "^3.4.6",
     "@headlessui/react": "^1.4.0",
     "apollo-link-error": "^1.1.13",
+    "axios": "^0.21.1",
     "daisyui": "^1.11.0",
     "graphql": "^15.5.1",
     "js-cookie": "^3.0.0",
