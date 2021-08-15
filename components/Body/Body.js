@@ -1,7 +1,7 @@
-import React from 'react';
-import CardList from './CardList';
+import React from "react";
+import CardList from "./CardList";
 
-export default function Body() {
+export default function Body({ debates }) {
   return (
     <>
       <div className="md:container md:mx-auto ">
@@ -10,7 +10,7 @@ export default function Body() {
           <a className="tab tab-bordered tab-active">Popular</a>
           <a className="tab tab-bordered">New</a>
         </div>
-        <CardList />
+        <CardList debates={debates} />
       </div>
       <div className="btn-group justify-center">
         <button className="btn">Previous</button>

@@ -17,3 +17,14 @@ export const getUser = gql`
     }
   }
 `;
+export const getDebates = gql`
+  query getDebates {
+    debates {
+      title
+      id
+      photo
+      ArguesCount
+      createdAt
+    }
+  }
+`;

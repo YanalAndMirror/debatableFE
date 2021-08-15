@@ -2,11 +2,13 @@ import { FaRegComments } from "react-icons/fa";
 import VotingBar from "../components/Debate/VotingBar";
 import ArgueModal from "../components/Debate/ArgueModal";
 import { useQuery } from "@apollo/client";
-import { currentUser } from "../providers/apollo/queries";
+import { currentUser, getDebates, getUser } from "../providers/apollo/queries";
+import client from "../providers/apollo/client";
 
-export default function Debate() {
+export default function Debate({ debates }) {
   const { data } = useQuery(currentUser);
   if (!data.currentUser) return <>loading</>;
+  console.log(debates);
   return (
     <>
       Hello {data?.currentUser ? data.currentUser.username : "NOT LOGGED IN"}
@@ -79,4 +81,15 @@ export default function Debate() {
       </div>
     </>
   );
+}
+export async function getServerSideProps() {
+  const { data } = await client.query({
+    query: getDebates,
+  });
+
+  return {
+    props: {
+      debates: data.debates,
+    },
+  };
 }

@@ -13,3 +13,13 @@ export const USER_LOGIN = gql`
     }
   }
 `;
+export const CREATE_DEBATE = gql`
+  mutation createDebate($createDebateDebate: DebateCreateInput!) {
+    createDebate(debate: $createDebateDebate) {
+      id
+      title
+      photo
+      createdAt
+    }
+  }
+`;
