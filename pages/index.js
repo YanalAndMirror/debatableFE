@@ -1,7 +1,7 @@
-import Body from "../components/Body/Body";
-import Header from "../components/Header";
-import client from "../providers/apollo/client";
-import { getDebates } from "../providers/apollo/queries";
+import Body from '../components/Body/Body';
+import Header from '../components/Header';
+import client from '../providers/apollo/client';
+import { getDebates } from '../providers/apollo/queries';
 
 export default function Home({ debates }) {
   return (

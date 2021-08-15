@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 export const currentUser = gql`
   query currentUser {
     currentUser @client {
@@ -23,7 +23,7 @@ export const getDebates = gql`
       title
       id
       photo
-      ArguesCount
+      # ArguesCount
       createdAt
     }
   }
