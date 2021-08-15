@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import Login from "./Login";
-import { userVar } from "../providers/apollo/vars";
-import { useQuery, gql } from "@apollo/client";
-import { getUser } from "../providers/apollo/queries";
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Login from './Login';
+import { userVar } from '../providers/apollo/vars';
+import { useQuery, gql } from '@apollo/client';
+import { getUser } from '../providers/apollo/queries';
 
 export default function Nav() {
   const { data } = useQuery(getUser);
@@ -15,7 +15,6 @@ export default function Nav() {
       <div className="navbar mb-2 shadow-lg bg-neutral text-neutral-content ">
         <div className="flex-none px-2 mx-2">
           <span className="text-lg font-bold">
-            {" "}
             <Link href="/">Debatable </Link>
           </span>
         </div>
