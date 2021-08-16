@@ -162,7 +162,7 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/prop-types@*":
+"@types/prop-types@*", "@types/prop-types@^15.7.3":
   version "15.7.4"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.4.tgz#fcf7205c25dff795ee79af1e30da2c9790808f11"
   integrity sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ==
@@ -2163,6 +2163,14 @@ react-is@^16.7.0, react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-lineto@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/react-lineto/-/react-lineto-3.2.1.tgz#df8092a1856728386e433613e310190f1e78e513"
+  integrity sha512-1M3EgOgHDhMwcTC+I9XR8pi56lESj2JnbZ8BCM7vTl46dSZA+2tkQXOpZ/I216uGUWd24zd75nBl2uMrfamCYA==
+  dependencies:
+    prop-types "15.7.2"
+    react "17.0.2"
+
 react-rating@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/react-rating/-/react-rating-2.0.5.tgz#2c9d7ebe5907db0361ba28b7c19f0394e6e4dd76"
@@ -2183,7 +2191,16 @@ react-toastify@^7.0.4:
   dependencies:
     clsx "^1.1.1"
 
-react@^17.0.2:
+react-xarrows@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-xarrows/-/react-xarrows-2.0.1.tgz#b1d372e468e59467988e03fa5aed9eafbc30a9f7"
+  integrity sha512-KhTXbd3PQvRL5mDns6ERx1aJkzD+CIugXOjoVdOHq9LvyrUNYxlygIZHsixxJBhR5ckOdjnn7uyDunMPXXvERQ==
+  dependencies:
+    "@types/prop-types" "^15.7.3"
+    lodash "^4.17.21"
+    prop-types "^15.7.2"
+
+react@17.0.2, react@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
   integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==

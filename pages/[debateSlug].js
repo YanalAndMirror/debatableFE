@@ -7,7 +7,9 @@ import { getDebate } from "../providers/apollo/queries";
 import { useEffect, useState } from "react";
 import { CREATE_ARGUE, VOTE_ARGUE } from "../providers/apollo/mutations";
 import FadeIn from "react-fade-in";
+import Pyramid from "../components/Pyramid";
 export default function Home() {
+  console.log("generate");
   const router = useRouter();
   const [content, setContent] = useState(null);
   const [input, setInput] = useState(null);
@@ -17,7 +19,7 @@ export default function Home() {
   });
   const [parent, setParent] = useState(path ?? null);
   useEffect(() => {
-    if (path && parent !== path) setParent(path);
+    if (parent != path) setParent(path);
   }, [path]);
 
   const [vote] = useMutation(VOTE_ARGUE);
@@ -64,6 +66,10 @@ export default function Home() {
     setInput(null);
     setContent(null);
   };
+  const changeParent = (argueId) => {
+    setParent(argueId);
+    if (argueId) router.push(debateSlug + "?path=" + argueId);
+  };
 
   let agreeArgues = data.debate.argues
     .filter(
@@ -71,13 +77,7 @@ export default function Home() {
     )
     .map((argue) => (
       <div className="card shadow rounded-none">
-        <div
-          onClick={() => {
-            setParent(argue._id);
-            router.push(debateSlug + "?path=" + argue._id);
-          }}
-          className="card-body"
-        >
+        <div onClick={() => changeParent(argue._id)} className="card-body">
           <div className="card-actions float-right">
             <BsArrowUpDown />
             {argue.votes.number > 0 &&
@@ -99,7 +99,7 @@ export default function Home() {
     )
     .map((argue) => (
       <div className="card shadow rounded-none">
-        <div onClick={() => setParent(argue._id)} className="card-body">
+        <div onClick={() => changeParent(argue._id)} className="card-body">
           <div className="card-actions float-right">
             <BsArrowUpDown />
             {argue.votes.number > 0 &&
@@ -114,8 +114,18 @@ export default function Home() {
         </div>
       </div>
     ));
+  console.log(
+    "w-full pr-16 input input-" +
+      (input === "agree" ? "success" : "error") +
+      " input-bordered"
+  );
   return (
     <>
+      <Pyramid
+        debate={data.debate}
+        parent={parent}
+        changeParent={changeParent}
+      />
       <div className="md:container md:mx-auto bg-white">
         <div className="card shadow rounded-none">
           <FadeIn>
@@ -173,17 +183,18 @@ export default function Home() {
                   type="text"
                   placeholder="Argue"
                   class={
-                    "w-full pr-16 input input-" +
-                    (input === "agree" ? "success" : "error") +
-                    " input-bordered"
+                    input === "agree"
+                      ? "w-full pr-16 input input-success  input-bordered"
+                      : "w-full pr-16 input input-error input-bordered"
                   }
                   onChange={(e) => setContent(e.target.value)}
                 />
                 <button
                   onClick={addArgue}
                   class={
-                    "absolute top-0 right-0 rounded-l-none btn btn-" +
-                    (input === "agree" ? "success" : "error")
+                    input === "agree"
+                      ? "absolute top-0 right-0 rounded-l-none btn btn-success"
+                      : "absolute top-0 right-0 rounded-l-none btn btn-error"
                   }
                 >
                   {input}
