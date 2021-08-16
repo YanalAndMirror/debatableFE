@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import Login from './Login';
-import { userVar } from '../providers/apollo/vars';
-import { useQuery } from '@apollo/client';
-import { currentUser, getUser } from '../providers/apollo/queries';
-import LoggedIn from './LoggedIn';
-import ThemeMenu from './ThemeMenu';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import Login from "./Login";
+import { userVar } from "../providers/apollo/vars";
+import { useQuery } from "@apollo/client";
+import { currentUser, getUser } from "../providers/apollo/queries";
+import LoggedIn from "./LoggedIn";
+import ThemeMenu from "./ThemeMenu";
 
 export default function Nav() {
   const { data } = useQuery(getUser);
+  const [theme, setTheme] = useState(null);
   const user = useQuery(currentUser).data.currentUser;
   useEffect(() => {
     if (data) userVar(data.user);
   }, [data]);
+
+  useEffect(() => {
+    document.body.dataset.theme = theme ?? localStorage?.getItem("theme");
+  }, [theme]);
   return (
     <>
       <div className="navbar mb-2 shadow-lg bg-neutral text-neutral-content ">
@@ -99,7 +104,7 @@ export default function Nav() {
             </ul>
           </div>
         </div>
-        <ThemeMenu />
+        <ThemeMenu setTheme={setTheme} />
         <div className="flex-none">
           <div class="dropdown dropdown-end">
             <div className="avatar">

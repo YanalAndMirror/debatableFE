@@ -1,26 +1,29 @@
-import { useMutation, useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
-import { BsArrowUpDown } from 'react-icons/bs';
-import VotingBar from '../components/Debate/VotingBar';
-import ArgueModal from '../components/Debate/ArgueModal';
-import { getDebate } from '../providers/apollo/queries';
-import { useState } from 'react';
-import { CREATE_ARGUE, VOTE_ARGUE } from '../providers/apollo/mutations';
-import FadeIn from 'react-fade-in';
+import { useMutation, useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
+import { BsArrowUpDown } from "react-icons/bs";
+import VotingBar from "../components/Debate/VotingBar";
+import ArgueModal from "../components/Debate/ArgueModal";
+import { getDebate } from "../providers/apollo/queries";
+import { useEffect, useState } from "react";
+import { CREATE_ARGUE, VOTE_ARGUE } from "../providers/apollo/mutations";
+import FadeIn from "react-fade-in";
 export default function Home() {
   const router = useRouter();
-  const [parent, setParent] = useState(null);
   const [content, setContent] = useState(null);
   const [input, setInput] = useState(null);
-  const { debateSlug } = router.query;
+  const { debateSlug, path } = router.query;
   const { loading, data } = useQuery(getDebate, {
     variables: { slug: debateSlug },
   });
+  const [parent, setParent] = useState(path ?? null);
+  useEffect(() => {
+    if (path && parent !== path) setParent(path);
+  }, [path]);
+
   const [vote] = useMutation(VOTE_ARGUE);
   const [createArgue] = useMutation(CREATE_ARGUE);
   if (loading) return <>loading</>;
   const doVote = (argue, value) => {
-    console.log('triggerd');
     vote({
       variables: { argue, value },
     });
@@ -45,7 +48,6 @@ export default function Home() {
           query: getDebate,
           variables: { slug: debateSlug },
         });
-        console.log(data);
         if (data) {
           cache.writeQuery({
             query: getDebate,
@@ -62,20 +64,27 @@ export default function Home() {
     setInput(null);
     setContent(null);
   };
+
   let agreeArgues = data.debate.argues
     .filter(
-      (argue) => argue.parent === mainArgue._id && argue.argueType === 'agree'
+      (argue) => argue.parent === mainArgue._id && argue.argueType === "agree"
     )
     .map((argue) => (
       <div className="card shadow rounded-none">
-        <div onClick={() => setParent(argue._id)} className="card-body">
+        <div
+          onClick={() => {
+            setParent(argue._id);
+            router.push(debateSlug + "?path=" + argue._id);
+          }}
+          className="card-body"
+        >
           <div className="card-actions float-right">
             <BsArrowUpDown />
             {argue.votes.number > 0 &&
               argue.votes.amount / argue.votes.number +
-                '/5 by ' +
+                "/5 by " +
                 argue.votes.number +
-                ' users'}
+                " users"}
           </div>
           <VotingBar argue={argue} doVote={doVote} color="green" />
 
@@ -86,7 +95,7 @@ export default function Home() {
   let disagreeArgues = data.debate.argues
     .filter(
       (argue) =>
-        argue.parent === mainArgue._id && argue.argueType === 'disagree'
+        argue.parent === mainArgue._id && argue.argueType === "disagree"
     )
     .map((argue) => (
       <div className="card shadow rounded-none">
@@ -95,9 +104,9 @@ export default function Home() {
             <BsArrowUpDown />
             {argue.votes.number > 0 &&
               argue.votes.amount / argue.votes.number +
-                '/5 by ' +
+                "/5 by " +
                 argue.votes.number +
-                ' users'}
+                " users"}
           </div>
           <VotingBar argue={argue} doVote={doVote} color="red" />
 
@@ -115,9 +124,9 @@ export default function Home() {
                 <BsArrowUpDown />
                 {mainArgue.votes.number > 0 &&
                   mainArgue.votes.amount / mainArgue.votes.number +
-                    '/5 by ' +
+                    "/5 by " +
                     mainArgue.votes.number +
-                    ' users'}
+                    " users"}
               </div>
               <VotingBar argue={mainArgue} color="green" doVote={doVote} />
 
@@ -130,7 +139,7 @@ export default function Home() {
               <div className="text-green-600 ">
                 <div className="justify-between flex">
                   <div
-                    onClick={() => setInput(input !== 'agree' ? 'agree' : null)}
+                    onClick={() => setInput(input !== "agree" ? "agree" : null)}
                   >
                     I Agree
                   </div>
@@ -140,11 +149,11 @@ export default function Home() {
                 </div>
               </div>
               <div className="text-red-600 pl-4">
-                {' '}
+                {" "}
                 <div className="justify-between flex">
                   <div
                     onClick={() =>
-                      setInput(input !== 'disagree' ? 'disagree' : null)
+                      setInput(input !== "disagree" ? "disagree" : null)
                     }
                   >
                     I Disagree
@@ -164,17 +173,17 @@ export default function Home() {
                   type="text"
                   placeholder="Argue"
                   class={
-                    'w-full pr-16 input input-' +
-                    (input === 'agree' ? 'success' : 'error') +
-                    ' input-bordered'
+                    "w-full pr-16 input input-" +
+                    (input === "agree" ? "success" : "error") +
+                    " input-bordered"
                   }
                   onChange={(e) => setContent(e.target.value)}
                 />
                 <button
                   onClick={addArgue}
                   class={
-                    'absolute top-0 right-0 rounded-l-none btn btn-' +
-                    (input === 'agree' ? 'success' : 'error')
+                    "absolute top-0 right-0 rounded-l-none btn btn-" +
+                    (input === "agree" ? "success" : "error")
                   }
                 >
                   {input}

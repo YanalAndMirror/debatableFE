@@ -1,8 +1,8 @@
-import React from 'react';
-import { RiBrush2Line } from 'react-icons/ri';
-import Cookies from 'js-cookie';
+import React from "react";
+import { RiBrush2Line } from "react-icons/ri";
+import Cookies from "js-cookie";
 
-export default function ThemeMenu() {
+export default function ThemeMenu({ setTheme }) {
   return (
     <>
       <div className="flex-none">
@@ -16,16 +16,18 @@ export default function ThemeMenu() {
             tabIndex="0"
             className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 text-black"
           >
-            <li>
+            <li
+              onClick={() => {
+                localStorage.setItem("theme", "light");
+                setTheme("light");
+              }}
+            >
               <a>Light</a>
             </li>
             <li
               onClick={() => {
-                console.log('theme');
-                if (typeof window !== 'undefined') {
-                  window.localStorage.setItem('theme', 'dark');
-                  console.log('here');
-                }
+                localStorage.setItem("theme", "dark");
+                setTheme("dark");
               }}
             >
               <a>Dark</a>
