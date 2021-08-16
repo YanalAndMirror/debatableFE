@@ -22,11 +22,13 @@ export const getUser = gql`
 export const getDebates = gql`
   query getDebates {
     debates {
-      title
       _id
+      title
       photo
-      arguesCount
       createdAt
+      argueCount
+      participants
+      argueVotes
       slug
     }
   }
