@@ -51,10 +51,32 @@ export const CREATE_DEBATE = gql`
 `;
 
 export const CREATE_ARGUE = gql`
-  mutation CreateArgueMutation($content: String!) {
-    createArgue(argue: { content: $content }) {
+  mutation CreateArgueMutation($argue: ArgueCreateInput!) {
+    createArgue(argue: $argue) {
+      _id
+      argueType
       content
-      id
+      parent
+      createdAt
+      votes {
+        number
+        amount
+      }
+    }
+  }
+`;
+export const VOTE_ARGUE = gql`
+  mutation VoteMutation($argue: String, $value: Int) {
+    vote(argue: $argue, value: $value) {
+      _id
+      argueType
+      content
+      createdAt
+      parent
+      votes {
+        number
+        amount
+      }
     }
   }
 `;

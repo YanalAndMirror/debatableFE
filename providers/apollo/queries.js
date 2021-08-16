@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 export const currentUser = gql`
   query currentUser {
     currentUser @client {
@@ -23,10 +23,33 @@ export const getDebates = gql`
   query getDebates {
     debates {
       title
-      id
+      _id
       photo
-      # ArguesCount
+      arguesCount
       createdAt
+      slug
+    }
+  }
+`;
+export const getDebate = gql`
+  query debate($slug: String!) {
+    debate(slug: $slug) {
+      title
+      createdAt
+      photo
+      slug
+      _id
+      argues {
+        _id
+        content
+        argueType
+        parent
+        createdAt
+        votes {
+          number
+          amount
+        }
+      }
     }
   }
 `;
