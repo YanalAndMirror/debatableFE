@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import DropzoneUtil from "../components/utils/Dropzone";
-import { CREATE_DEBATE } from "../providers/apollo/mutations";
-import { useMutation, gql, useQuery } from "@apollo/client";
-import { currentUser, getDebates, getUser } from "../providers/apollo/queries";
-import { useRouter } from "next/router";
-import axios from "axios";
+import React, { useState } from 'react';
+import DropzoneUtil from '../components/utils/Dropzone';
+import { CREATE_DEBATE } from '../providers/apollo/mutations';
+import { useMutation, gql, useQuery } from '@apollo/client';
+import { currentUser, getDebates, getUser } from '../providers/apollo/queries';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 export default function create() {
   const router = useRouter();
   const [debate, setDebate] = useState({ photo: null });
@@ -17,7 +17,7 @@ export default function create() {
   };
   const uploadImage = async (e) => {
     const formData = new FormData();
-    formData.append("file", e.target?.files[0]);
+    formData.append('file', e.target?.files[0]);
     const res = await axios.post(`http://localhost:4000/uploadImage`, formData);
     setDebate({ ...debate, photo: res.data });
   };
@@ -38,7 +38,7 @@ export default function create() {
           }
         },
       });
-      router.push("/");
+      router.push('/');
     } catch (e) {
       console.log(e);
     }
@@ -66,7 +66,7 @@ export default function create() {
       </label>
       <textarea
         class="textarea h-24 textarea-bordered"
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
         placeholder="argue"
         onChange={handleChange}
         name="argue"
@@ -76,16 +76,53 @@ export default function create() {
       </label>
 
       {debate.photo ? (
-        <img src={debate.photo} width="200px" />
+        <div class="m-6 indicator">
+          <div class="indicator-item">
+            <button
+              class="btn btn-circle btn-xs md:btn-xs lg:btn-xs xl:btn-xs"
+              onClick={() => setDebate({ ...debate, photo: null })}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="inline-block w-1 h-1 stroke-current md:w-6 md:h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="grid w-32 h-32 bg-base-300 place-items-center">
+            <img src={debate.photo} width="200px" />
+          </div>
+        </div>
       ) : (
-        <input type="file" onChange={uploadImage} />
+        <label>
+          <input
+            class="text-sm cursor-pointer w-36 hidden"
+            type="file"
+            onChange={uploadImage}
+          />
+          <div className="btn">Select</div>
+        </label>
       )}
       <br />
       {/* <div className="float-right bg-gray-50"> */}
-      <button class="btn ml-2 mb-36 float-right">Cancel</button>
-      <button class="btn btn-primary float-right" onClick={handleSubmit}>
-        Create Debate
-      </button>
+      <button class="btn btn-outline ml-2 mb-36 float-right">Cancel</button>
+      {!debate.title || !debate.argue || !debate.photo ? (
+        <button class="btn float-right btn-disabled" onClick="">
+          Create Debate
+        </button>
+      ) : (
+        <button class="btn float-right" onClick={handleSubmit}>
+          Create Debate
+        </button>
+      )}
 
       {/* </div> */}
     </div>

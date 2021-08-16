@@ -1,13 +1,25 @@
-import { ApolloProvider } from "@apollo/client";
-import "tailwindcss/tailwind.css";
-import client from "../providers/apollo/client.js";
-import Nav from "../components/Nav";
+import { ApolloProvider } from '@apollo/client';
+import 'tailwindcss/tailwind.css';
+import client from '../providers/apollo/client.js';
+import Nav from '../components/Nav';
+import { ToastContainer, toast } from 'react-toastify';
 
 function MyApp({ Component, pageProps }) {
   return (
     <ApolloProvider client={client}>
       <Nav />
       <Component {...pageProps} />
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </ApolloProvider>
   );
 }

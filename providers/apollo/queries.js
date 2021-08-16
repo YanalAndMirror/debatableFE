@@ -4,6 +4,8 @@ export const currentUser = gql`
     currentUser @client {
       _id
       username
+      photo
+      email
     }
   }
 `;
