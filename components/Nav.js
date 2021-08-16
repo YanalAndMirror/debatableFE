@@ -103,7 +103,7 @@ export default function Nav() {
         <div className="flex-none">
           <div class="dropdown dropdown-end">
             <div className="avatar">
-              <div className="rounded-full w-10 h-10 m-1">
+              <div className="rounded-full w-10 h-full m-1">
                 {user ? (
                   <div tabindex="0">
                     {user.photo ? (
@@ -122,9 +122,7 @@ export default function Nav() {
                   tabindex="0"
                   class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 text-black"
                 >
-                  <div class="form-control">
-                    {user ? <LoggedIn /> : <Login />}
-                  </div>
+                  {user ? <LoggedIn /> : <Login />}
                 </ul>
               </div>
             </div>
