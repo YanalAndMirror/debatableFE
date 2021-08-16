@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useMutation, gql, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { USER_UPDATE } from '../../providers/apollo/mutations';
 
 export default function UpdateModal({ user }) {

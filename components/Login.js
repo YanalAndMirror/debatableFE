@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { userVar } from '../providers/apollo/vars';
 import { USER_LOGIN } from '../providers/apollo/mutations';
 import { USER_SIGNUP } from '../providers/apollo/mutations';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
 import { Tab } from '@headlessui/react';

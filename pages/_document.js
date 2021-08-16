@@ -1,4 +1,5 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document';
+import Cookies from 'js-cookie';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -7,8 +8,13 @@ class MyDocument extends Document {
   }
 
   render() {
+    let theme;
+    if (typeof window !== 'undefined') {
+      theme = window.localStorage.getItem('theme');
+    }
+    console.log(theme);
     return (
-      <Html data-theme="light">
+      <Html data-theme={theme ? theme : 'light'}>
         <Head />
         <body className="bg-gray-50">
           <Main />

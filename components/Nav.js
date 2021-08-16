@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Login from './Login';
 import { userVar } from '../providers/apollo/vars';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { currentUser, getUser } from '../providers/apollo/queries';
 import LoggedIn from './LoggedIn';
+import ThemeMenu from './ThemeMenu';
 
 export default function Nav() {
   const { data } = useQuery(getUser);
@@ -98,6 +99,7 @@ export default function Nav() {
             </ul>
           </div>
         </div>
+        <ThemeMenu />
         <div className="flex-none">
           <div class="dropdown dropdown-end">
             <div className="avatar">

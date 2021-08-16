@@ -1,13 +1,12 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { useRouter } from "next/router";
-import { FaRegComments } from "react-icons/fa";
-import VotingBar from "../components/Debate/VotingBar";
-import ArgueModal from "../components/Debate/ArgueModal";
-import { getDebate, getDebates } from "../providers/apollo/queries";
-import { useState } from "react";
-import { CREATE_ARGUE, VOTE_ARGUE } from "../providers/apollo/mutations";
-import Rating from "react-rating";
-
+import { useMutation, useQuery } from '@apollo/client';
+import { useRouter } from 'next/router';
+import { BsArrowUpDown } from 'react-icons/bs';
+import VotingBar from '../components/Debate/VotingBar';
+import ArgueModal from '../components/Debate/ArgueModal';
+import { getDebate } from '../providers/apollo/queries';
+import { useState } from 'react';
+import { CREATE_ARGUE, VOTE_ARGUE } from '../providers/apollo/mutations';
+import FadeIn from 'react-fade-in';
 export default function Home() {
   const router = useRouter();
   const [parent, setParent] = useState(null);
@@ -21,6 +20,7 @@ export default function Home() {
   const [createArgue] = useMutation(CREATE_ARGUE);
   if (loading) return <>loading</>;
   const doVote = (argue, value) => {
+    console.log('triggerd');
     vote({
       variables: { argue, value },
     });
@@ -64,28 +64,21 @@ export default function Home() {
   };
   let agreeArgues = data.debate.argues
     .filter(
-      (argue) => argue.parent === mainArgue._id && argue.argueType === "agree"
+      (argue) => argue.parent === mainArgue._id && argue.argueType === 'agree'
     )
     .map((argue) => (
       <div className="card shadow rounded-none">
-        <Rating onChange={(e) => doVote(argue._id, e)} />
         <div onClick={() => setParent(argue._id)} className="card-body">
           <div className="card-actions float-right">
-            <FaRegComments />
+            <BsArrowUpDown />
             {argue.votes.number > 0 &&
               argue.votes.amount / argue.votes.number +
-                "/5 by" +
-                argue.votes.number}
+                '/5 by ' +
+                argue.votes.number +
+                ' users'}
           </div>
-          <progress
-            className="progress progress-success w-1/6"
-            value={
-              argue.votes.number > 0
-                ? (argue.votes.amount / argue.votes.number) * 20
-                : 50
-            }
-            max="100"
-          ></progress>
+          <VotingBar argue={argue} doVote={doVote} color="green" />
+
           <p>{argue.content}</p>
         </div>
       </div>
@@ -93,29 +86,21 @@ export default function Home() {
   let disagreeArgues = data.debate.argues
     .filter(
       (argue) =>
-        argue.parent === mainArgue._id && argue.argueType === "disagree"
+        argue.parent === mainArgue._id && argue.argueType === 'disagree'
     )
     .map((argue) => (
       <div className="card shadow rounded-none">
-        <Rating onChange={(e) => doVote(argue._id, e)} />
-
         <div onClick={() => setParent(argue._id)} className="card-body">
           <div className="card-actions float-right">
-            <FaRegComments />{" "}
+            <BsArrowUpDown />
             {argue.votes.number > 0 &&
               argue.votes.amount / argue.votes.number +
-                "/5 by" +
-                argue.votes.number}
+                '/5 by ' +
+                argue.votes.number +
+                ' users'}
           </div>
-          <progress
-            className="progress progress-success w-1/6"
-            value={
-              argue.votes.number > 0
-                ? (argue.votes.amount / argue.votes.number) * 20
-                : 50
-            }
-            max="100"
-          ></progress>
+          <VotingBar argue={argue} doVote={doVote} color="red" />
+
           <p>{argue.content}</p>
         </div>
       </div>
@@ -124,25 +109,28 @@ export default function Home() {
     <>
       <div className="md:container md:mx-auto bg-white">
         <div className="card shadow rounded-none">
-          <Rating onChange={(e) => doVote(mainArgue._id, e)} />
+          <FadeIn>
+            <div className="card-body">
+              <div className="card-actions float-right">
+                <BsArrowUpDown />
+                {mainArgue.votes.number > 0 &&
+                  mainArgue.votes.amount / mainArgue.votes.number +
+                    '/5 by ' +
+                    mainArgue.votes.number +
+                    ' users'}
+              </div>
+              <VotingBar argue={mainArgue} color="green" doVote={doVote} />
 
-          <div className="card-body">
-            <div className="card-actions float-right">
-              <FaRegComments />
-              {mainArgue.votes.number > 0 &&
-                mainArgue.votes.amount / mainArgue.votes.number +
-                  "/5 by" +
-                  mainArgue.votes.number}
+              <h2 className="card-title">{mainArgue.content}</h2>
             </div>
-            <VotingBar />
-            <h2 className="card-title">{mainArgue.content}</h2>
-          </div>
+          </FadeIn>
+
           <div className="card-body">
             <div className="grid grid-cols-2 divide-x h-full">
               <div className="text-green-600 ">
                 <div className="justify-between flex">
                   <div
-                    onClick={() => setInput(input !== "agree" ? "agree" : null)}
+                    onClick={() => setInput(input !== 'agree' ? 'agree' : null)}
                   >
                     I Agree
                   </div>
@@ -152,11 +140,11 @@ export default function Home() {
                 </div>
               </div>
               <div className="text-red-600 pl-4">
-                {" "}
+                {' '}
                 <div className="justify-between flex">
                   <div
                     onClick={() =>
-                      setInput(input !== "disagree" ? "disagree" : null)
+                      setInput(input !== 'disagree' ? 'disagree' : null)
                     }
                   >
                     I Disagree
@@ -176,17 +164,17 @@ export default function Home() {
                   type="text"
                   placeholder="Argue"
                   class={
-                    "w-full pr-16 input input-" +
-                    (input === "agree" ? "success" : "error") +
-                    " input-bordered"
+                    'w-full pr-16 input input-' +
+                    (input === 'agree' ? 'success' : 'error') +
+                    ' input-bordered'
                   }
                   onChange={(e) => setContent(e.target.value)}
                 />
                 <button
                   onClick={addArgue}
                   class={
-                    "absolute top-0 right-0 rounded-l-none btn btn-" +
-                    (input === "agree" ? "success" : "error")
+                    'absolute top-0 right-0 rounded-l-none btn btn-' +
+                    (input === 'agree' ? 'success' : 'error')
                   }
                 >
                   {input}

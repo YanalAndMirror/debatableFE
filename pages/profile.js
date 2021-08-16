@@ -1,8 +1,8 @@
 import React from 'react';
 import UserActivitys from '../components/UserProfile/UserActivitys';
 import UserStats from '../components/UserProfile/UserStats';
-import { useQuery, gql, useMutation } from '@apollo/client';
-import { currentUser, getUser } from '../providers/apollo/queries';
+import { useQuery } from '@apollo/client';
+import { currentUser } from '../providers/apollo/queries';
 import UpdateModal from '../components/UserProfile/UpdateModal';
 
 export default function profile() {
