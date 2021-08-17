@@ -2,7 +2,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { BsArrowUpDown } from 'react-icons/bs';
 import VotingBar from '../components/Debate/VotingBar';
-import ArgueModal from '../components/Debate/ArgueModal';
 import { getDebate } from '../providers/apollo/queries';
 import { AiFillPlusSquare } from 'react-icons/ai';
 
@@ -78,22 +77,24 @@ export default function Home() {
       (argue) => argue.parent === mainArgue._id && argue.argueType === 'agree'
     )
     .map((argue) => (
-      <div className="card shadow rounded-none text-base-content">
-        <div onClick={() => changeParent(argue._id)} className="card-body">
-          <div className="card-actions float-right">
-            <BsArrowUpDown />
-            {argue.votes.number > 0
-              ? argue.votes.amount / argue.votes.number +
-                '/5 by ' +
-                argue.votes.number +
-                ' users'
-              : 0}
-          </div>
-          <VotingBar argue={argue} doVote={doVote} color="green" />
+      <FadeIn>
+        <div className="card shadow rounded-none text-base-content">
+          <div onClick={() => changeParent(argue._id)} className="card-body">
+            <div className="card-actions float-right">
+              <BsArrowUpDown />
+              {argue.votes.number > 0
+                ? argue.votes.amount / argue.votes.number +
+                  '/5 by ' +
+                  argue.votes.number +
+                  ' users'
+                : 0}
+            </div>
+            <VotingBar argue={argue} doVote={doVote} color="green" />
 
-          <p>{argue.content}</p>
+            <p>{argue.content}</p>
+          </div>
         </div>
-      </div>
+      </FadeIn>
     ));
   let disagreeArgues = data.debate.argues
     .filter(
@@ -101,22 +102,24 @@ export default function Home() {
         argue.parent === mainArgue._id && argue.argueType === 'disagree'
     )
     .map((argue) => (
-      <div className="card shadow rounded-none text-base-content">
-        <div onClick={() => changeParent(argue._id)} className="card-body">
-          <div className="card-actions float-right">
-            <BsArrowUpDown />
-            {argue.votes.number > 0
-              ? argue.votes.amount / argue.votes.number +
-                '/5 by ' +
-                argue.votes.number +
-                ' users'
-              : 0}
-          </div>
-          <VotingBar argue={argue} doVote={doVote} color="red" />
+      <FadeIn>
+        <div className="card shadow rounded-none text-base-content">
+          <div onClick={() => changeParent(argue._id)} className="card-body">
+            <div className="card-actions float-right">
+              <BsArrowUpDown />
+              {argue.votes.number > 0
+                ? argue.votes.amount / argue.votes.number +
+                  '/5 by ' +
+                  argue.votes.number +
+                  ' users'
+                : 0}
+            </div>
+            <VotingBar argue={argue} doVote={doVote} color="red" />
 
-          <p>{argue.content}</p>
+            <p>{argue.content}</p>
+          </div>
         </div>
-      </div>
+      </FadeIn>
     ));
   return (
     <>
