@@ -1,8 +1,9 @@
-import { ApolloProvider } from '@apollo/client';
-import 'tailwindcss/tailwind.css';
-import client from '../providers/apollo/client.js';
-import Nav from '../components/Nav';
-import { ToastContainer } from 'react-toastify';
+import "tailwindcss/tailwind.css";
+
+import { ApolloProvider } from "@apollo/client";
+import client from "../providers/apollo/client.js";
+import Nav from "../components/Nav";
+import { ToastContainer } from "react-toastify";
 
 function MyApp({ Component, pageProps }) {
   return (
