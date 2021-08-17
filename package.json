@@ -21,7 +21,8 @@
     "react-fade-in": "^2.0.1",
     "react-icons": "^4.2.0",
     "react-rating": "^2.0.5",
-    "react-toastify": "^7.0.4"
+    "react-toastify": "^7.0.4",
+    "react-xarrows": "2.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.2.6",
