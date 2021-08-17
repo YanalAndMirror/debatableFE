@@ -8,6 +8,7 @@
   "dependencies": {
     "@apollo/client": "^3.4.6",
     "@headlessui/react": "^1.4.0",
+    "@tailwindcss/typography": "^0.4.1",
     "apollo-link-error": "^1.1.13",
     "axios": "^0.21.1",
     "daisyui": "^1.11.0",
@@ -19,8 +20,11 @@
     "react-dropzone": "^11.3.4",
     "react-fade-in": "^2.0.1",
     "react-icons": "^4.2.0",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-rating": "^2.0.5",
-    "react-toastify": "^7.0.4"
+    "react-scroll-to-bottom": "^4.1.2",
+    "react-toastify": "^7.0.4",
+    "react-xarrows": "2.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.2.6",

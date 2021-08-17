@@ -20,14 +20,32 @@ export const getUser = gql`
   }
 `;
 export const getDebates = gql`
-  query getDebates {
-    debates {
-      title
+  query getDebates(
+    $debatesTag: String
+    $debatesAmount: Int
+    $debatesStart: Int
+    $debatesOrder: String
+  ) {
+    debates(
+      tag: $debatesTag
+      amount: $debatesAmount
+      start: $debatesStart
+      order: $debatesOrder
+    ) {
       _id
+      title
       photo
-      arguesCount
-      createdAt
+      views
+      tags {
+        title
+        photo
+        _id
+      }
       slug
+      participants
+      argueVotes
+      argueCount
+      createdAt
     }
   }
 `;
@@ -50,6 +68,15 @@ export const getDebate = gql`
           amount
         }
       }
+    }
+  }
+`;
+export const getTags = gql`
+  query getTags {
+    tags {
+      _id
+      title
+      photo
     }
   }
 `;

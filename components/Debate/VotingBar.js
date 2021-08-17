@@ -46,27 +46,47 @@ export default function VotingBar({ argue, doVote, color }) {
               ]}
               fullSymbol={[
                 <div
-                  className={`badge badge-outline rounded-none bg-${color}-100`}
+                  className={
+                    color === 'green'
+                      ? `badge badge-outline rounded-none bg-green-100`
+                      : `badge badge-outline rounded-none bg-red-100`
+                  }
                 >
                   Strongly disagree
                 </div>,
                 <div
-                  className={`badge badge-outline rounded-none bg-${color}-200`}
+                  className={
+                    color === 'green'
+                      ? `badge badge-outline rounded-none bg-green-200`
+                      : `badge badge-outline rounded-none bg-red-200`
+                  }
                 >
                   Disagree
                 </div>,
                 <div
-                  className={`badge badge-outline rounded-none bg-${color}-300`}
+                  className={
+                    color === 'green'
+                      ? `badge badge-outline rounded-none bg-green-300`
+                      : `badge badge-outline rounded-none bg-red-300`
+                  }
                 >
                   Neither{' '}
                 </div>,
                 <div
-                  className={`badge badge-outline rounded-none bg-${color}-400`}
+                  className={
+                    color === 'green'
+                      ? `badge badge-outline rounded-none bg-green-400`
+                      : `badge badge-outline rounded-none bg-red-400`
+                  }
                 >
                   Agree
                 </div>,
                 <div
-                  className={`badge badge-outline rounded-none bg-${color}-500`}
+                  className={
+                    color === 'green'
+                      ? `badge badge-outline rounded-none bg-green-500`
+                      : `badge badge-outline rounded-none bg-red-500`
+                  }
                 >
                   Strongly agree
                 </div>,

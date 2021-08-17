@@ -37,7 +37,7 @@ export default function Login() {
         userVar(data.signup.user);
         setInput({ username: null, password: null });
       } else {
-        toast.error('test error', {
+        toast.error('Please Check Your Username,Password,Email', {
           position: 'bottom-left',
           autoClose: 5000,
           hideProgressBar: false,
@@ -97,7 +97,7 @@ export default function Login() {
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel>
-            <form onSubmit={handelSignin}>
+            <form onSubmit={handelSignin} className="text-base-content">
               <li>
                 <label class="label">
                   <span class="label-text">Username</span>
@@ -137,7 +137,7 @@ export default function Login() {
           </Tab.Panel>
           <Tab.Panel>
             {' '}
-            <form onSubmit={handelSignup}>
+            <form onSubmit={handelSignup} className="text-base-content">
               <li>
                 <label class="label">
                   <span class="label-text">Username</span>

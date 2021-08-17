@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Login from "./Login";
+import { BiAddToQueue } from "react-icons/bi";
 import { userVar } from "../providers/apollo/vars";
 import { useQuery } from "@apollo/client";
 import { currentUser, getUser } from "../providers/apollo/queries";
@@ -16,7 +17,10 @@ export default function Nav() {
   }, [data]);
 
   useEffect(() => {
-    document.body.dataset.theme = theme ?? localStorage?.getItem("theme");
+    document.documentElement.setAttribute(
+      "data-theme",
+      theme ?? localStorage?.getItem("theme")
+    );
   }, [theme]);
   return (
     <>
@@ -31,13 +35,16 @@ export default function Nav() {
             <span className="btn btn-ghost btn-sm rounded-btn">
               <Link href="/">Explore</Link>
             </span>
-
-            <span className="btn btn-ghost btn-sm rounded-btn">
-              <Link href="/create">Create a debate</Link>
-            </span>
-            <span className="btn btn-ghost btn-sm rounded-btn">
-              <Link href="/debate">Debates</Link>
-            </span>
+            {user && (
+              <span className="btn btn-ghost btn-sm rounded-btn">
+                <Link href="/create">
+                  <span className="flex justify-center">
+                    <BiAddToQueue size="24px" className="mr-1" />
+                    Debate
+                  </span>
+                </Link>
+              </span>
+            )}
           </div>
         </div>
         <div className="flex-1 lg:flex-none">
@@ -90,7 +97,7 @@ export default function Nav() {
             </div>
             <ul
               tabIndex="0"
-              className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 text-black"
+              className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 text-base-content"
             >
               <li>
                 <a>Item 1</a>
@@ -125,7 +132,7 @@ export default function Nav() {
 
                 <ul
                   tabindex="0"
-                  class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 text-black"
+                  class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 "
                 >
                   {user ? <LoggedIn /> : <Login />}
                 </ul>
