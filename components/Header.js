@@ -3,9 +3,9 @@ import React from 'react';
 export default function Header() {
   return (
     <center>
-      <div className="card lg:card-side">
+      <div className="card lg:card-side text-base-content">
         <div className="card-body">
-          <h2 className="card-title">Explore Debates</h2>
+          <div className="card-title text-2xl">Explore Debates</div>
           <p>
             <div className="badge badge-outline m-2">Politics</div>
             <div className="badge badge-outline m-2">Philosophy</div>
