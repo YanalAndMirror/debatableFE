@@ -20,7 +20,9 @@
     "react-dropzone": "^11.3.4",
     "react-fade-in": "^2.0.1",
     "react-icons": "^4.2.0",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-rating": "^2.0.5",
+    "react-scroll-to-bottom": "^4.1.2",
     "react-toastify": "^7.0.4",
     "react-xarrows": "2.0.1"
   },

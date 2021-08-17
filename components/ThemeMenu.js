@@ -45,7 +45,10 @@ export default function ThemeMenu({ setTheme }) {
         <div className="dropdown dropdown-end">
           <div tabIndex="0">
             <button className="btn btn-square btn-ghost">
-              <RiBrush2Line size="24px" />
+              <RiBrush2Line
+                size="24px"
+                className=" fill-current text-neutral-content"
+              />
             </button>
           </div>
           <ul

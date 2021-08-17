@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 export const currentUser = gql`
   query currentUser {
     currentUser @client {
@@ -20,8 +20,16 @@ export const getUser = gql`
   }
 `;
 export const getDebates = gql`
-  query getDebates {
-    debates {
+  query getDebates(
+    $debatesStart: Int
+    $debatesAmount: Int
+    $debatesOrder: String
+  ) {
+    debates(
+      start: $debatesStart
+      amount: $debatesAmount
+      order: $debatesOrder
+    ) {
       _id
       title
       photo
@@ -29,6 +37,7 @@ export const getDebates = gql`
       argueCount
       participants
       argueVotes
+      views
       slug
     }
   }
