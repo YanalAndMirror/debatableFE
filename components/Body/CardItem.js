@@ -6,6 +6,7 @@ import { BsArrowUpDown } from 'react-icons/bs';
 import Link from 'next/link';
 
 export default function CardItem({ debate }) {
+  console.log(debate);
   return (
     <div className="card bordered m-4 text-base-content">
       <Link href={'/' + debate.slug}>
@@ -39,8 +40,9 @@ export default function CardItem({ debate }) {
           </div>
         </p>
         <div className="card-actions">
-          <div className="badge badge-outline">Article</div>
-          <div className="badge badge-outline">Photography</div>
+          {debate.tags?.map((tag) => {
+            return <div className="badge badge-outline">{tag.title}</div>;
+          })}
         </div>
       </div>
     </div>

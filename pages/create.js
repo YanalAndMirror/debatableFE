@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
 import { CREATE_DEBATE } from '../providers/apollo/mutations';
 import { useMutation, useQuery } from '@apollo/client';
-import { currentUser, getDebates } from '../providers/apollo/queries';
+import { currentUser, getDebates, getTags } from '../providers/apollo/queries';
 import { useRouter } from 'next/router';
+import Select from 'react-select';
 import axios from 'axios';
 export default function create() {
-  const router = useRouter();
-  const [debate, setDebate] = useState({ photo: null });
-  const { data } = useQuery(currentUser);
+  const { loading, data } = useQuery(getTags);
+  const [selectState, setSelectState] = useState(false);
+  if (loading) return <>Loading</>;
 
+  const router = useRouter();
+  const [debate, setDebate] = useState({ photo: null, tags: [] });
+  const options = data.tags.map((tag) => {
+    return {
+      value: tag._id,
+      label: tag.title,
+    };
+  });
   const [createDebate] = useMutation(CREATE_DEBATE);
 
   const handleChange = (event) => {
@@ -42,10 +51,6 @@ export default function create() {
       console.log(e);
     }
   };
-  if (!data.currentUser) {
-    return <>You should be signed in to create a debate</>;
-  }
-  // document.body.classList.add('bg-base-100');
   return (
     <div className=" min-h-full">
       <div className="md:container md:mx-auto mt-36 text-base-content">
@@ -111,6 +116,20 @@ export default function create() {
             <div className="btn">Select</div>
           </label>
         )}
+        <Select
+          closeMenuOnSelect={false}
+          isMulti
+          options={options}
+          className="mt-4"
+          isDisabled={selectState}
+          isClearable="true"
+          onChange={(value) => {
+            setDebate({ ...debate, tags: value.map((v) => v.value) });
+            if (debate['tags'].length > 1) {
+              setSelectState(true);
+            }
+          }}
+        />
         <br />
         <button class="btn btn-outline ml-2 mb-36 float-right">Cancel</button>
         {!debate.title || !debate.argue || !debate.photo ? (
