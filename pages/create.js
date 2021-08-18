@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
-import { CREATE_DEBATE } from '../providers/apollo/mutations';
-import { useMutation, useQuery } from '@apollo/client';
-import { currentUser, getDebates, getTags } from '../providers/apollo/queries';
-import { useRouter } from 'next/router';
-import Select from 'react-select';
-import axios from 'axios';
+import React, { useState } from "react";
+import { CREATE_DEBATE } from "../providers/apollo/mutations";
+import { useMutation, useQuery } from "@apollo/client";
+import { currentUser, getDebates, getTags } from "../providers/apollo/queries";
+import { useRouter } from "next/router";
+import Select from "react-select";
+import axios from "axios";
 export default function create() {
   const { loading, data } = useQuery(getTags);
   const [selectState, setSelectState] = useState(false);
+  const [debate, setDebate] = useState({ photo: null, tags: [] });
+  const [createDebate] = useMutation(CREATE_DEBATE);
+  const router = useRouter();
   if (loading) return <>Loading</>;
 
-  const router = useRouter();
-  const [debate, setDebate] = useState({ photo: null, tags: [] });
   const options = data.tags.map((tag) => {
     return {
       value: tag._id,
       label: tag.title,
     };
   });
-  const [createDebate] = useMutation(CREATE_DEBATE);
 
   const handleChange = (event) => {
     setDebate({ ...debate, [event.target.name]: event.target.value });
   };
   const uploadImage = async (e) => {
     const formData = new FormData();
-    formData.append('file', e.target?.files[0]);
+    formData.append("file", e.target?.files[0]);
     const res = await axios.post(`http://localhost:4000/uploadImage`, formData);
     setDebate({ ...debate, photo: res.data });
   };
@@ -46,7 +46,7 @@ export default function create() {
           }
         },
       });
-      router.push('/');
+      router.push("/");
     } catch (e) {
       console.log(e);
     }
@@ -71,7 +71,7 @@ export default function create() {
         </label>
         <textarea
           class="textarea h-24 textarea-bordered"
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
           placeholder="argue"
           onChange={handleChange}
           name="argue"
@@ -125,7 +125,7 @@ export default function create() {
           isClearable="true"
           onChange={(value) => {
             setDebate({ ...debate, tags: value.map((v) => v.value) });
-            if (debate['tags'].length > 1) {
+            if (debate["tags"].length > 1) {
               setSelectState(true);
             }
           }}
