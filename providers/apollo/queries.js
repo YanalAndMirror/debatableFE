@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 export const currentUser = gql`
   query currentUser {
     currentUser @client {
@@ -21,24 +21,31 @@ export const getUser = gql`
 `;
 export const getDebates = gql`
   query getDebates(
-    $debatesStart: Int
+    $debatesTag: String
     $debatesAmount: Int
+    $debatesStart: Int
     $debatesOrder: String
   ) {
     debates(
-      start: $debatesStart
+      tag: $debatesTag
       amount: $debatesAmount
+      start: $debatesStart
       order: $debatesOrder
     ) {
       _id
       title
       photo
-      createdAt
-      argueCount
+      views
+      tags {
+        title
+        photo
+        _id
+      }
+      slug
       participants
       argueVotes
-      views
-      slug
+      argueCount
+      createdAt
     }
   }
 `;
@@ -61,6 +68,15 @@ export const getDebate = gql`
           amount
         }
       }
+    }
+  }
+`;
+export const getTags = gql`
+  query getTags {
+    tags {
+      _id
+      title
+      photo
     }
   }
 `;

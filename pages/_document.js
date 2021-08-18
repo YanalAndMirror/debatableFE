@@ -9,10 +9,10 @@ class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head className="bg-base-100" />
-        <body className="bg-base-100 h-full">
-          <Main className="bg-base-100" />
-          <NextScript className="bg-base-100" />
+        <Head />
+        <body>
+          <Main />
+          <NextScript />
         </body>
       </Html>
     );
