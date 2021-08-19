@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import Login from "./Login";
-import { BiAddToQueue } from "react-icons/bi";
-import { userVar } from "../providers/apollo/vars";
-import { useQuery } from "@apollo/client";
-import { currentUser, getUser } from "../providers/apollo/queries";
-import LoggedIn from "./LoggedIn";
-import ThemeMenu from "./ThemeMenu";
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Login from './Login';
+import { BiAddToQueue } from 'react-icons/bi';
+import { userVar } from '../providers/apollo/vars';
+import { useQuery } from '@apollo/client';
+import { currentUser, getUser } from '../providers/apollo/queries';
+import LoggedIn from './LoggedIn';
+import ThemeMenu from './ThemeMenu';
+import Notifications from './Notifications';
 
 export default function Nav() {
   const { data } = useQuery(getUser);
@@ -18,8 +19,8 @@ export default function Nav() {
 
   useEffect(() => {
     document.documentElement.setAttribute(
-      "data-theme",
-      theme ?? localStorage?.getItem("theme")
+      'data-theme',
+      theme ?? localStorage?.getItem('theme')
     );
   }, [theme]);
   return (
@@ -47,32 +48,6 @@ export default function Nav() {
             )}
           </div>
         </div>
-        <div className="flex-1 lg:flex-none">
-          <div className="form-control">
-            <input
-              type="text"
-              placeholder="Search"
-              className="input input-ghost"
-            />
-          </div>
-        </div>
-        <div className="flex-none">
-          <button className="btn btn-square btn-ghost">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="inline-block w-6 h-6 stroke-current"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              ></path>
-            </svg>
-          </button>
-        </div>
         <div className="flex-none">
           <div className="dropdown dropdown-end">
             <div tabIndex="0">
@@ -95,20 +70,7 @@ export default function Nav() {
                 </div>
               </button>
             </div>
-            <ul
-              tabIndex="0"
-              className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 text-base-content"
-            >
-              <li>
-                <a>Item 1</a>
-              </li>
-              <li>
-                <a>Item 2</a>
-              </li>
-              <li>
-                <a>Item 3</a>
-              </li>
-            </ul>
+            <Notifications user={user} />
           </div>
         </div>
         <ThemeMenu setTheme={setTheme} />

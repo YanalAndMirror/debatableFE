@@ -27,10 +27,23 @@ export const USER_SIGNUP = gql`
   }
 `;
 export const USER_UPDATE = gql`
-  mutation UpdateUserMutation($username: String, $photo: String) {
-    updateUser(user: { username: $username, photo: $photo }) {
+  mutation UpdateUserMutation(
+    $username: String
+    $photo: String
+    $email: String
+    $password: String
+  ) {
+    updateUser(
+      user: {
+        username: $username
+        photo: $photo
+        email: $email
+        password: $password
+      }
+    ) {
       username
       photo
+      email
     }
   }
 `;
@@ -86,6 +99,13 @@ export const VOTE_ARGUE = gql`
         number
         amount
       }
+    }
+  }
+`;
+export const FOLLOW_DEBATE = gql`
+  mutation FollowMutation($followDebate: String!) {
+    follow(debate: $followDebate) {
+      _id
     }
   }
 `;

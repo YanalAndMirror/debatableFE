@@ -2,11 +2,15 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { BsArrowUpDown } from 'react-icons/bs';
 import VotingBar from '../components/Debate/VotingBar';
-import { getDebate } from '../providers/apollo/queries';
+import { getDebate, getUser } from '../providers/apollo/queries';
 import { AiFillPlusSquare } from 'react-icons/ai';
-
+import { ShareSocial } from 'react-share-social';
 import { useEffect, useState } from 'react';
-import { CREATE_ARGUE, VOTE_ARGUE } from '../providers/apollo/mutations';
+import {
+  CREATE_ARGUE,
+  VOTE_ARGUE,
+  FOLLOW_DEBATE,
+} from '../providers/apollo/mutations';
 import FadeIn from 'react-fade-in';
 import Pyramid from '../components/Pyramid';
 export default function Home() {
@@ -14,10 +18,12 @@ export default function Home() {
   const router = useRouter();
   const [content, setContent] = useState(null);
   const [input, setInput] = useState(null);
+  const [follow, setFollow] = useState('follow');
   const { debateSlug, path } = router.query;
   const { loading, data } = useQuery(getDebate, {
     variables: { slug: debateSlug },
   });
+  const followed = useQuery(getUser).data?.user?.followed;
   const [parent, setParent] = useState(path ?? null);
   useEffect(() => {
     if (parent != path) setParent(path);
@@ -25,6 +31,7 @@ export default function Home() {
 
   const [vote] = useMutation(VOTE_ARGUE);
   const [createArgue] = useMutation(CREATE_ARGUE);
+  const [followDebate] = useMutation(FOLLOW_DEBATE);
   if (loading) return <>loading</>;
   const doVote = (argue, value) => {
     vote({
@@ -36,6 +43,15 @@ export default function Home() {
     (argue) =>
       (!parent && argue.parent == parent) || (parent && parent === argue._id)
   );
+  const handleFollowDebate = () => {
+    setFollow('followed');
+    followDebate({
+      variables: {
+        followDebate: data?.debate._id,
+      },
+    });
+  };
+
   const addArgue = () => {
     createArgue({
       variables: {
@@ -132,14 +148,46 @@ export default function Home() {
         <div className="card shadow rounded-none">
           <FadeIn>
             <div className="card-body">
-              <div className="card-actions float-right">
-                <BsArrowUpDown />
-                {mainArgue.votes.number > 0
-                  ? mainArgue.votes.amount / mainArgue.votes.number +
-                    '/5 by ' +
-                    mainArgue.votes.number +
-                    ' users'
-                  : 0}
+              <div className="card-actions">
+                <div className="justify-between flex w-full">
+                  <div className="flex items-center">
+                    <BsArrowUpDown />
+                    {mainArgue.votes.number > 0
+                      ? mainArgue.votes.amount / mainArgue.votes.number +
+                        '/5 by ' +
+                        mainArgue.votes.number +
+                        ' users'
+                      : 0}
+                  </div>
+                  <div>
+                    <button className="btn" onClick={handleFollowDebate}>
+                      {followed?.includes(data?.debate._id)
+                        ? 'followed'
+                        : follow}
+                    </button>
+                    <div class="dropdown dropdown-end">
+                      <div tabindex="0" class="m-1 btn">
+                        Share
+                      </div>
+                      <ul
+                        tabindex="0"
+                        class="shadow menu dropdown-content bg-base-100 rounded-box w-24"
+                      >
+                        <li>
+                          <ShareSocial
+                            url="url_to_share.com"
+                            socialTypes={[
+                              'facebook',
+                              'twitter',
+                              'reddit',
+                              'email',
+                            ]}
+                          />
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
               <VotingBar argue={mainArgue} color="green" doVote={doVote} />
 

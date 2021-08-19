@@ -1,17 +1,17 @@
-import React from "react";
-import { GrEdit } from "react-icons/gr";
+import React from 'react';
 
-export default function UserActivitys() {
+export default function UserActivitys({ notfications }) {
+  notfications = notfications?.map((notfication) => (
+    <li>
+      <a>{notfication.text}</a>
+    </li>
+  ));
   return (
-    <div>
-      Activity
-      <ul className="menu  py-3 bg-base-100 rounded-box ">
-        <li>
-          <a>
-            <GrEdit /> - You posted an argue on : does god exist
-          </a>
-        </li>
-      </ul>
-    </div>
+    <>
+      Notifications
+      <div className="md:container md:mx-auto bordered border-2 w-3/6 rounded">
+        <ul className="menu  py-3 bg-base-100 rounded-box ">{notfications}</ul>
+      </div>
+    </>
   );
 }
