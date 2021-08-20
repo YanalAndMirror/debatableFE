@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 export const currentUser = gql`
   query currentUser {
     currentUser @client {
@@ -110,6 +110,38 @@ export const getDebate = gql`
           amount
         }
       }
+    }
+  }
+`;
+export const getRooms = gql`
+  query getRooms(
+    $roomsOrder: String
+    $roomsStart: Int
+    $roomsAmount: Int
+    $roomsTag: String
+    $roomsKeyword: String
+  ) {
+    rooms(
+      order: $roomsOrder
+      start: $roomsStart
+      amount: $roomsAmount
+      tag: $roomsTag
+      keyword: $roomsKeyword
+    ) {
+      _id
+      title
+      slug
+      user
+    }
+  }
+`;
+export const getRoom = gql`
+  query getRoom($slug: String!) {
+    room(slug: $slug) {
+      _id
+      title
+      slug
+      user
     }
   }
 `;

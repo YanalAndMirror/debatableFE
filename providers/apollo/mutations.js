@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const USER_LOGIN = gql`
   mutation signin($username: String!, $password: String!) {
@@ -71,7 +71,26 @@ export const CREATE_DEBATE = gql`
     }
   }
 `;
-
+export const CREATE_ROOM = gql`
+  mutation createRoom($title: String!, $photo: String!, $tags: [String]) {
+    createRoom(room: { title: $title, photo: $photo, tags: $tags }) {
+      _id
+      title
+      user
+      slug
+    }
+  }
+`;
+export const UPDATE_ROOM_STATUS = gql`
+  mutation roomStatus($slug: String) {
+    roomStatus(slug: $slug) {
+      _id
+      title
+      user
+      slug
+    }
+  }
+`;
 export const CREATE_ARGUE = gql`
   mutation CreateArgueMutation($argue: ArgueCreateInput!) {
     createArgue(argue: $argue) {

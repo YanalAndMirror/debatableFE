@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { currentUser, getDebates, getTags } from "../providers/apollo/queries";
 import { useRouter } from "next/router";
 import Select from "react-select";
-import axios from "axios";
+import instance from "../components/utils/instance";
 export default function create() {
   const { loading, data } = useQuery(getTags);
   const [selectState, setSelectState] = useState(false);
@@ -26,7 +26,7 @@ export default function create() {
   const uploadImage = async (e) => {
     const formData = new FormData();
     formData.append("file", e.target?.files[0]);
-    const res = await axios.post(`http://localhost:4000/uploadImage`, formData);
+    const res = await instance.post(`/uploadImage`, formData);
     setDebate({ ...debate, photo: res.data });
   };
   const handleSubmit = (event) => {
