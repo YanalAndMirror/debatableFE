@@ -5,6 +5,7 @@ import { BiAddToQueue } from 'react-icons/bi';
 import { userVar } from '../providers/apollo/vars';
 import { useQuery } from '@apollo/client';
 import { currentUser, getUser } from '../providers/apollo/queries';
+import { CgMediaLive } from 'react-icons/cg';
 import LoggedIn from './LoggedIn';
 import ThemeMenu from './ThemeMenu';
 import Notifications from './Notifications';
@@ -34,8 +35,15 @@ export default function Nav() {
         <div className="flex-1 px-2 mx-2">
           <div className="items-stretch hidden lg:flex">
             <span className="btn btn-ghost btn-sm rounded-btn">
-              <Link href="/">Explore</Link>
+              <Link href="/tags">Explore</Link>
             </span>
+            <Link href="/livedebates">
+              <span className="btn btn-ghost btn-sm rounded-btn">
+                <CgMediaLive className="mr-1" size="24px" />
+                Live
+              </span>
+            </Link>
+
             {user && (
               <span className="btn btn-ghost btn-sm rounded-btn">
                 <Link href="/create">
