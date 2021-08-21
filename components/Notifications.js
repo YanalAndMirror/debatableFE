@@ -23,12 +23,10 @@ export default function Notifications({ user }) {
     <li>
       <Link href={`/${notification.debate.slug}`}>
         <a>
-          <div class="card sm:card-side bordered">
-            <figure>
-              <img src={notification.debate.photo} className="h-28 w-20" />
-            </figure>
+          <div class="card sm:card-side border-2 w-max h-max">
+            <img src={notification.debate.photo} className=" h-24 w-24" />
             <div class="card-body">
-              <h2 class="card-title">{notification.text}</h2>
+              <p class="card-title text-sm">{notification.text}</p>
             </div>
           </div>
         </a>

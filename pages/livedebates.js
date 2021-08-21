@@ -9,15 +9,24 @@ export default function liveDebates() {
   console.log(data.rooms);
   const rooms = data.rooms.map((room) => (
     <>
-      <div class="card bordered">
+      <div class="card border-2">
         <figure>
-          <img src={room.debate.photo} />
+          <img
+            src={room.debate.photo}
+            className="object-cover  h-40 cursor-pointer"
+          />
         </figure>
         <div class="card-body">
           <h2 class="card-title">
             {room.debate.title}
             <div class="badge mx-2 badge-secondary">LIVE</div>
           </h2>
+          <div className="card-actions">
+            {room.debate.tags?.map((tag) => {
+              return <div className="badge badge-outline">{tag.title}</div>;
+            })}
+          </div>
+
           <div class="justify-end card-actions">
             <button
               class="btn"

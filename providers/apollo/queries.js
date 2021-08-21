@@ -139,6 +139,9 @@ export const getRooms = gql`
       debate {
         photo
         title
+        tags {
+          title
+        }
       }
     }
   }
