@@ -1,16 +1,18 @@
 import React from "react";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { currentUser, getRoom } from "../../providers/apollo/queries";
 import { FiVideo } from "react-icons/fi";
 import { FiVideoOff } from "react-icons/fi";
 import { BsMic } from "react-icons/bs";
 import { FiMicOff } from "react-icons/fi";
+import { unstable_batchedUpdates } from "react-dom";
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Video from "../../components/Video";
 import instance from "../../components/utils/instance";
 import { Link } from "@material-ui/core";
+import { ADD_ROOM_VOTE } from "../../providers/apollo/mutations";
 let openviduBrowser;
 if (typeof window !== "undefined")
   openviduBrowser = require("openvidu-browser");
@@ -18,12 +20,12 @@ export default function profile() {
   const { data } = useQuery(currentUser);
   const router = useRouter();
   const { roomSlug } = router.query;
-
+  const [addRoomVote] = useMutation(ADD_ROOM_VOTE);
   const [OV, setOV] = useState(null);
   const [session, setSession] = useState();
   const [publisher, setPublisher] = useState();
   const [subscribers, setSubscribers] = useState([]);
-
+  const [votes, setVotes] = useState([]);
   const [join, setJoin] = useState(false);
   const [chat, setChat] = useState([]);
   const [input, setInput] = useState(null);
@@ -35,6 +37,7 @@ export default function profile() {
     left: false,
     host: false,
   });
+
   const [allowed, setAllowed] = useState([]);
   const [users, setUsers] = useState([]);
   const mute = (side) => {
@@ -49,13 +52,34 @@ export default function profile() {
       type: "kick",
     });
   };
+  const vote = (side) => {
+    session.signal({
+      data: JSON.stringify({ user: data.currentUser._id, side }),
+      type: "vote",
+    });
+    addRoomVote({ variables: { slug: roomSlug, side } });
+  };
+  const resetThenJoin = () => {
+    unstable_batchedUpdates(() => {
+      setSubscribers([]);
+      setUsers([]);
+      setMuted({
+        right: false,
+        left: false,
+        host: false,
+      });
+      setChat([]);
+      setAllowed([]);
+      setJoin(true);
+    });
+  };
   useEffect(() => {
     if (!OV) {
       if (openviduBrowser) setOV(new openviduBrowser.OpenVidu());
     } else setSession(OV.initSession());
   }, [OV]);
-  useEffect(async () => {
-    if (session) session.disconnect();
+  useEffect(() => {
+    session?.disconnect();
     setJoin(false);
   }, [data]);
   useEffect(async () => {
@@ -75,6 +99,13 @@ export default function profile() {
     });
     session.on("connectionDestroyed", (event) => {
       setUsers((users) => users.filter((user) => user !== event.connection));
+      setAllowed((allowed) =>
+        allowed.filter(
+          (user) =>
+            JSON.parse(user.data).clientData.userId !==
+            JSON.parse(event.connection.data).clientData.userId
+        )
+      );
     });
     session.on("signal:my-chat", (event) => {
       setChat((currentState) => [...currentState, event.data]);
@@ -104,9 +135,41 @@ export default function profile() {
         currentState.filter((a) => a !== event.data)
       );
     });
+    session.on("signal:vote", (event) => {
+      let myVote = JSON.parse(event.data);
+      console.log(myVote);
+      setVotes((votes) => [
+        ...votes.filter((vote) => vote.user !== myVote.user),
+        myVote,
+      ]);
+    });
+    return () => {
+      if (!session) return;
+      session.off("streamCreated");
+      session.off("streamDestroyed");
+      session.off("connectionCreated");
+      session.off("connectionDestroyed");
+      session.off("signal:my-chat");
+      session.off("signal:mute");
+      session.off("signal:muteMatch");
+      session.off("signal:stream");
+      session.off("signal:allow");
+      session.off("signal:disallow");
+      session.off("signal:vote");
+    };
+  }, [session]);
+  useEffect(() => {
+    if (session)
+      router.events.on("routeChangeComplete", () => session.disconnect());
+    return () => {
+      router.events.off("routeChangeComplete", () => session.disconnect());
+    };
   }, [session]);
   const room = useQuery(getRoom, {
     variables: { slug: roomSlug },
+    onCompleted: (data) => {
+      setVotes(data.room.vote);
+    },
   });
   const debate = room.data?.room.debate;
   useEffect(() => {
@@ -125,7 +188,14 @@ export default function profile() {
   if (!data || !room.data) return <>loading</>;
   if (!room.data.room) return <>Not Found</>;
   let streams = [publisher, ...subscribers].filter((a) => a !== undefined);
-  streams.sort();
+  streams.sort((a, b) => {
+    if (
+      JSON.parse(a.stream.connection.data).clientData.userId >
+      JSON.parse(b.stream.connection.data).clientData.userId
+    )
+      return 1;
+    else -1;
+  });
   let host = streams.find(
     (stream) =>
       JSON.parse(stream.stream.connection.data).clientData.type === "host"
@@ -137,34 +207,46 @@ export default function profile() {
   let rightDebater = streams[0];
   let leftDebater = streams[1];
   let thisHost = data.currentUser?._id === room.data.room.user;
-
+  let rightVotes = votes.filter((vote) => vote.side === "right");
+  let leftVotes = votes.filter((vote) => vote.side === "left");
   return (
-    <div class="md:container md:mx-auto">
+    <div class="container m-6">
       {join ? (
-        <div class="grid grid-cols-4  gap-6 border-2 p-4 h-full">
+        <div
+          class="grid grid-cols-4  gap-6 border-2 p-4"
+          style={{ height: "90vh" }}
+        >
           <div>
             {leftDebater && (
-              <Video
-                stream={leftDebater}
-                muted={publisher === leftDebater ? true : muted.left}
-                thisHost={thisHost}
-                mute={mute}
-                kick={kick}
-                side={"left"}
-              />
+              <>
+                <Video
+                  stream={leftDebater}
+                  muted={publisher === leftDebater ? true : muted.left}
+                  thisHost={thisHost}
+                  mute={mute}
+                  kick={kick}
+                  side={"left"}
+                  vote={vote}
+                />{" "}
+                {leftVotes.length}
+              </>
             )}
           </div>
           <div></div>
           <div>
             {rightDebater && (
-              <Video
-                stream={rightDebater}
-                muted={publisher === rightDebater ? true : muted.right}
-                thisHost={thisHost}
-                mute={mute}
-                kick={kick}
-                side={"right"}
-              />
+              <>
+                <Video
+                  stream={rightDebater}
+                  muted={publisher === rightDebater ? true : muted.right}
+                  thisHost={thisHost}
+                  mute={mute}
+                  kick={kick}
+                  side={"right"}
+                  vote={vote}
+                />{" "}
+                {rightVotes.length}
+              </>
             )}
           </div>
           <div class="row-span-3 border-2 p-4 h-96">
@@ -224,15 +306,17 @@ export default function profile() {
                   );
                 })}
               <div class="divider"></div>
-              {chat.map((a) => {
-                a = JSON.parse(a);
-                return (
-                  <>
-                    {a.user} : {a.input}
-                    <br />
-                  </>
-                );
-              })}
+              <div class="overflow-auto h-72">
+                {chat.map((a) => {
+                  a = JSON.parse(a);
+                  return (
+                    <>
+                      {a.user} : {a.input}
+                      <br />
+                    </>
+                  );
+                })}
+              </div>
             </div>
             <form
               onSubmit={(e) => {
@@ -275,6 +359,7 @@ export default function profile() {
               <Video
                 stream={host}
                 muted={publisher === host ? true : muted.host}
+                side="host"
               />
             )}
           </div>
@@ -346,12 +431,6 @@ export default function profile() {
               </button>
             </>
           )}
-          {/* <button
-            class="btn btn-outline btn-secondary"
-            onClick={() => setMuted({ right: false, left: false, host: false })}
-          >
-            Mute all
-          </button> */}
         </div>
       ) : (
         <div class="flex h-screen">
@@ -362,7 +441,8 @@ export default function profile() {
                   room: roomSlug,
                 });
                 if (token) {
-                  setJoin(true);
+                  resetThenJoin();
+
                   session.connect(token.data, {
                     clientData: {
                       type:

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const USER_LOGIN = gql`
   mutation signin($username: String!, $password: String!) {
@@ -67,6 +67,17 @@ export const CREATE_DEBATE = gql`
       slug
       tags {
         title
+      }
+    }
+  }
+`;
+export const ADD_ROOM_VOTE = gql`
+  mutation addRoomVote($slug: String!, $side: String!) {
+    addRoomVote(slug: $slug, side: $side) {
+      slug
+      vote {
+        user
+        side
       }
     }
   }

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 export const currentUser = gql`
   query currentUser {
     currentUser @client {
@@ -125,6 +125,10 @@ export const getRoom = gql`
         title
         photo
         slug
+      }
+      vote {
+        user
+        side
       }
     }
   }
