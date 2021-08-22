@@ -10,6 +10,7 @@ import instance from "../../components/utils/instance";
 let openviduBrowser;
 if (typeof window !== "undefined")
   openviduBrowser = require("openvidu-browser");
+
 export default function profile() {
   const { data } = useQuery(currentUser);
   const router = useRouter();
@@ -64,6 +65,7 @@ export default function profile() {
       );
     });
     session.on("connectionCreated", (event) => {
+      console.log(event.connection);
       setUsers((users) => [...users, event.connection]);
     });
     session.on("connectionDestroyed", (event) => {
