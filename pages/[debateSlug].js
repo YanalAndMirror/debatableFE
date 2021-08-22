@@ -10,14 +10,15 @@ import {
   CREATE_ARGUE,
   VOTE_ARGUE,
   FOLLOW_DEBATE,
+  CREATE_ROOM,
 } from "../providers/apollo/mutations";
 import FadeIn from "react-fade-in";
 import Pyramid from "../components/Pyramid";
 export default function Home() {
-  console.log("generate");
   const router = useRouter();
   const [content, setContent] = useState(null);
   const [input, setInput] = useState(null);
+  const [room, setRoom] = useState({});
   const [follow, setFollow] = useState("follow");
   const { debateSlug, path } = router.query;
   const { loading, data } = useQuery(getDebate, {
@@ -32,6 +33,8 @@ export default function Home() {
   const [vote] = useMutation(VOTE_ARGUE);
   const [createArgue] = useMutation(CREATE_ARGUE);
   const [followDebate] = useMutation(FOLLOW_DEBATE);
+  const [createRoom] = useMutation(CREATE_ROOM);
+
   if (loading) return <>loading</>;
   const doVote = (argue, value) => {
     vote({
@@ -51,7 +54,15 @@ export default function Home() {
       },
     });
   };
-
+  const handleCreateRoom = () => {
+    createRoom({
+      variables: {
+        debate: data?.debate._id,
+        title: data?.debate.slug,
+      },
+    });
+    router.push(`/live/${data?.debate.slug}`);
+  };
   const addArgue = () => {
     createArgue({
       variables: {
@@ -160,6 +171,9 @@ export default function Home() {
                       : 0}
                   </div>
                   <div>
+                    <button className="btn m-1" onClick={handleCreateRoom}>
+                      Create Live Debate
+                    </button>
                     <button className="btn" onClick={handleFollowDebate}>
                       {followed?.includes(data?.debate._id)
                         ? "followed"

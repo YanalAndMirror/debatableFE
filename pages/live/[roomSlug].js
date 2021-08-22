@@ -1,16 +1,19 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { currentUser, getRoom } from "../../providers/apollo/queries";
+import { FiVideo } from "react-icons/fi";
+import { FiVideoOff } from "react-icons/fi";
+import { BsMic } from "react-icons/bs";
+import { FiMicOff } from "react-icons/fi";
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Video from "../../components/Video";
 import instance from "../../components/utils/instance";
+import { Link } from "@material-ui/core";
 let openviduBrowser;
 if (typeof window !== "undefined")
   openviduBrowser = require("openvidu-browser");
-
 export default function profile() {
   const { data } = useQuery(currentUser);
   const router = useRouter();
@@ -24,6 +27,9 @@ export default function profile() {
   const [join, setJoin] = useState(false);
   const [chat, setChat] = useState([]);
   const [input, setInput] = useState(null);
+  const [audioOff, setAudioOff] = useState(false);
+  const [videoOff, setVideoOff] = useState(false);
+
   const [muted, setMuted] = useState({
     right: false,
     left: false,
@@ -65,7 +71,6 @@ export default function profile() {
       );
     });
     session.on("connectionCreated", (event) => {
-      console.log(event.connection);
       setUsers((users) => [...users, event.connection]);
     });
     session.on("connectionDestroyed", (event) => {
@@ -103,6 +108,7 @@ export default function profile() {
   const room = useQuery(getRoom, {
     variables: { slug: roomSlug },
   });
+  const debate = room.data?.room.debate;
   useEffect(() => {
     if (users.length > 0) {
       if (data.currentUser?._id === room.data.room.user) {
@@ -133,9 +139,9 @@ export default function profile() {
   let thisHost = data.currentUser?._id === room.data.room.user;
 
   return (
-    <div class="container mx-auto">
+    <div class="md:container md:mx-auto">
       {join ? (
-        <div class="grid grid-cols-4  gap-6">
+        <div class="grid grid-cols-4  gap-6 border-2 p-4 h-full">
           <div>
             {leftDebater && (
               <Video
@@ -161,17 +167,21 @@ export default function profile() {
               />
             )}
           </div>
-          <div class="row-span-3">
-            <div class="overflow-visible h-24 ...">
-              {chat.map((a) => {
-                a = JSON.parse(a);
-                return (
-                  <>
-                    {a.user} : {a.input}
-                    <br />
-                  </>
-                );
-              })}
+          <div class="row-span-3 border-2 p-4 h-96">
+            Original debate: <br />
+            <Link href={`/${debate.slug}`}>
+              <div class="card card-side border-2  w-full">
+                <figure>
+                  <img className="h-32 w-32" src={debate.photo} />
+                </figure>
+                <div class="card-body">
+                  <h3 class="card-title">{debate.title}</h3>
+                </div>
+              </div>
+            </Link>
+            <div class="overflow-visible ...">
+              Participants:
+              <br />
               {users
                 .filter(
                   (u) => JSON.parse(u.data).clientData.username !== "Guest"
@@ -186,7 +196,7 @@ export default function profile() {
                         thisUser.username !== data.currentUser.username &&
                         (!allowed.includes(thisUser.userId) ? (
                           <button
-                            class="btn btn-outline btn-xs"
+                            class="ml-1 btn btn-outline btn-xs"
                             onClick={() =>
                               session.signal({
                                 data: thisUser.userId,
@@ -194,11 +204,11 @@ export default function profile() {
                               })
                             }
                           >
-                            Allow
+                            Set as a debator
                           </button>
                         ) : (
                           <button
-                            class="btn btn-outline btn-xs btn-error"
+                            class="ml-1 btn btn-outline btn-xs btn-error"
                             onClick={() =>
                               session.signal({
                                 data: thisUser.userId,
@@ -206,13 +216,23 @@ export default function profile() {
                               })
                             }
                           >
-                            disallow
+                            Set as a guest
                           </button>
                         ))}
                       <br />
                     </>
                   );
                 })}
+              <div class="divider"></div>
+              {chat.map((a) => {
+                a = JSON.parse(a);
+                return (
+                  <>
+                    {a.user} : {a.input}
+                    <br />
+                  </>
+                );
+              })}
             </div>
             <form
               onSubmit={(e) => {
@@ -231,15 +251,15 @@ export default function profile() {
                 <label class="label"></label>
                 <div class="flex space-x-2">
                   <input
-                    placeholder="Search"
-                    class="w-full input input-primary input-bordered"
+                    placeholder="Chat"
+                    class="w-full input input-bordered"
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     disabled={!data.currentUser}
                   />
                   <button
-                    class="btn btn-primary"
+                    class="btn"
                     type="submit"
                     disabled={!data.currentUser}
                   >
@@ -249,7 +269,7 @@ export default function profile() {
               </div>
             </form>
           </div>
-          <div class="bg-white"></div>
+          <div></div>
           <div>
             {host && (
               <Video
@@ -258,13 +278,13 @@ export default function profile() {
               />
             )}
           </div>
-          <div class="bg-white"></div>
+          <div></div>
 
           {(thisHost ||
             (data.currentUser && allowed.includes(data.currentUser._id))) &&
             (!publisher ? (
               <button
-                class="btn btn-outline btn-primary"
+                class="btn btn-outline"
                 onClick={() => {
                   let publisher = OV.initPublisher(undefined, {
                     audioSource: undefined,
@@ -289,11 +309,11 @@ export default function profile() {
                   });
                 }}
               >
-                STREAM
+                Join
               </button>
             ) : (
               <button
-                class="btn btn-outline btn-primary"
+                class="btn btn-outline"
                 onClick={() => {
                   publisher.stream.disposeWebRtcPeer();
                   publisher.stream.disposeMediaStream();
@@ -301,38 +321,37 @@ export default function profile() {
                   setPublisher();
                 }}
               >
-                Stop Stream
+                Leave
               </button>
             ))}
           {publisher && (
             <>
               <button
-                class="btn btn-outline btn-primary"
+                class="btn btn-outline"
                 onClick={() => {
                   publisher.publishAudio(!publisher.stream.audioActive);
+                  setAudioOff(!audioOff);
                 }}
               >
-                myStream : {publisher.stream.audioActive ? "Mute" : "Umute"}
+                {audioOff ? <FiMicOff /> : <BsMic />}
               </button>
               <button
-                class="btn btn-outline btn-primary"
+                class="btn btn-outline"
                 onClick={() => {
                   publisher.publishVideo(!publisher.stream.videoActive);
+                  setVideoOff(!videoOff);
                 }}
               >
-                myStream :{" "}
-                {publisher.stream.videoActive
-                  ? "Remove Video"
-                  : "Bring Back Video"}
+                {videoOff ? <FiVideoOff /> : <FiVideo />}
               </button>
             </>
           )}
-          <button
+          {/* <button
             class="btn btn-outline btn-secondary"
             onClick={() => setMuted({ right: false, left: false, host: false })}
           >
             Mute all
-          </button>
+          </button> */}
         </div>
       ) : (
         <div class="flex h-screen">
