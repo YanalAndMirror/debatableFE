@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { BsMic } from "react-icons/bs";
-import { FiMicOff } from "react-icons/fi";
+import { useEffect, useRef, useState } from 'react';
+import { BsMic } from 'react-icons/bs';
+import { FiMicOff } from 'react-icons/fi';
 const Video = ({ stream, muted, mute, thisHost, side, kick, vote }) => {
   const userVideo = useRef({});
   const [isMuted, setIsMuted] = useState(false);
@@ -30,7 +30,6 @@ const Video = ({ stream, muted, mute, thisHost, side, kick, vote }) => {
         </figure>
         <div class="card-body">
           <h2 class="card-title">
-            {" "}
             {JSON.parse(stream.stream.connection.data).clientData.username}
           </h2>
           <div class="justify-center card-actions">
@@ -55,7 +54,7 @@ const Video = ({ stream, muted, mute, thisHost, side, kick, vote }) => {
                   }
                 >
                   Kick
-                </button>{" "}
+                </button>{' '}
               </>
             )}
             <input
@@ -78,7 +77,7 @@ const Video = ({ stream, muted, mute, thisHost, side, kick, vote }) => {
                 });
               }}
             >
-              {volume.muted ? "unmute" : "mute"} for me
+              {volume.muted ? 'unmute' : 'mute'} for me
             </button>
             <button
               onClick={() => {
