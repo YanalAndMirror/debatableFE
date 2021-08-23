@@ -15,7 +15,9 @@
     "graphql": "^15.5.1",
     "js-cookie": "^3.0.0",
     "next": "latest",
+    "openvidu-browser": "^2.19.0",
     "react": "^17.0.2",
+    "react-countdown": "^2.3.2",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.4",
     "react-fade-in": "^2.0.1",
@@ -23,6 +25,8 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-rating": "^2.0.5",
     "react-scroll-to-bottom": "^4.1.2",
+    "react-select": "^4.3.1",
+    "react-share-social": "^0.1.48",
     "react-toastify": "^7.0.4",
     "react-xarrows": "2.0.1"
   },

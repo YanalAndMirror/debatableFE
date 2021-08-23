@@ -27,10 +27,23 @@ export const USER_SIGNUP = gql`
   }
 `;
 export const USER_UPDATE = gql`
-  mutation UpdateUserMutation($username: String, $photo: String) {
-    updateUser(user: { username: $username, photo: $photo }) {
+  mutation UpdateUserMutation(
+    $username: String
+    $photo: String
+    $email: String
+    $password: String
+  ) {
+    updateUser(
+      user: {
+        username: $username
+        photo: $photo
+        email: $email
+        password: $password
+      }
+    ) {
       username
       photo
+      email
     }
   }
 `;
@@ -39,8 +52,11 @@ export const CREATE_DEBATE = gql`
     $title: String!
     $photo: String!
     $argue: String!
+    $tags: [String]
   ) {
-    createDebate(debate: { title: $title, photo: $photo, argue: $argue }) {
+    createDebate(
+      debate: { title: $title, photo: $photo, argue: $argue, tags: $tags }
+    ) {
       _id
       title
       photo
@@ -49,10 +65,33 @@ export const CREATE_DEBATE = gql`
       participants
       argueVotes
       slug
+      tags {
+        title
+      }
     }
   }
 `;
-
+export const ADD_ROOM_VOTE = gql`
+  mutation addRoomVote($slug: String!, $side: String!) {
+    addRoomVote(slug: $slug, side: $side) {
+      slug
+      vote {
+        user
+        side
+      }
+    }
+  }
+`;
+export const UPDATE_ROOM_STATUS = gql`
+  mutation roomStatus($slug: String) {
+    roomStatus(slug: $slug) {
+      _id
+      title
+      user
+      slug
+    }
+  }
+`;
 export const CREATE_ARGUE = gql`
   mutation CreateArgueMutation($argue: ArgueCreateInput!) {
     createArgue(argue: $argue) {
@@ -80,6 +119,23 @@ export const VOTE_ARGUE = gql`
         number
         amount
       }
+    }
+  }
+`;
+export const FOLLOW_DEBATE = gql`
+  mutation FollowMutation($followDebate: String!) {
+    follow(debate: $followDebate) {
+      _id
+    }
+  }
+`;
+export const CREATE_ROOM = gql`
+  mutation Mutation($debate: String, $title: String) {
+    createRoom(room: { debate: $debate, title: $title }) {
+      _id
+      title
+      slug
+      user
     }
   }
 `;

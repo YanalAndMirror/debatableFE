@@ -1,23 +1,32 @@
-import React, { useState } from 'react';
-import { CREATE_DEBATE } from '../providers/apollo/mutations';
-import { useMutation, useQuery } from '@apollo/client';
-import { currentUser, getDebates } from '../providers/apollo/queries';
-import { useRouter } from 'next/router';
-import axios from 'axios';
+import React, { useState } from "react";
+import { CREATE_DEBATE } from "../providers/apollo/mutations";
+import { useMutation, useQuery } from "@apollo/client";
+import { currentUser, getDebates, getTags } from "../providers/apollo/queries";
+import { useRouter } from "next/router";
+import Select from "react-select";
+import instance from "../components/utils/instance";
 export default function create() {
-  const router = useRouter();
-  const [debate, setDebate] = useState({ photo: null });
-  const { data } = useQuery(currentUser);
-
+  const { loading, data } = useQuery(getTags);
+  const [selectState, setSelectState] = useState(false);
+  const [debate, setDebate] = useState({ photo: null, tags: [] });
   const [createDebate] = useMutation(CREATE_DEBATE);
+  const router = useRouter();
+  if (loading) return <>Loading</>;
+
+  const options = data.tags.map((tag) => {
+    return {
+      value: tag._id,
+      label: tag.title,
+    };
+  });
 
   const handleChange = (event) => {
     setDebate({ ...debate, [event.target.name]: event.target.value });
   };
   const uploadImage = async (e) => {
     const formData = new FormData();
-    formData.append('file', e.target?.files[0]);
-    const res = await axios.post(`http://localhost:4000/uploadImage`, formData);
+    formData.append("file", e.target?.files[0]);
+    const res = await instance.post(`/uploadImage`, formData);
     setDebate({ ...debate, photo: res.data });
   };
   const handleSubmit = (event) => {
@@ -37,15 +46,11 @@ export default function create() {
           }
         },
       });
-      router.push('/');
+      router.push("/");
     } catch (e) {
       console.log(e);
     }
   };
-  if (!data.currentUser) {
-    return <>You should be signed in to create a debate</>;
-  }
-  // document.body.classList.add('bg-base-100');
   return (
     <div className=" min-h-full">
       <div className="md:container md:mx-auto mt-36 text-base-content">
@@ -66,7 +71,7 @@ export default function create() {
         </label>
         <textarea
           class="textarea h-24 textarea-bordered"
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
           placeholder="argue"
           onChange={handleChange}
           name="argue"
@@ -111,6 +116,20 @@ export default function create() {
             <div className="btn">Select</div>
           </label>
         )}
+        <Select
+          closeMenuOnSelect={false}
+          isMulti
+          options={options}
+          className="mt-4"
+          isDisabled={selectState}
+          isClearable="true"
+          onChange={(value) => {
+            setDebate({ ...debate, tags: value.map((v) => v.value) });
+            if (debate["tags"].length > 1) {
+              setSelectState(true);
+            }
+          }}
+        />
         <br />
         <button class="btn btn-outline ml-2 mb-36 float-right">Cancel</button>
         {!debate.title || !debate.argue || !debate.photo ? (

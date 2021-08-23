@@ -4,12 +4,14 @@ import Body from '../components/Body/Body';
 import Header from '../components/Header';
 import { getDebates } from '../providers/apollo/queries';
 import { Tab } from '@headlessui/react';
+import { ImSearch } from 'react-icons/im';
 export default function Home() {
   const [page, setPage] = useState({
     debatesStart: 0,
     debatesAmount: 9,
     debatesOrder: 'hot',
   });
+  const [query, setQuery] = useState('');
 
   const { loading, data } = useQuery(getDebates, {
     variables: page,
@@ -20,69 +22,90 @@ export default function Home() {
     <>
       <Header />
       <div className="md:container md:mx-auto ">
-        <div className="tabs ml-32">
-          <Tab.Group>
-            <Tab.List>
-              <span
-                onClick={() =>
-                  setPage({
-                    debatesStart: 0,
-                    debatesAmount: 9,
-                    debatesOrder: 'hot',
-                  })
-                }
-              >
-                <Tab
-                  className={
-                    page.debatesOrder === 'hot'
-                      ? 'tab tab-bordered tab-active'
-                      : 'tab tab-bordered'
+        <div className="justify-between flex">
+          <div className="tabs ml-32">
+            <Tab.Group>
+              <Tab.List>
+                <span
+                  onClick={() =>
+                    setPage({
+                      debatesStart: 0,
+                      debatesAmount: 9,
+                      debatesOrder: 'hot',
+                    })
                   }
                 >
-                  Featured
-                </Tab>
-              </span>
-              <span
-                onClick={() =>
-                  setPage({
-                    debatesStart: 0,
-                    debatesAmount: 9,
-                    debatesOrder: 'popularity',
-                  })
-                }
-              >
-                <Tab
-                  className={
-                    page.debatesOrder === 'popularity'
-                      ? 'tab tab-bordered tab-active'
-                      : 'tab tab-bordered'
+                  <Tab
+                    className={
+                      page.debatesOrder === 'hot'
+                        ? 'tab tab-bordered tab-active'
+                        : 'tab tab-bordered'
+                    }
+                  >
+                    Featured
+                  </Tab>
+                </span>
+                <span
+                  onClick={() =>
+                    setPage({
+                      debatesStart: 0,
+                      debatesAmount: 9,
+                      debatesOrder: 'popularity',
+                    })
                   }
                 >
-                  Popular
-                </Tab>
-              </span>
-              <span
-                onClick={() =>
-                  setPage({
-                    debatesStart: 0,
-                    debatesAmount: 9,
-                    debatesOrder: 'new',
-                  })
-                }
-              >
-                <Tab
-                  className={
-                    page.debatesOrder === 'new'
-                      ? 'tab tab-bordered tab-active'
-                      : 'tab tab-bordered'
+                  <Tab
+                    className={
+                      page.debatesOrder === 'popularity'
+                        ? 'tab tab-bordered tab-active'
+                        : 'tab tab-bordered'
+                    }
+                  >
+                    Popular
+                  </Tab>
+                </span>
+                <span
+                  onClick={() =>
+                    setPage({
+                      debatesStart: 0,
+                      debatesAmount: 9,
+                      debatesOrder: 'new',
+                    })
                   }
                 >
-                  New
-                </Tab>
-              </span>
-            </Tab.List>
-          </Tab.Group>
+                  <Tab
+                    className={
+                      page.debatesOrder === 'new'
+                        ? 'tab tab-bordered tab-active'
+                        : 'tab tab-bordered'
+                    }
+                  >
+                    New
+                  </Tab>
+                </span>
+              </Tab.List>
+            </Tab.Group>
+          </div>
+          {/* search  */}
+          <div class="form-control mr-28">
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Search"
+                class="w-full pr-16 input input-bordered"
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <button
+                class="absolute top-0 right-0 rounded-l-none btn"
+                onClick={() => setPage({ ...page, debatesKeyword: query })}
+              >
+                <ImSearch />{' '}
+              </button>
+            </div>
+          </div>
+          {/* end search */}
         </div>
+
         <Body debates={data.debates} />
       </div>
 

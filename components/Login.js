@@ -11,7 +11,6 @@ import { Tab } from '@headlessui/react';
 export default function Login() {
   const [signIn] = useMutation(USER_LOGIN, {
     onCompleted(data) {
-      console.log(data);
       if (data.signin !== null) {
         Cookies.set('token', data.signin.token);
         userVar(data.signin.user);

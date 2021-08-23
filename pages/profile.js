@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import UserActivitys from '../components/UserProfile/UserActivitys';
 import UserStats from '../components/UserProfile/UserStats';
 import { useQuery } from '@apollo/client';
-import { currentUser } from '../providers/apollo/queries';
+import { currentUser, getUser } from '../providers/apollo/queries';
 import UpdateModal from '../components/UserProfile/UpdateModal';
+import { Tab } from '@headlessui/react';
+import CardList from '../components/Body/CardList';
 
 export default function profile() {
   const user = useQuery(currentUser).data.currentUser;
-
+  let [isOpen, setIsOpen] = useState(false);
+  const { data } = useQuery(getUser);
+  const notfications = data?.user.notifications;
   return (
     <>
-      <div className="card text-center shadow-2xl ">
+      <div className="card text-center ">
         <center>
           <div className="avatar">
             <div className=" w-24 h-24 mask mask-squircle mt-8">
@@ -27,11 +31,39 @@ export default function profile() {
             {user?.username.charAt(0).toUpperCase() + user?.username.slice(1)}
           </h2>
           <p>
-            <UserStats />
+            <UserStats user={data?.user} />
           </p>
         </div>
-        <UpdateModal user={user} />
-        <UserActivitys />
+        <UpdateModal user={user} isOpen={isOpen} setIsOpen={setIsOpen} />
+        <UserActivitys notfications={notfications} />
+
+        <Tab.Group>
+          <Tab.List>
+            <Tab
+              className={({ selected }) =>
+                selected ? 'tab tab-bordered tab-active' : 'tab tab-bordered'
+              }
+            >
+              Your Debates
+            </Tab>
+            <Tab
+              className={({ selected }) =>
+                selected ? 'tab tab-bordered tab-active' : 'tab tab-bordered'
+              }
+            >
+              Your Argues
+            </Tab>
+          </Tab.List>
+          <Tab.Panels>
+            <Tab.Panel>
+              <CardList debates={data?.user?.debates}></CardList>
+            </Tab.Panel>
+            <Tab.Panel>
+              {' '}
+              <CardList debates={data?.user?.otherDebates}></CardList>
+            </Tab.Panel>
+          </Tab.Panels>
+        </Tab.Group>
       </div>
     </>
   );

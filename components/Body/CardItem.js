@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function CardItem({ debate }) {
   return (
-    <div className="card bordered m-4 text-base-content">
+    <div className="card h-max border-2 m-4 text-base-content">
       <Link href={'/' + debate.slug}>
         <figure>
           <img
@@ -17,7 +17,7 @@ export default function CardItem({ debate }) {
         </figure>
       </Link>
 
-      <div className="card-body">
+      <div className="card-body h-max">
         <Link href={'/' + debate.slug}>
           <h2 className="card-title mt-0 cursor-pointer">{debate.title}</h2>
         </Link>
@@ -39,8 +39,9 @@ export default function CardItem({ debate }) {
           </div>
         </p>
         <div className="card-actions">
-          <div className="badge badge-outline">Article</div>
-          <div className="badge badge-outline">Photography</div>
+          {debate.tags?.map((tag) => {
+            return <div className="badge badge-outline">{tag.title}</div>;
+          })}
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
-import { useQuery } from "@apollo/client";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import Body from "../../components/Body/Body";
-import Header from "../../components/Header";
-import { getDebates } from "../../providers/apollo/queries";
+import { useQuery } from '@apollo/client';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import Body from '../../components/Body/Body';
+import Header from '../../components/Header';
+import { getDebates } from '../../providers/apollo/queries';
 export default function Home() {
   const router = useRouter();
   const { tag } = router.query;
@@ -18,7 +18,6 @@ export default function Home() {
   if (loading) return <>loading</>;
   return (
     <>
-      <Header />
       <div className="md:container md:mx-auto ">
         <Body debates={data.debates} />
       </div>
