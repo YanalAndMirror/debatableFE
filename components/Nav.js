@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import Login from './Login';
-import { BiAddToQueue } from 'react-icons/bi';
-import { userVar } from '../providers/apollo/vars';
-import { useQuery } from '@apollo/client';
-import { currentUser, getUser } from '../providers/apollo/queries';
-import { CgMediaLive } from 'react-icons/cg';
-import LoggedIn from './LoggedIn';
-import ThemeMenu from './ThemeMenu';
-import Notifications from './Notifications';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import Login from "./Login";
+import { BiAddToQueue } from "react-icons/bi";
+import { userVar } from "../providers/apollo/vars";
+import { useQuery } from "@apollo/client";
+import { currentUser, getUser } from "../providers/apollo/queries";
+import { CgMediaLive } from "react-icons/cg";
+import LoggedIn from "./LoggedIn";
+import ThemeMenu from "./ThemeMenu";
+import Notifications from "./Notifications";
 
 export default function Nav() {
   const { data } = useQuery(getUser);
@@ -20,8 +20,8 @@ export default function Nav() {
 
   useEffect(() => {
     document.documentElement.setAttribute(
-      'data-theme',
-      theme ?? localStorage?.getItem('theme')
+      "data-theme",
+      theme ?? localStorage?.getItem("theme") ?? "fantasy"
     );
   }, [theme]);
   return (

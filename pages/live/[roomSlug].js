@@ -171,7 +171,7 @@ export default function profile() {
       setVotes(data.room.vote);
     },
   });
-  const debate = room.data?.room.debate;
+  const debate = room.data?.room?.debate;
   useEffect(() => {
     if (users.length > 0) {
       if (data.currentUser?._id === room.data.room.user) {

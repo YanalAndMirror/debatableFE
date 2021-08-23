@@ -106,7 +106,7 @@ export default function Home() {
     .map((argue) => (
       <FadeIn>
         <div className="card shadow rounded-none text-base-content">
-          <div onClick={() => changeParent(argue._id)} className="card-body">
+          <div className="card-body">
             <div className="card-actions float-right">
               <BsArrowUpDown />
               {argue.votes.number > 0
@@ -118,7 +118,7 @@ export default function Home() {
             </div>
             <VotingBar argue={argue} doVote={doVote} color="green" />
 
-            <p>{argue.content}</p>
+            <p onClick={() => changeParent(argue._id)}>{argue.content}</p>
           </div>
         </div>
       </FadeIn>
@@ -131,7 +131,7 @@ export default function Home() {
     .map((argue) => (
       <FadeIn>
         <div className="card shadow rounded-none text-base-content">
-          <div onClick={() => changeParent(argue._id)} className="card-body">
+          <div className="card-body">
             <div className="card-actions float-right">
               <BsArrowUpDown />
               {argue.votes.number > 0
@@ -143,7 +143,7 @@ export default function Home() {
             </div>
             <VotingBar argue={argue} doVote={doVote} color="red" />
 
-            <p>{argue.content}</p>
+            <p onClick={() => changeParent(argue._id)}>{argue.content}</p>
           </div>
         </div>
       </FadeIn>
@@ -189,7 +189,7 @@ export default function Home() {
                       >
                         <li>
                           <ShareSocial
-                            url="http://url_to_share.com"
+                            url={window?.location?.href}
                             socialTypes={[
                               "facebook",
                               "twitter",
