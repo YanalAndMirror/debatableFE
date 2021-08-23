@@ -110,6 +110,10 @@ export const getDebate = gql`
           amount
         }
       }
+      room {
+        live
+        slug
+      }
     }
   }
 `;

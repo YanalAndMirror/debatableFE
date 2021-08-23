@@ -1,21 +1,22 @@
-import React from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import { currentUser, getRoom } from '../../providers/apollo/queries';
-import { FiVideo } from 'react-icons/fi';
-import { FiVideoOff } from 'react-icons/fi';
-import { BsMic } from 'react-icons/bs';
-import { FiMicOff } from 'react-icons/fi';
-import { unstable_batchedUpdates } from 'react-dom';
+import React from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { currentUser, getRoom } from "../../providers/apollo/queries";
+import { FiVideo } from "react-icons/fi";
+import { FiVideoOff } from "react-icons/fi";
+import { BsMic } from "react-icons/bs";
+import { FiMicOff } from "react-icons/fi";
+import { unstable_batchedUpdates } from "react-dom";
+import Countdown from "react-countdown";
 
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import Video from '../../components/Video';
-import instance from '../../components/utils/instance';
-import { Link } from '@material-ui/core';
-import { ADD_ROOM_VOTE } from '../../providers/apollo/mutations';
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import Video from "../../components/Video";
+import instance from "../../components/utils/instance";
+import { Link } from "@material-ui/core";
+import { ADD_ROOM_VOTE } from "../../providers/apollo/mutations";
 let openviduBrowser;
-if (typeof window !== 'undefined')
-  openviduBrowser = require('openvidu-browser');
+if (typeof window !== "undefined")
+  openviduBrowser = require("openvidu-browser");
 export default function profile() {
   const { data } = useQuery(currentUser);
   const router = useRouter();
@@ -31,6 +32,12 @@ export default function profile() {
   const [input, setInput] = useState(null);
   const [audioOff, setAudioOff] = useState(false);
   const [videoOff, setVideoOff] = useState(false);
+  const [timer, setTimer] = useState({
+    timestamp: Date.now(),
+    time: 0,
+    active: false,
+  });
+  const [input2, setInput2] = useState(null);
 
   const [muted, setMuted] = useState({
     right: false,
@@ -43,19 +50,19 @@ export default function profile() {
   const mute = (side) => {
     session.signal({
       data: side,
-      type: 'mute',
+      type: "mute",
     });
   };
   const kick = (id) => {
     session.signal({
       data: id,
-      type: 'kick',
+      type: "kick",
     });
   };
   const vote = (side) => {
     session.signal({
       data: JSON.stringify({ user: data.currentUser._id, side }),
-      type: 'vote',
+      type: "vote",
     });
     addRoomVote({ variables: { slug: roomSlug, side } });
   };
@@ -84,20 +91,20 @@ export default function profile() {
   }, [data]);
   useEffect(async () => {
     if (!session) return;
-    session.on('streamCreated', (event) => {
+    session.on("streamCreated", (event) => {
       let subscriber = session.subscribe(event.stream, undefined);
       setSubscribers((currentState) => [...currentState, subscriber]);
     });
-    session.on('streamDestroyed', (event) => {
+    session.on("streamDestroyed", (event) => {
       event.preventDefault();
       setSubscribers((currentState) =>
         currentState.filter((s) => s !== event.stream.streamManager)
       );
     });
-    session.on('connectionCreated', (event) => {
+    session.on("connectionCreated", (event) => {
       setUsers((users) => [...users, event.connection]);
     });
-    session.on('connectionDestroyed', (event) => {
+    session.on("connectionDestroyed", (event) => {
       setUsers((users) => users.filter((user) => user !== event.connection));
       setAllowed((allowed) =>
         allowed.filter(
@@ -107,35 +114,35 @@ export default function profile() {
         )
       );
     });
-    session.on('signal:my-chat', (event) => {
+    session.on("signal:my-chat", (event) => {
       setChat((currentState) => [...currentState, event.data]);
     });
-    session.on('signal:mute', (event) => {
+    session.on("signal:mute", (event) => {
       setMuted((currentState) => ({
         ...currentState,
         [event.data]: !currentState[event.data],
       }));
     });
-    session.on('signal:muteMatch', (event) => {
+    session.on("signal:muteMatch", (event) => {
       setMuted((currentState) =>
         !currentState.host ? JSON.parse(event.data) : currentState
       );
     });
-    session.on('signal:stream', (event) => {
+    session.on("signal:stream", (event) => {
       setMuted((currentState) => ({
         ...currentState,
         [event.data]: !currentState[event.data],
       }));
     });
-    session.on('signal:allow', (event) => {
+    session.on("signal:allow", (event) => {
       setAllowed((currentState) => [...currentState, event.data]);
     });
-    session.on('signal:disallow', (event) => {
+    session.on("signal:disallow", (event) => {
       setAllowed((currentState) =>
         currentState.filter((a) => a !== event.data)
       );
     });
-    session.on('signal:vote', (event) => {
+    session.on("signal:vote", (event) => {
       let myVote = JSON.parse(event.data);
       console.log(myVote);
       setVotes((votes) => [
@@ -143,50 +150,53 @@ export default function profile() {
         myVote,
       ]);
     });
+    session.on("signal:timer", (event) => {
+      setTimer({ ...JSON.parse(event.data), active: true });
+    });
     return () => {
       if (!session) return;
-      session.off('streamCreated');
-      session.off('streamDestroyed');
-      session.off('connectionCreated');
-      session.off('connectionDestroyed');
-      session.off('signal:my-chat');
-      session.off('signal:mute');
-      session.off('signal:muteMatch');
-      session.off('signal:stream');
-      session.off('signal:allow');
-      session.off('signal:disallow');
-      session.off('signal:vote');
+      session.off("streamCreated");
+      session.off("streamDestroyed");
+      session.off("connectionCreated");
+      session.off("connectionDestroyed");
+      session.off("signal:my-chat");
+      session.off("signal:mute");
+      session.off("signal:muteMatch");
+      session.off("signal:stream");
+      session.off("signal:allow");
+      session.off("signal:disallow");
+      session.off("signal:vote");
+      session.off("signal:timer");
     };
   }, [session]);
   useEffect(() => {
     if (session)
-      router.events.on('routeChangeComplete', () => session.disconnect());
+      router.events.on("routeChangeComplete", () => session.disconnect());
     return () => {
-      router.events.off('routeChangeComplete', () => session.disconnect());
+      router.events.off("routeChangeComplete", () => session.disconnect());
     };
   }, [session]);
-  const room = useQuery(getRoom, {
-    variables: { slug: roomSlug },
-    onCompleted: (data) => {
-      setVotes(data.room.vote);
-    },
-  });
-  const debate = room.data?.room?.debate;
   useEffect(() => {
     if (users.length > 0) {
       if (data.currentUser?._id === room.data.room.user) {
         if (!muted.host) {
           session.signal({
             data: JSON.stringify(muted),
-            type: 'muteMatch',
+            type: "muteMatch",
           });
         }
       }
     }
   }, [users]);
-
+  const room = useQuery(getRoom, {
+    variables: { slug: roomSlug },
+    onCompleted: (data) => {
+      setVotes(data.room.vote);
+    },
+  });
   if (!data || !room.data) return <>loading</>;
   if (!room.data.room) return <>Not Found</>;
+  const debate = room.data?.room?.debate;
   let streams = [publisher, ...subscribers].filter((a) => a !== undefined);
   streams.sort((a, b) => {
     if (
@@ -198,23 +208,23 @@ export default function profile() {
   });
   let host = streams.find(
     (stream) =>
-      JSON.parse(stream.stream.connection.data).clientData.type === 'host'
+      JSON.parse(stream.stream.connection.data).clientData.type === "host"
   );
   streams = streams.filter(
     (stream) =>
-      JSON.parse(stream.stream.connection.data).clientData.type !== 'host'
+      JSON.parse(stream.stream.connection.data).clientData.type !== "host"
   );
   let rightDebater = streams[0];
   let leftDebater = streams[1];
   let thisHost = data.currentUser?._id === room.data.room.user;
-  let rightVotes = votes.filter((vote) => vote.side === 'right');
-  let leftVotes = votes.filter((vote) => vote.side === 'left');
+  let rightVotes = votes.filter((vote) => vote.side === "right");
+  let leftVotes = votes.filter((vote) => vote.side === "left");
   return (
     <div class="container m-6">
       {join ? (
         <div
           class="grid grid-cols-4  gap-6 border-2 p-4"
-          style={{ height: '90vh' }}
+          style={{ height: "90vh" }}
         >
           <div>
             {leftDebater && (
@@ -225,9 +235,9 @@ export default function profile() {
                   thisHost={thisHost}
                   mute={mute}
                   kick={kick}
-                  side={'left'}
+                  side={"left"}
                   vote={vote}
-                />{' '}
+                />{" "}
               </>
             )}
           </div>
@@ -241,9 +251,9 @@ export default function profile() {
                   thisHost={thisHost}
                   mute={mute}
                   kick={kick}
-                  side={'right'}
+                  side={"right"}
                   vote={vote}
-                />{' '}
+                />{" "}
               </>
             )}
           </div>
@@ -251,7 +261,7 @@ export default function profile() {
             <center className="flex justify-between">
               <button
                 className="btn bg-green-500 m-1"
-                onClick={() => vote('left')}
+                onClick={() => vote("left")}
               >
                 Left
                 <div class="badge ml-2 badge-outline">{leftVotes.length}</div>
@@ -259,7 +269,7 @@ export default function profile() {
               Vote
               <button
                 className="btn bg-red-500 m-1"
-                onClick={() => vote('right')}
+                onClick={() => vote("right")}
               >
                 Right
                 <div class="badge ml-2 badge-outline">{rightVotes.length}</div>
@@ -281,7 +291,7 @@ export default function profile() {
               <br />
               {users
                 .filter(
-                  (u) => JSON.parse(u.data).clientData.username !== 'Guest'
+                  (u) => JSON.parse(u.data).clientData.username !== "Guest"
                 )
                 .map((u) => {
                   let thisUser = JSON.parse(u.data).clientData;
@@ -297,7 +307,7 @@ export default function profile() {
                             onClick={() =>
                               session.signal({
                                 data: thisUser.userId,
-                                type: 'allow',
+                                type: "allow",
                               })
                             }
                           >
@@ -309,7 +319,7 @@ export default function profile() {
                             onClick={() =>
                               session.signal({
                                 data: thisUser.userId,
-                                type: 'disallow',
+                                type: "disallow",
                               })
                             }
                           >
@@ -341,9 +351,9 @@ export default function profile() {
                     input,
                     user: data.currentUser.username,
                   }),
-                  type: 'my-chat',
+                  type: "my-chat",
                 });
-                setInput('');
+                setInput("");
               }}
             >
               <div class="form-control">
@@ -378,7 +388,36 @@ export default function profile() {
               />
             )}
           </div>
-          <div></div>
+          <div>
+            {timer.active && (
+              <Countdown
+                date={+timer.timestamp + timer.time * 1 * 1000}
+                onComplete={() =>
+                  setTimer({ timestamp: Date.now(), time: 0, active: false })
+                }
+              />
+            )}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                session.signal({
+                  data: JSON.stringify({
+                    timestamp: Date.now(),
+                    time: +input2,
+                  }),
+                  type: "timer",
+                });
+                setInput2(null);
+              }}
+            >
+              <input
+                class="w-full input input-bordered"
+                type="number"
+                value={input2}
+                onChange={(e) => setInput2(e.target.value)}
+              />
+            </form>
+          </div>
 
           {(thisHost ||
             (data.currentUser && allowed.includes(data.currentUser._id))) &&
@@ -391,16 +430,16 @@ export default function profile() {
                     videoSource: undefined,
                     publishAudio: true,
                     publishVideo: true,
-                    resolution: '640x480',
+                    resolution: "640x480",
                     frameRate: 30,
-                    insertMode: 'APPEND',
+                    insertMode: "APPEND",
                     mirror: false,
                   });
                   session.publish(publisher);
                   setPublisher(publisher);
-                  session.on('signal:kick', (event) => {
+                  session.on("signal:kick", (event) => {
                     if (event.data === data.currentUser._id) {
-                      alert('you have been kicked');
+                      alert("you have been kicked");
                       publisher.stream.disposeWebRtcPeer();
                       publisher.stream.disposeMediaStream();
                       session.unpublish(publisher);
@@ -452,7 +491,7 @@ export default function profile() {
           <div class="m-auto">
             <button
               onClick={async () => {
-                let token = await instance.post('/openViduToken', {
+                let token = await instance.post("/openViduToken", {
                   room: roomSlug,
                 });
                 if (token) {
@@ -462,11 +501,11 @@ export default function profile() {
                     clientData: {
                       type:
                         data.currentUser?._id === room.data.room.user
-                          ? 'host'
-                          : 'debater',
+                          ? "host"
+                          : "debater",
                       username: data.currentUser
                         ? data.currentUser.username
-                        : 'Guest',
+                        : "Guest",
                       userId: data.currentUser ? data.currentUser._id : 0,
                     },
                   });
@@ -474,7 +513,7 @@ export default function profile() {
               }}
               class="btn btn-wide btn-lg"
             >
-              Join as {data.currentUser ? data.currentUser.username : 'Guest'}
+              Join as {data.currentUser ? data.currentUser.username : "Guest"}
             </button>
           </div>
         </div>

@@ -33,7 +33,12 @@ export default function Home() {
   const [vote] = useMutation(VOTE_ARGUE);
   const [createArgue] = useMutation(CREATE_ARGUE);
   const [followDebate] = useMutation(FOLLOW_DEBATE);
-  const [createRoom] = useMutation(CREATE_ROOM);
+  const [createRoom] = useMutation(CREATE_ROOM, {
+    onCompleted: (data) => {
+      console.log(data);
+      router.push(`/live/${data?.createRoom.slug}`);
+    },
+  });
 
   if (loading) return <>loading</>;
   const doVote = (argue, value) => {
@@ -61,7 +66,6 @@ export default function Home() {
         title: data?.debate.slug,
       },
     });
-    router.push(`/live/${data?.debate.slug}`);
   };
   const addArgue = () => {
     createArgue({
@@ -171,9 +175,23 @@ export default function Home() {
                       : 0}
                   </div>
                   <div>
-                    <button className="btn m-1" onClick={handleCreateRoom}>
-                      Create Live Debate
-                    </button>
+                    {data.debate.room?.live ? (
+                      <button
+                        className="m-1 btn"
+                        onClick={() =>
+                          router.push(`/live/${data.debate.room.slug}`)
+                        }
+                      >
+                        Live
+                        <span className="text-red-500 text-2xl ml-1 mb-2">
+                          &bull;
+                        </span>
+                      </button>
+                    ) : (
+                      <button className="btn m-1" onClick={handleCreateRoom}>
+                        Create Live Debate
+                      </button>
+                    )}
                     <button className="btn" onClick={handleFollowDebate}>
                       {followed?.includes(data?.debate._id)
                         ? "followed"
