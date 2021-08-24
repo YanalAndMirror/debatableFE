@@ -1,5 +1,4 @@
 import "tailwindcss/tailwind.css";
-
 import { ApolloProvider } from "@apollo/client";
 import client from "../providers/apollo/client.js";
 import Nav from "../components/Nav";
