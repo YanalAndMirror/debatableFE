@@ -211,8 +211,9 @@ export default function Home() {
                           <ShareSocial
                             url={window?.location?.href}
                             socialTypes={[
-                              "facebook",
                               "twitter",
+
+                              "facebook",
                               "reddit",
                               "email",
                             ]}

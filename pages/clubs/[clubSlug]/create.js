@@ -70,18 +70,14 @@ export default function create() {
             data = cache.readQuery({
               query: getDebates,
               variables: {
-                debatesStart: 0,
-                debatesAmount: 9,
-                debateClub: myClub.data.club._id,
+                debatesClub: myClub.data.club.slug,
               },
             });
             if (data && data.debates.length < 9) {
               cache.writeQuery({
                 query: getDebates,
                 variables: {
-                  debatesStart: 0,
-                  debatesAmount: 9,
-                  debateClub: myClub.data.club._id,
+                  debatesClub: myClub.data.club.slug,
                 },
                 data: { debates: [...data.debates, createDebate] },
               });
