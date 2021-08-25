@@ -39,7 +39,7 @@ export default function Nav() {
             <span className="btn btn-ghost btn-sm rounded-btn">
               <Link href="/tags">Explore</Link>
             </span>
-            <Link href="/livedebates">
+            <Link href="/live">
               <span className="btn btn-ghost btn-sm rounded-btn">
                 <CgMediaLive className="mr-1" size="24px" />
                 Live

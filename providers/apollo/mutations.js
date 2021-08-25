@@ -166,3 +166,11 @@ export const CREATE_CLUB = gql`
     }
   }
 `;
+
+export const ROOMS_STATUE = gql`
+  mutation roomStatus($slug: String, $status: String) {
+    roomStatus(slug: $slug, status: $status) {
+      live
+    }
+  }
+`;

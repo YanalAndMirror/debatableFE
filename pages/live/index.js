@@ -1,7 +1,7 @@
-import { useQuery } from '@apollo/client';
-import router from 'next/router';
-import React from 'react';
-import { getRooms } from '../providers/apollo/queries';
+import { useQuery } from "@apollo/client";
+import router from "next/router";
+import React from "react";
+import { getRooms } from "../../providers/apollo/queries";
 
 export default function liveDebates() {
   const { data, loading } = useQuery(getRooms);

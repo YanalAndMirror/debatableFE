@@ -127,6 +127,7 @@ export const getRoom = gql`
       title
       slug
       user
+      live
       debate {
         _id
         title
