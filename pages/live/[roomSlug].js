@@ -220,7 +220,7 @@ export default function profile() {
   let rightVotes = votes.filter((vote) => vote.side === "right");
   let leftVotes = votes.filter((vote) => vote.side === "left");
   return (
-    <div class="container m-6">
+    <div>
       {join ? (
         <div
           class="grid grid-cols-4  gap-6 border-2 p-4"
@@ -289,47 +289,6 @@ export default function profile() {
             <div class="overflow-visible ...">
               Participants:
               <br />
-              {users
-                .filter(
-                  (u) => JSON.parse(u.data).clientData.username !== "Guest"
-                )
-                .map((u) => {
-                  let thisUser = JSON.parse(u.data).clientData;
-
-                  return (
-                    <>
-                      {thisUser.username}
-                      {thisHost &&
-                        thisUser.username !== data.currentUser.username &&
-                        (!allowed.includes(thisUser.userId) ? (
-                          <button
-                            class="ml-1 btn btn-outline btn-xs"
-                            onClick={() =>
-                              session.signal({
-                                data: thisUser.userId,
-                                type: "allow",
-                              })
-                            }
-                          >
-                            Set as a debator
-                          </button>
-                        ) : (
-                          <button
-                            class="ml-1 btn btn-outline btn-xs btn-error"
-                            onClick={() =>
-                              session.signal({
-                                data: thisUser.userId,
-                                type: "disallow",
-                              })
-                            }
-                          >
-                            Set as a guest
-                          </button>
-                        ))}
-                      <br />
-                    </>
-                  );
-                })}
               <div class="divider"></div>
               <div class="overflow-auto h-72">
                 {chat.map((a) => {
@@ -448,7 +407,7 @@ export default function profile() {
                   });
                 }}
               >
-                Join
+                Stream
               </button>
             ) : (
               <button
@@ -487,35 +446,33 @@ export default function profile() {
           )}
         </div>
       ) : (
-        <div class="flex h-screen">
-          <div class="m-auto">
-            <button
-              onClick={async () => {
-                let token = await instance.post("/openViduToken", {
-                  room: roomSlug,
-                });
-                if (token) {
-                  resetThenJoin();
+        <div class="flex h-72 w-full">
+          <button
+            onClick={async () => {
+              let token = await instance.post("/openViduToken", {
+                room: roomSlug,
+              });
+              if (token) {
+                resetThenJoin();
 
-                  session.connect(token.data, {
-                    clientData: {
-                      type:
-                        data.currentUser?._id === room.data.room.user
-                          ? "host"
-                          : "debater",
-                      username: data.currentUser
-                        ? data.currentUser.username
-                        : "Guest",
-                      userId: data.currentUser ? data.currentUser._id : 0,
-                    },
-                  });
-                }
-              }}
-              class="btn btn-wide btn-lg"
-            >
-              Join as {data.currentUser ? data.currentUser.username : "Guest"}
-            </button>
-          </div>
+                session.connect(token.data, {
+                  clientData: {
+                    type:
+                      data.currentUser?._id === room.data.room.user
+                        ? "host"
+                        : "debater",
+                    username: data.currentUser
+                      ? data.currentUser.username
+                      : "Guest",
+                    userId: data.currentUser ? data.currentUser._id : 0,
+                  },
+                });
+              }
+            }}
+            class="btn btn-wide btn-lg animate-pulse m-auto bg-blue-500 border-none"
+          >
+            Join as {data.currentUser ? data.currentUser.username : "Guest"}
+          </button>
         </div>
       )}
     </div>

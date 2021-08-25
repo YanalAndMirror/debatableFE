@@ -1,5 +1,5 @@
-import React from 'react';
-import Xarrow from 'react-xarrows';
+import React from "react";
+import Xarrow from "react-xarrows";
 
 export default function Pyramid({ debate: { argues }, parent, changeParent }) {
   const root = argues.find((argue) => argue.parent === null);
@@ -29,9 +29,9 @@ export default function Pyramid({ debate: { argues }, parent, changeParent }) {
       <>
         <div
           className={
-            argue.argueType === 'agree'
-              ? 'tooltip tooltip-success tooltip-bottom transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110 rounded-md w-10 h-5  border-success border-2 m-1.5'
-              : 'tooltip tooltip-error tooltip-bottom transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110 rounded-md w-10 h-5  border-error border-2 m-1.5'
+            argue.argueType === "agree"
+              ? "tooltip tooltip-success tooltip-bottom transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110 rounded-md w-16 h-8  border-success border-2 m-1.5"
+              : "tooltip tooltip-error tooltip-bottom transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110 rounded-md w-16 h-8  border-error border-2 m-1.5"
           }
           id={argue._id}
           data-tip={argue.content}
@@ -42,7 +42,7 @@ export default function Pyramid({ debate: { argues }, parent, changeParent }) {
           end={argue._id}
           showHead={false}
           strokeWidth={1}
-          lineColor={argue.argueType === 'agree' ? '#009485' : '#FF5724'}
+          lineColor={argue.argueType === "agree" ? "#009485" : "#FF5724"}
         />
       </>
     ));
@@ -52,7 +52,7 @@ export default function Pyramid({ debate: { argues }, parent, changeParent }) {
     <>
       <center>
         <div
-          className="rounded-md w-10 h-5 border-neutral border-2 m-2"
+          className="rounded-md w-16 h-8 border-neutral border-2 m-2 mt-10"
           id={root._id}
           title={root.content}
           onClick={() => changeParent(null)}

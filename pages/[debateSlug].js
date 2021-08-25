@@ -4,6 +4,8 @@ import { BsArrowUpDown } from "react-icons/bs";
 import VotingBar from "../components/Debate/VotingBar";
 import { getDebate, getUser } from "../providers/apollo/queries";
 import { AiFillPlusSquare } from "react-icons/ai";
+import { AiOutlinePlus } from "react-icons/ai";
+
 import { ShareSocial } from "react-share-social";
 import { useEffect, useState } from "react";
 import {
@@ -159,8 +161,8 @@ export default function Home() {
         parent={parent}
         changeParent={changeParent}
       />
-      <div className="md:container md:mx-auto text-base-content">
-        <div className="card shadow rounded-none">
+      <div className="md:container md:mx-auto text-base-content mt-8">
+        <div className="card shadow rounded-none  border-t-2">
           <FadeIn>
             <div className="card-body">
               <div className="card-actions">
@@ -221,67 +223,63 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <VotingBar argue={mainArgue} color="green" doVote={doVote} />
+              <VotingBar
+                main={true}
+                argue={mainArgue}
+                color="green"
+                doVote={doVote}
+              />
 
               <h2 className="card-title">{mainArgue.content}</h2>
             </div>
           </FadeIn>
-
-          <div className="card-body">
-            <div className="grid grid-cols-2 divide-x h-full">
-              <div className="text-green-600 ">
-                <div className="justify-between flex">
-                  I Agree
-                  <div
-                    className="mr-2 cursor-pointer"
-                    onClick={() => setInput(input !== "agree" ? "agree" : null)}
-                  >
-                    <AiFillPlusSquare size="34px" />
-                  </div>
-                </div>
-              </div>
-              <div className="text-red-600 pl-4">
-                {" "}
-                <div className="justify-between flex">
-                  I Disagree
-                  <div
-                    className="mr-2 cursor-pointer"
-                    onClick={() =>
-                      setInput(input !== "disagree" ? "disagree" : null)
+        </div>
+        <div className="card-body border-r-0 border-l-0 border-t-2">
+          <div className="grid grid-cols-2 divide-x h-full">
+            <button
+              className="btn  btn-success w-3/6 mx-auto"
+              onClick={() => setInput(input !== "agree" ? "agree" : null)}
+            >
+              I Agree <AiOutlinePlus size="20px" />
+            </button>
+            <button
+              className="btn  btn-error w-3/6 mx-auto"
+              onClick={() => setInput(input !== "disagree" ? "disagree" : null)}
+            >
+              I Disagree <AiOutlinePlus size="20px" />
+            </button>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-2">
+          {input && (
+            <>
+              {input !== "agree" && <span className=""></span>}
+              <div class="form-control">
+                <div class="relative">
+                  <input
+                    value={content}
+                    type="text"
+                    placeholder="Argue"
+                    class={
+                      input === "agree"
+                        ? "w-full pr-16 input input-success  input-bordered"
+                        : "w-full pr-16 input input-error input-bordered"
+                    }
+                    onChange={(e) => setContent(e.target.value)}
+                  />
+                  <button
+                    onClick={addArgue}
+                    class={
+                      input === "agree"
+                        ? "absolute top-0 right-0 rounded-l-none btn btn-success"
+                        : "absolute top-0 right-0 rounded-l-none btn bg-red-600 hover:bg-red-600"
                     }
                   >
-                    <AiFillPlusSquare size="34px" />
-                  </div>
+                    {input}
+                  </button>
                 </div>
               </div>
-            </div>
-          </div>
-          {input && (
-            <div class="form-control">
-              <div class="relative">
-                <input
-                  value={content}
-                  type="text"
-                  placeholder="Argue"
-                  class={
-                    input === "agree"
-                      ? "w-full pr-16 input input-success  input-bordered"
-                      : "w-full pr-16 input input-error input-bordered"
-                  }
-                  onChange={(e) => setContent(e.target.value)}
-                />
-                <button
-                  onClick={addArgue}
-                  class={
-                    input === "agree"
-                      ? "absolute top-0 right-0 rounded-l-none btn btn-success"
-                      : "absolute top-0 right-0 rounded-l-none btn bg-red-600 hover:bg-red-600"
-                  }
-                >
-                  {input}
-                </button>
-              </div>
-            </div>
+            </>
           )}
         </div>
         <div class="grid grid-cols-2 gap-0">
