@@ -1,8 +1,8 @@
-import { useQuery } from '@apollo/client';
-import React from 'react';
-import { getUser } from '../providers/apollo/queries';
-import { GrScheduleNew } from 'react-icons/gr';
-import Link from 'next/link';
+import { useQuery } from "@apollo/client";
+import React from "react";
+import { getUser } from "../providers/apollo/queries";
+import { GrScheduleNew } from "react-icons/gr";
+import Link from "next/link";
 export default function Notifications({ user }) {
   const { data, loading } = useQuery(getUser);
   if (loading) return <>Loading...</>;
@@ -13,12 +13,11 @@ export default function Notifications({ user }) {
           tabIndex="0"
           className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-max text-base-content"
         >
-          Sign in to see your notifications{' '}
+          Sign in to see your notifications{" "}
         </ul>
       </div>
     );
   let notifications;
-  console.log(data?.user?.notifications);
   notifications = data?.user?.notifications.map((notification) => (
     <li>
       <Link href={`/${notification.debate.slug}`}>
@@ -40,7 +39,7 @@ export default function Notifications({ user }) {
           tabIndex="0"
           className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-max text-base-content"
         >
-          You have no notifications{' '}
+          You have no notifications{" "}
         </ul>
       </div>
     );

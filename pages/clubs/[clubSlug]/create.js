@@ -1,17 +1,27 @@
 import React, { useState } from "react";
-import { CREATE_DEBATE } from "../providers/apollo/mutations";
+import { CREATE_DEBATE } from "../../../providers/apollo/mutations";
 import { useMutation, useQuery } from "@apollo/client";
-import { currentUser, getDebates, getTags } from "../providers/apollo/queries";
+import {
+  currentUser,
+  getClub,
+  getDebates,
+  getTags,
+} from "../../../providers/apollo/queries";
 import { useRouter } from "next/router";
 import Select from "react-select";
-import instance from "../components/utils/instance";
+import instance from "../../../components/utils/instance";
 export default function create() {
   const { loading, data } = useQuery(getTags);
   const [selectState, setSelectState] = useState(false);
   const [debate, setDebate] = useState({ photo: null, tags: [] });
   const [createDebate] = useMutation(CREATE_DEBATE);
   const router = useRouter();
-  if (loading) return <>Loading</>;
+  const { clubSlug } = router.query;
+  const myClub = useQuery(getClub, {
+    variables: { slug: clubSlug },
+  });
+  if (loading || myClub.loading) return <>Loading</>;
+  if (clubSlug !== "public" && !myClub.data.club) return <>403</>;
 
   const options = data.tags.map((tag) => {
     return {
@@ -33,20 +43,55 @@ export default function create() {
     event.preventDefault();
     try {
       createDebate({
-        variables: debate,
+        variables: { ...debate, club: myClub.data.club?._id },
         update: (cache, { data: { createDebate } }) => {
-          const data = cache.readQuery({
-            query: getDebates,
-          });
-          if (data) {
-            cache.writeQuery({
+          let data;
+          if (!myClub.data.club) {
+            data = cache.readQuery({
               query: getDebates,
-              data: { debates: [...data.debates, createDebate] },
+              variables: {
+                debatesStart: 0,
+                debatesAmount: 9,
+                debatesOrder: "hot",
+              },
             });
+            if (data && data.debates.length < 9) {
+              cache.writeQuery({
+                query: getDebates,
+                variables: {
+                  debatesStart: 0,
+                  debatesAmount: 9,
+                  debatesOrder: "hot",
+                },
+                data: { debates: [...data.debates, createDebate] },
+              });
+            }
+          } else {
+            data = cache.readQuery({
+              query: getDebates,
+              variables: {
+                debatesStart: 0,
+                debatesAmount: 9,
+                debateClub: myClub.data.club._id,
+              },
+            });
+            if (data && data.debates.length < 9) {
+              cache.writeQuery({
+                query: getDebates,
+                variables: {
+                  debatesStart: 0,
+                  debatesAmount: 9,
+                  debateClub: myClub.data.club._id,
+                },
+                data: { debates: [...data.debates, createDebate] },
+              });
+            }
           }
         },
       });
-      router.push("/");
+      if (!myClub.data.club) {
+        router.push("/");
+      } else router.push(`/clubs/${myClub.data.club.slug}/`);
     } catch (e) {
       console.log(e);
     }
@@ -54,6 +99,11 @@ export default function create() {
   return (
     <div className=" min-h-full">
       <div className="md:container md:mx-auto mt-36 text-base-content">
+        {myClub.data.club && (
+          <label class="label w-20">
+            <span class="label-text">CLUB : {myClub.data.club.name}</span>
+          </label>
+        )}
         <div class="form-control">
           <label class="label w-20">
             <span class="label-text">Title</span>

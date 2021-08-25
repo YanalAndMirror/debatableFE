@@ -1,9 +1,9 @@
-import { useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import Body from '../../components/Body/Body';
-import Header from '../../components/Header';
-import { getDebates } from '../../providers/apollo/queries';
+import { useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import Body from "../../components/Body/Body";
+import Header from "../../components/Header";
+import { getDebates } from "../../providers/apollo/queries";
 export default function Home() {
   const router = useRouter();
   const { tag } = router.query;
@@ -23,18 +23,20 @@ export default function Home() {
       </div>
 
       <div className="btn-group justify-center">
-        <button
-          className="btn btn-outline btn-wide"
-          onClick={() =>
-            setPage({
-              ...page,
-              debatesStart: page.debatesStart - 9,
-              debatesAmount: page.debatesStart,
-            })
-          }
-        >
-          Previous Page
-        </button>
+        {page.debatesStart > 0 && (
+          <button
+            className="btn btn-outline btn-wide"
+            onClick={() =>
+              setPage({
+                ...page,
+                debatesStart: page.debatesStart - 9,
+                debatesAmount: page.debatesStart,
+              })
+            }
+          >
+            Previous Page
+          </button>
+        )}
         <button
           className="btn btn-outline btn-wide"
           onClick={() =>

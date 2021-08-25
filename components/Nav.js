@@ -6,6 +6,8 @@ import { userVar } from "../providers/apollo/vars";
 import { useQuery } from "@apollo/client";
 import { currentUser, getUser } from "../providers/apollo/queries";
 import { CgMediaLive } from "react-icons/cg";
+import { TiGroup } from "react-icons/ti";
+
 import LoggedIn from "./LoggedIn";
 import ThemeMenu from "./ThemeMenu";
 import Notifications from "./Notifications";
@@ -43,7 +45,12 @@ export default function Nav() {
                 Live
               </span>
             </Link>
-
+            <Link href="/clubs">
+              <span className="btn btn-ghost btn-sm rounded-btn">
+                <TiGroup className="mr-1" size="24px" />
+                Clubs
+              </span>
+            </Link>
             {user && (
               <span className="btn btn-ghost btn-sm rounded-btn">
                 <Link href="/create">

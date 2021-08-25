@@ -66,6 +66,7 @@ export const getDebates = gql`
     $debatesStart: Int
     $debatesOrder: String
     $debatesKeyword: String
+    $debatesClub: String
   ) {
     debates(
       tag: $debatesTag
@@ -73,6 +74,7 @@ export const getDebates = gql`
       start: $debatesStart
       order: $debatesOrder
       keyword: $debatesKeyword
+      club: $debatesClub
     ) {
       _id
       title
@@ -91,6 +93,7 @@ export const getDebates = gql`
     }
   }
 `;
+
 export const getDebate = gql`
   query debate($slug: String!) {
     debate(slug: $slug) {
@@ -161,6 +164,35 @@ export const getTags = gql`
       _id
       title
       photo
+    }
+  }
+`;
+
+export const getClubs = gql`
+  query getClubs {
+    clubs {
+      myClubs {
+        _id
+        name
+        slug
+        photo
+      }
+      otherClubs {
+        _id
+        name
+        photo
+        slug
+      }
+    }
+  }
+`;
+export const getClub = gql`
+  query getClub($slug: String!) {
+    club(slug: $slug) {
+      _id
+      name
+      photo
+      slug
     }
   }
 `;

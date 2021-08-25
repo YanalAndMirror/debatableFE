@@ -53,9 +53,16 @@ export const CREATE_DEBATE = gql`
     $photo: String!
     $argue: String!
     $tags: [String]
+    $club: String
   ) {
     createDebate(
-      debate: { title: $title, photo: $photo, argue: $argue, tags: $tags }
+      debate: {
+        title: $title
+        photo: $photo
+        argue: $argue
+        tags: $tags
+        club: $club
+      }
     ) {
       _id
       title
@@ -136,6 +143,26 @@ export const CREATE_ROOM = gql`
       title
       slug
       user
+    }
+  }
+`;
+export const JOIN_CLUB = gql`
+  mutation joinClub($club: String) {
+    joinClub(club: $club) {
+      _id
+      name
+      photo
+      slug
+    }
+  }
+`;
+export const CREATE_CLUB = gql`
+  mutation createClub($name: String, $photo: String, $inviteType: String) {
+    createClub(name: $name, photo: $photo, inviteType: $inviteType) {
+      _id
+      name
+      photo
+      slug
     }
   }
 `;
