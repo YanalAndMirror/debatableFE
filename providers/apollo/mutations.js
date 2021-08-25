@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const USER_LOGIN = gql`
   mutation signin($username: String!, $password: String!) {
@@ -156,6 +156,15 @@ export const JOIN_CLUB = gql`
     }
   }
 `;
+
+export const USE_INVITE_LINK = gql`
+  mutation Mutation($useInviteLinkInviteLink: String) {
+    useInviteLink(inviteLink: $useInviteLinkInviteLink) {
+      slug
+    }
+  }
+`;
+
 export const CREATE_CLUB = gql`
   mutation createClub($name: String, $photo: String, $inviteType: String) {
     createClub(name: $name, photo: $photo, inviteType: $inviteType) {
