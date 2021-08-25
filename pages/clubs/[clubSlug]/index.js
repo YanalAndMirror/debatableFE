@@ -24,6 +24,7 @@ export default function club() {
     <>
       <div className="text-4xl">Club Debates</div>
       <button
+        //
         class="btn btn-outline btn-primary"
         onClick={() => router.push(`/clubs/${clubSlug}/create`)}
       >
