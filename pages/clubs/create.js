@@ -1,21 +1,21 @@
-import { useMutation } from "@apollo/client";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
-import instance from "../../components/utils/instance";
-import { CREATE_CLUB } from "../../providers/apollo/mutations";
-import { getClubs } from "../../providers/apollo/queries";
+import { useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import instance from '../../components/utils/instance';
+import { CREATE_CLUB } from '../../providers/apollo/mutations';
+import { getClubs } from '../../providers/apollo/queries';
 
 export default function createClubs() {
   const router = useRouter();
 
   const [createClub] = useMutation(CREATE_CLUB);
-  const [club, setClub] = useState({ photo: null, inviteType: "any" });
+  const [club, setClub] = useState({ photo: null, inviteType: 'any' });
   const handleChange = (event) => {
     setClub({ ...club, [event.target.name]: event.target.value });
   };
   const uploadImage = async (e) => {
     const formData = new FormData();
-    formData.append("file", e.target?.files[0]);
+    formData.append('file', e.target?.files[0]);
     const res = await instance.post(`/uploadImage`, formData);
     setClub({ ...club, photo: res.data });
   };
@@ -41,12 +41,12 @@ export default function createClubs() {
         }
       },
     });
-    router.push("/clubs");
+    router.push('/clubs');
   };
   return (
     <div className=" min-h-full">
-      <div className="md:container md:mx-auto mt-36 text-base-content">
-        <div class="form-control">
+      <div className="md:container md:mx-auto mt-36 text-base-content ">
+        <div class="form-control ">
           <label class="label w-20">
             <span class="label-text">Name</span>
           </label>
@@ -55,17 +55,17 @@ export default function createClubs() {
             name="name"
             placeholder="name"
             onChange={handleChange}
-            class="input input-bordered"
+            class="input input-bordered border-2"
           />
         </div>
-        <div class="p-6 card bordered">
+        <div class="p-6 card border-2 w-1/6 mt-2">
           <div class="form-control">
             <label class="cursor-pointer label">
               <span class="label-text">Public</span>
               <input
                 type="radio"
                 name="inviteType"
-                checked={club.inviteType === "any"}
+                checked={club.inviteType === 'any'}
                 class="radio radio-secondary"
                 value="any"
                 onChange={handleChange}
@@ -78,7 +78,7 @@ export default function createClubs() {
               <input
                 type="radio"
                 name="inviteType"
-                checked={club.inviteType === "adminOnly"}
+                checked={club.inviteType === 'adminOnly'}
                 class="radio radio-accent"
                 value="adminOnly"
                 onChange={handleChange}

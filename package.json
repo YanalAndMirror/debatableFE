@@ -29,6 +29,7 @@
     "react-select": "^4.3.1",
     "react-share-social": "^0.1.48",
     "react-toastify": "^7.0.4",
+    "react-use-clipboard": "1.0.7",
     "react-xarrows": "2.0.1"
   },
   "devDependencies": {
