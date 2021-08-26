@@ -1,23 +1,31 @@
-import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
-import { userVar } from '../providers/apollo/vars';
-import { USER_LOGIN } from '../providers/apollo/mutations';
-import { USER_SIGNUP } from '../providers/apollo/mutations';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Cookies from 'js-cookie';
-import { Tab } from '@headlessui/react';
+import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { userVar } from "../providers/apollo/vars";
+import { USER_LOGIN } from "../providers/apollo/mutations";
+import { USER_SIGNUP } from "../providers/apollo/mutations";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
+import { Tab } from "@headlessui/react";
+import client from "../providers/apollo/client";
+import { getClubs, getUser } from "../providers/apollo/queries";
 
 export default function Login() {
+  const refetch = async () => {
+    await client.refetchQueries({
+      include: [getUser, getClubs],
+    });
+  };
   const [signIn] = useMutation(USER_LOGIN, {
     onCompleted(data) {
       if (data.signin !== null) {
-        Cookies.set('token', data.signin.token);
+        Cookies.set("token", data.signin.token);
         userVar(data.signin.user);
+        refetch();
         setInput({ username: null, password: null });
       } else {
-        toast.error('Please check your username/password!', {
-          position: 'bottom-left',
+        toast.error("Please check your username/password!", {
+          position: "bottom-left",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -32,12 +40,13 @@ export default function Login() {
   const [signup] = useMutation(USER_SIGNUP, {
     onCompleted(data) {
       if (data.signup !== null) {
-        Cookies.set('token', data.signup.token);
+        Cookies.set("token", data.signup.token);
         userVar(data.signup.user);
+        refetch();
         setInput({ username: null, password: null });
       } else {
-        toast.error('Please Check Your Username,Password,Email', {
-          position: 'bottom-left',
+        toast.error("Please Check Your Username,Password,Email", {
+          position: "bottom-left",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -49,7 +58,7 @@ export default function Login() {
     },
   });
 
-  const [input, setInput] = useState({ username: '', password: '' });
+  const [input, setInput] = useState({ username: "", password: "" });
 
   const handelSignin = (e) => {
     e.preventDefault();
@@ -81,14 +90,14 @@ export default function Login() {
         <Tab.List>
           <Tab
             className={({ selected }) =>
-              selected ? 'tab tab-bordered tab-active' : 'tab tab-bordered'
+              selected ? "tab tab-bordered tab-active" : "tab tab-bordered"
             }
           >
             Login
           </Tab>
           <Tab
             className={({ selected }) =>
-              selected ? 'tab tab-bordered tab-active' : 'tab tab-bordered'
+              selected ? "tab tab-bordered tab-active" : "tab tab-bordered"
             }
           >
             Signup
@@ -135,7 +144,7 @@ export default function Login() {
             </form>
           </Tab.Panel>
           <Tab.Panel>
-            {' '}
+            {" "}
             <form onSubmit={handelSignup} className="text-base-content">
               <li>
                 <label class="label">
