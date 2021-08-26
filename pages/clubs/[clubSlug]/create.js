@@ -1,15 +1,17 @@
-import React, { useState } from "react";
-import { CREATE_DEBATE } from "../../../providers/apollo/mutations";
-import { useMutation, useQuery } from "@apollo/client";
+import React, { useState } from 'react';
+import { CREATE_DEBATE } from '../../../providers/apollo/mutations';
+import { useMutation, useQuery } from '@apollo/client';
 import {
   currentUser,
   getClub,
   getDebates,
   getTags,
-} from "../../../providers/apollo/queries";
-import { useRouter } from "next/router";
-import Select from "react-select";
-import instance from "../../../components/utils/instance";
+} from '../../../providers/apollo/queries';
+import { useRouter } from 'next/router';
+import Select from 'react-select';
+import instance from '../../../components/utils/instance';
+import Head from 'next/head';
+import Loading from '../../../components/Loading';
 export default function create() {
   const { loading, data } = useQuery(getTags);
   const [selectState, setSelectState] = useState(false);
@@ -20,8 +22,8 @@ export default function create() {
   const myClub = useQuery(getClub, {
     variables: { slug: clubSlug },
   });
-  if (loading || myClub.loading) return <>Loading</>;
-  if (clubSlug !== "public" && !myClub.data.club) return <>403</>;
+  if (loading || myClub.loading) return <Loading />;
+  if (clubSlug !== 'public' && !myClub.data.club) return <>403</>;
 
   const options = data.tags.map((tag) => {
     return {
@@ -35,7 +37,7 @@ export default function create() {
   };
   const uploadImage = async (e) => {
     const formData = new FormData();
-    formData.append("file", e.target?.files[0]);
+    formData.append('file', e.target?.files[0]);
     const res = await instance.post(`/uploadImage`, formData);
     setDebate({ ...debate, photo: res.data });
   };
@@ -52,7 +54,7 @@ export default function create() {
               variables: {
                 debatesStart: 0,
                 debatesAmount: 9,
-                debatesOrder: "hot",
+                debatesOrder: 'hot',
               },
             });
             if (data && data.debates.length < 9) {
@@ -61,7 +63,7 @@ export default function create() {
                 variables: {
                   debatesStart: 0,
                   debatesAmount: 9,
-                  debatesOrder: "hot",
+                  debatesOrder: 'hot',
                 },
                 data: { debates: [...data.debates, createDebate] },
               });
@@ -86,7 +88,7 @@ export default function create() {
         },
       });
       if (!myClub.data.club) {
-        router.push("/");
+        router.push('/');
       } else router.push(`/clubs/${myClub.data.club.slug}/`);
     } catch (e) {
       console.log(e);
@@ -94,6 +96,10 @@ export default function create() {
   };
   return (
     <div className=" min-h-full">
+      <Head>
+        <title>Create a debate</title>
+      </Head>
+
       <div className="md:container md:mx-auto mt-36 text-base-content">
         {myClub.data.club && (
           <label class="label w-20">
@@ -117,7 +123,7 @@ export default function create() {
         </label>
         <textarea
           class="textarea h-24 textarea-bordered"
-          style={{ width: "100%" }}
+          style={{ width: '100%' }}
           placeholder="argue"
           onChange={handleChange}
           name="argue"
@@ -125,7 +131,6 @@ export default function create() {
         <label class="label ">
           <span class="label-text">Image</span>
         </label>
-
         {debate.photo ? (
           <div class="m-6 indicator">
             <div class="indicator-item">
@@ -162,6 +167,8 @@ export default function create() {
             <div className="btn">Select</div>
           </label>
         )}
+        <br />
+        Tags:
         <Select
           closeMenuOnSelect={false}
           isMulti
@@ -171,7 +178,7 @@ export default function create() {
           isClearable="true"
           onChange={(value) => {
             setDebate({ ...debate, tags: value.map((v) => v.value) });
-            if (debate["tags"].length > 1) {
+            if (debate['tags'].length > 1) {
               setSelectState(true);
             }
           }}

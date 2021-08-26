@@ -1,6 +1,8 @@
 import { useMutation, useQuery } from '@apollo/client';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
+import Loading from '../../components/Loading';
 import { JOIN_CLUB } from '../../providers/apollo/mutations';
 import { getClubs } from '../../providers/apollo/queries';
 
@@ -31,7 +33,7 @@ export default function clubs() {
       },
     });
   };
-  if (loading) return <>Loading</>;
+  if (loading) return <Loading />;
 
   let otherClubsCards = data.clubs.otherClubs.map((club) => (
     <div class="card text-center border-2">
@@ -48,7 +50,6 @@ export default function clubs() {
       </div>
     </div>
   ));
-  console.log(data.clubs.myClubs);
   let myClubsCards = data.clubs.myClubs.map((club) => (
     <div
       class="card text-center border-2"
@@ -64,6 +65,10 @@ export default function clubs() {
   ));
   return (
     <div className="container mx-auto">
+      <Head>
+        <title>Clubs</title>
+      </Head>
+
       <div class="justify-between card-actions">
         <div className="text-4xl">My Clubs</div>
 
