@@ -1,27 +1,16 @@
-import { useMutation, useQuery } from '@apollo/client';
-import React from 'react';
-import { getUser } from '../providers/apollo/queries';
-import Link from 'next/link';
-import { CLEAR_NOTIFICATION } from '../providers/apollo/mutations';
-import { BsBell } from 'react-icons/bs';
-import Loading from './Loading';
+import { useMutation, useQuery } from "@apollo/client";
+import React from "react";
+import { getUser } from "../providers/apollo/queries";
+import Link from "next/link";
+import { CLEAR_NOTIFICATION } from "../providers/apollo/mutations";
+import { BsBell } from "react-icons/bs";
+import Loading from "./Loading";
 
 export default function Notifications({ user }) {
   const [clearNotification] = useMutation(CLEAR_NOTIFICATION);
 
   const { data, loading } = useQuery(getUser);
-  if (loading) return <Loading />;
-  if (!user)
-    return (
-      <div>
-        <ul
-          tabIndex="0"
-          className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-max text-base-content"
-        >
-          Sign in to see your notifications{' '}
-        </ul>
-      </div>
-    );
+  if (loading || !user || !data || !data.user) return <div></div>;
   let notifications;
   let notSeen = data?.user?.notifications.filter((n) => !n.seen);
   notifications = data?.user?.notifications.map((notification) => (
@@ -46,8 +35,8 @@ export default function Notifications({ user }) {
         <div
           class={
             notSeen.length > 0
-              ? 'my-6 mr-4 indicator animate-bounce'
-              : 'my-6 mr-4 indicator'
+              ? "my-6 mr-4 indicator animate-bounce"
+              : "my-6 mr-4 indicator"
           }
         >
           {notSeen.length > 0 && (
@@ -64,7 +53,7 @@ export default function Notifications({ user }) {
             tabIndex="0"
             className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-max text-base-content"
           >
-            You have no notifications{' '}
+            You have no notifications{" "}
           </ul>
         </div>
       ) : (

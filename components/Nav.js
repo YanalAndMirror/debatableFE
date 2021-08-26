@@ -5,7 +5,7 @@ import { BiAddToQueue } from "react-icons/bi";
 
 import { userVar } from "../providers/apollo/vars";
 import { useQuery } from "@apollo/client";
-import { currentUser, getUser } from "../providers/apollo/queries";
+import { currentUser, getClubs, getUser } from "../providers/apollo/queries";
 import { CgMediaLive } from "react-icons/cg";
 import { TiGroup } from "react-icons/ti";
 import { io } from "socket.io-client";
@@ -21,11 +21,14 @@ export default function Nav() {
   const [socket, setSocket] = useState(false);
 
   const user = useQuery(currentUser).data.currentUser;
-  useEffect(() => {
+  useEffect(async () => {
     if (data) {
       userVar(data.user);
       if (data.user) {
         if (typeof window !== undefined && !socket) {
+          await client.refetchQueries({
+            include: [getUser, getClubs],
+          });
           setSocket(
             io(process.env.BACKEND, {
               query: {
