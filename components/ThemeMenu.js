@@ -1,37 +1,38 @@
-import React from 'react';
-import { RiBrush2Line } from 'react-icons/ri';
-import Cookies from 'js-cookie';
+import React from "react";
+import { RiBrush2Line } from "react-icons/ri";
+import Cookies from "js-cookie";
 
 export default function ThemeMenu({ setTheme }) {
   const setCurrTheme = (theme) => {
-    localStorage.setItem('theme', theme);
+    localStorage.setItem("theme", theme);
     setTheme(theme);
   };
   let themesArray = [
-    'light',
-    'dark',
-    'cupcake',
-    'bumblebee',
-    'emerald',
-    'corporate',
-    'synthwave',
-    'retro',
-    'cyberpunk',
-    'valentine',
-    'halloween',
-    'garden',
-    'forest',
-    'aqua',
-    'lofi',
-    'pastel',
-    'fantasy',
-    'wireframe',
-    'black',
-    'luxury',
-    'dracula',
+    "light",
+    "dark",
+    "cupcake",
+    "bumblebee",
+    "emerald",
+    "corporate",
+    "synthwave",
+    "retro",
+    "cyberpunk",
+    "valentine",
+    "halloween",
+    "garden",
+    "forest",
+    "aqua",
+    "lofi",
+    "pastel",
+    "fantasy",
+    "wireframe",
+    "black",
+    "luxury",
+    "dracula",
   ];
   themesArray = themesArray.map((theme) => (
     <li
+      key={theme}
       onClick={() => {
         setCurrTheme(theme);
       }}

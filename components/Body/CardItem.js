@@ -22,26 +22,26 @@ export default function CardItem({ debate }) {
           <h2 className="card-title mt-0 cursor-pointer">{debate.title}</h2>
         </Link>
 
-        <p>
-          <div className="card-actions">
-            <span className="badge badge-lg ">
-              <AiOutlineEye className="mr-1" /> {debate.views}
-            </span>
-            <span className="badge badge-lg ">
-              <FaRegComments className="mr-1" /> {debate.argueCount}
-            </span>
-            <span className="badge badge-lg ">
-              <BsPeople className="mr-1" /> {debate.participants}
-            </span>
-            <span className="badge badge-lg ">
-              <BsArrowUpDown className="mr-1" /> {debate.argueVotes}
-            </span>
-          </div>
-        </p>
+        <div className="card-actions">
+          <span className="badge badge-lg ">
+            <AiOutlineEye className="mr-1" /> {debate.views}
+          </span>
+          <span className="badge badge-lg ">
+            <FaRegComments className="mr-1" /> {debate.argueCount}
+          </span>
+          <span className="badge badge-lg ">
+            <BsPeople className="mr-1" /> {debate.participants}
+          </span>
+          <span className="badge badge-lg ">
+            <BsArrowUpDown className="mr-1" /> {debate.argueVotes}
+          </span>
+        </div>
         <div className="card-actions">
           {debate.tags?.map((tag) => {
             return (
-              <div className="badge badge-error badge-outline">{tag.title}</div>
+              <div className="badge badge-error badge-outline" key={tag._id}>
+                {tag.title}
+              </div>
             );
           })}
         </div>

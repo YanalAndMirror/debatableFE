@@ -1,26 +1,26 @@
-import { useQuery } from '@apollo/client';
-import Head from 'next/head';
-import router from 'next/router';
-import React from 'react';
-import Loading from '../../components/Loading';
-import { getRooms } from '../../providers/apollo/queries';
+import { useQuery } from "@apollo/client";
+import Head from "next/head";
+import router from "next/router";
+import React from "react";
+import Loading from "../../components/Loading";
+import { getRooms } from "../../providers/apollo/queries";
 
 export default function liveDebates() {
   const { data, loading } = useQuery(getRooms);
   if (loading) return <Loading />;
   const rooms = data.rooms.map((room) => (
     <>
-      <div class="card border-2">
+      <div className="card border-2">
         <figure>
           <img
             src={room.debate.photo}
             className="object-cover  h-40 cursor-pointer"
           />
         </figure>
-        <div class="card-body">
-          <h2 class="card-title">
+        <div className="card-body">
+          <h2 className="card-title">
             {room.debate.title}
-            <div class="badge mx-2 badge-secondary">LIVE</div>
+            <div className="badge mx-2 badge-secondary">LIVE</div>
           </h2>
           <div className="card-actions">
             {room.debate.tags?.map((tag) => {
@@ -28,9 +28,9 @@ export default function liveDebates() {
             })}
           </div>
 
-          <div class="justify-end card-actions">
+          <div className="justify-end card-actions">
             <button
-              class="btn"
+              className="btn"
               onClick={() => router.push(`/live/${room.slug}`)}
             >
               Watch

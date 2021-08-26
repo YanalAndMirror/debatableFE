@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Dialog } from '@headlessui/react';
-import { AiFillPlusSquare } from 'react-icons/ai';
+import React, { useState } from "react";
+import { Dialog } from "@headlessui/react";
+import { AiFillPlusSquare } from "react-icons/ai";
 
 export default function ArgueModal({ agree }) {
   const [argue, setArgue] = useState({});
@@ -20,12 +20,12 @@ export default function ArgueModal({ agree }) {
       <div className="modal">
         <div className="modal-box">
           <p>
-            <label class="label ">
-              <span class="label-text">Argue</span>
+            <label className="label ">
+              <span className="label-text">Argue</span>
             </label>
             <textarea
-              style={{ width: '100%' }}
-              class="textarea h-24 textarea-bordered w-max"
+              style={{ width: "100%" }}
+              className="textarea h-24 textarea-bordered w-max"
               placeholder="argue"
               onChange={handleChange}
               name="argue"

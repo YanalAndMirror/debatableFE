@@ -14,13 +14,13 @@ export default function Notifications({ user }) {
   let notifications;
   let notSeen = data?.user?.notifications.filter((n) => !n.seen);
   notifications = data?.user?.notifications.map((notification) => (
-    <li>
+    <li key={notification.argue}>
       <Link href={`/${notification.debate.slug}`}>
         <a>
-          <div class="card sm:card-side border-2">
+          <div className="card sm:card-side border-2">
             <img src={notification.debate.photo} className="mb-8  w-20 h-20" />
-            <div class="card-body">
-              <p class="card-title text-sm">{notification.text}</p>
+            <div className="card-body">
+              <p className="card-title text-sm">{notification.text}</p>
             </div>
           </div>
         </a>
@@ -33,14 +33,14 @@ export default function Notifications({ user }) {
     <>
       <div tabIndex="0" onClick={() => clearNotification()}>
         <div
-          class={
+          className={
             notSeen.length > 0
               ? "my-6 mr-4 indicator animate-bounce"
               : "my-6 mr-4 indicator"
           }
         >
           {notSeen.length > 0 && (
-            <div class="indicator-item badge badge-info badge-sm ">
+            <div className="indicator-item badge badge-info badge-sm ">
               {notSeen.length}
             </div>
           )}
