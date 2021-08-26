@@ -114,6 +114,9 @@ export const getDebate = gql`
           amount
         }
       }
+      user {
+        username
+      }
       room {
         live
         slug

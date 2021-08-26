@@ -7,7 +7,7 @@ export default function VotingBar({ argue, doVote, color, main }) {
   const user = useQuery(currentUser).data.currentUser;
   return (
     <div className="dropdown dropdown-hover dropdown-top ">
-      <div tabindex="0">
+      <div tabIndex="0">
         <progress
           className={
             main === true && !argue.argueType
@@ -25,7 +25,7 @@ export default function VotingBar({ argue, doVote, color, main }) {
         ></progress>
       </div>
       <ul
-        tabindex="0"
+        tabIndex="0"
         className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-max"
       >
         <li>

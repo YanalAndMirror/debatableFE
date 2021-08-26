@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import React from "react";
 import Body from "../../../components/Body/Body";
 import useClipboard from "react-use-clipboard";
-import { JOIN_CLUB } from "../../../providers/apollo/mutations";
 
 import { toast } from "react-toastify";
 
@@ -12,15 +11,16 @@ import {
   getClub,
   getDebates,
 } from "../../../providers/apollo/queries";
+import Head from "next/head";
+import Loading from "../../../components/Loading";
 
 export default function club() {
   const router = useRouter();
   const { clubSlug } = router.query;
   const user = useQuery(currentUser).data.currentUser;
   const myClub = useQuery(getClub, {
-    variables: { slug: clubSlug },
+    variables: { slug: clubSlug ?? " slug" },
   });
-  const [joinClub] = useMutation(JOIN_CLUB);
 
   const { loading, data } = useQuery(getDebates, {
     variables: { debatesClub: clubSlug },
@@ -30,23 +30,25 @@ export default function club() {
       typeof window !== "undefined" ? window.location.host : ""
     }/invite/${myClub?.data?.club?.inviteLink}`
   );
-  if (loading || myClub.loading) return <>Loading</>;
-  console.log(myClub.data.club);
-  console.log(user);
+  if (loading || myClub.loading) return <Loading />;
   return (
     <div className="container mx-auto">
-      <div class="justify-between card-actions">
+      {" "}
+      <Head>
+        <title>{myClub.data.club.name}</title>
+      </Head>
+      <div className="justify-between card-actions">
         <div className="text-4xl">Club Debates</div>
         <div>
           <button
-            class="btn "
+            className="btn "
             onClick={() => router.push(`/clubs/${clubSlug}/create`)}
           >
             Create
           </button>
           {myClub.data.club.admin === user?._id && (
             <button
-              class="btn ml-2"
+              className="btn ml-2"
               onClick={() => {
                 setCopied();
                 toast("Copied to clipboard", {
@@ -65,7 +67,6 @@ export default function club() {
           )}
         </div>
       </div>
-
       <Body debates={data.debates} />
     </div>
   );

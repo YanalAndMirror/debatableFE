@@ -4,7 +4,7 @@ import { BsArrowUpDown } from "react-icons/bs";
 import VotingBar from "../components/Debate/VotingBar";
 import { currentUser, getDebate, getUser } from "../providers/apollo/queries";
 import { AiOutlinePlus } from "react-icons/ai";
-
+import Head from "next/head";
 import { ShareSocial } from "react-share-social";
 import { useEffect, useState } from "react";
 import {
@@ -15,16 +15,16 @@ import {
 } from "../providers/apollo/mutations";
 import FadeIn from "react-fade-in";
 import Pyramid from "../components/Pyramid";
+import Loading from "../components/Loading";
 export default function Home() {
   const router = useRouter();
   const user = useQuery(currentUser).data.currentUser;
-  const [content, setContent] = useState(null);
+  const [content, setContent] = useState("");
   const [input, setInput] = useState(null);
-  const [room, setRoom] = useState({});
   const [follow, setFollow] = useState("follow");
   const { debateSlug, path } = router.query;
   const { loading, data } = useQuery(getDebate, {
-    variables: { slug: debateSlug },
+    variables: { slug: debateSlug ?? " noSlug" },
   });
   const followed = useQuery(getUser).data?.user?.followed;
   const [parent, setParent] = useState(path ?? null);
@@ -42,7 +42,8 @@ export default function Home() {
     },
   });
 
-  if (loading) return <>loading</>;
+  if (loading) return <Loading />;
+  if (!data || !data.debate) return <>403</>;
   const doVote = (argue, value) => {
     vote({
       variables: { argue, value },
@@ -53,6 +54,7 @@ export default function Home() {
     (argue) =>
       (!parent && argue.parent == parent) || (parent && parent === argue._id)
   );
+
   const handleFollowDebate = () => {
     setFollow("followed");
     followDebate({
@@ -110,7 +112,7 @@ export default function Home() {
       (argue) => argue.parent === mainArgue._id && argue.argueType === "agree"
     )
     .map((argue) => (
-      <FadeIn>
+      <FadeIn key={argue._id}>
         <div className="card shadow rounded-none text-base-content">
           <div className="card-body">
             <div className="card-actions float-right">
@@ -135,7 +137,7 @@ export default function Home() {
         argue.parent === mainArgue._id && argue.argueType === "disagree"
     )
     .map((argue) => (
-      <FadeIn>
+      <FadeIn key={argue._id}>
         <div className="card shadow rounded-none text-base-content">
           <div className="card-body">
             <div className="card-actions float-right">
@@ -156,6 +158,10 @@ export default function Home() {
     ));
   return (
     <>
+      <Head>
+        <title>{mainArgue.content}</title>
+      </Head>
+
       <Pyramid
         debate={data.debate}
         parent={parent}
@@ -196,28 +202,30 @@ export default function Home() {
                         </button>
                       )
                     )}
-                    <button className="btn" onClick={handleFollowDebate}>
-                      {followed?.includes(data?.debate._id)
-                        ? "followed"
-                        : follow}
-                    </button>
-                    <div class="dropdown dropdown-end">
-                      <div tabindex="0" class="m-1 btn">
+                    {user && (
+                      <button className="btn" onClick={handleFollowDebate}>
+                        {followed?.includes(data?.debate._id)
+                          ? "followed"
+                          : follow}
+                      </button>
+                    )}
+                    <div className="dropdown dropdown-end">
+                      <div tabIndex="0" className="m-1 btn">
                         Share
                       </div>
                       <ul
-                        tabindex="0"
-                        class="shadow menu dropdown-content bg-base-100 rounded-box w-24"
+                        tabIndex="0"
+                        className="shadow menu dropdown-content bg-base-100 rounded-box w-24 h-24"
                       >
                         <li>
                           <ShareSocial
+                            className="p-1"
                             url={window?.location?.href}
                             socialTypes={[
                               "twitter",
-
-                              "facebook",
-                              "reddit",
-                              "email",
+                              //"facebook",
+                              //"reddit",
+                              //"email",
                             ]}
                           />
                         </li>
@@ -232,8 +240,8 @@ export default function Home() {
                 color="green"
                 doVote={doVote}
               />
-
               <h2 className="card-title">{mainArgue.content}</h2>
+              by {data.debate.user.username}
             </div>
           </FadeIn>
         </div>
@@ -253,17 +261,17 @@ export default function Home() {
             </button>
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-4 mb-2">
+        <div className="grid grid-cols-2 gap-4 mb-2">
           {user && input && (
             <>
               {input !== "agree" && <span className=""></span>}
-              <div class="form-control">
-                <div class="relative">
+              <div className="form-control">
+                <div className="relative">
                   <input
                     value={content}
                     type="text"
                     placeholder="Argue"
-                    class={
+                    className={
                       input === "agree"
                         ? "w-full pr-16 input input-success  input-bordered"
                         : "w-full pr-16 input input-error input-bordered"
@@ -272,7 +280,7 @@ export default function Home() {
                   />
                   <button
                     onClick={addArgue}
-                    class={
+                    className={
                       input === "agree"
                         ? "absolute top-0 right-0 rounded-l-none btn btn-success"
                         : "absolute top-0 right-0 rounded-l-none btn bg-red-600 hover:bg-red-600"
@@ -285,7 +293,7 @@ export default function Home() {
             </>
           )}
         </div>
-        <div class="grid grid-cols-2 gap-0">
+        <div className="grid grid-cols-2 gap-0">
           <div style={{ padding: 0, borderRight: 0 }}>{agreeArgues}</div>
           <div style={{ padding: 0 }}>{disagreeArgues}</div>
         </div>

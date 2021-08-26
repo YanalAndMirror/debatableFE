@@ -5,6 +5,8 @@ import Header from "../components/Header";
 import { getDebates } from "../providers/apollo/queries";
 import { Tab } from "@headlessui/react";
 import { ImSearch } from "react-icons/im";
+import Head from "next/head";
+import Loading from "../components/Loading";
 export default function Home() {
   const [page, setPage] = useState({
     debatesStart: 0,
@@ -17,10 +19,13 @@ export default function Home() {
     variables: page,
   });
 
-  if (loading) return <>loading</>;
+  if (loading) return <Loading />;
   return (
     <>
       <Header />
+      <Head>
+        <title>Debatable</title>
+      </Head>
       <div className="md:container md:mx-auto ">
         <div className="justify-between flex">
           <div className="tabs ml-32">
@@ -87,16 +92,16 @@ export default function Home() {
             </Tab.Group>
           </div>
           {/* search  */}
-          <div class="form-control mr-28">
-            <div class="relative">
+          <div className="form-control mr-28">
+            <div className="relative">
               <input
                 type="text"
                 placeholder="Search"
-                class="w-full pr-16 input input-bordered"
+                className="w-full pr-16 input input-bordered"
                 onChange={(e) => setQuery(e.target.value)}
               />
               <button
-                class="absolute top-0 right-0 rounded-l-none btn"
+                className="absolute top-0 right-0 rounded-l-none btn"
                 onClick={() => setPage({ ...page, debatesKeyword: query })}
               >
                 <ImSearch />{" "}
