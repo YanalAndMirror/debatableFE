@@ -107,36 +107,34 @@ export default function Login() {
           <Tab.Panel>
             <form onSubmit={handelSignin} className="text-base-content">
               <li>
-                <label class="label">
-                  <span class="label-text">Username</span>
+                <label className="label">
+                  <span className="label-text">Username</span>
                 </label>
                 <input
                   value={input.username}
                   type="text"
                   placeholder="username"
                   name="username"
-                  class="input input-bordered"
+                  className="input input-bordered"
                   onChange={handelChangeSignin}
                 />
               </li>
               <li>
-                <label class="label">
-                  <span class="label-text">Password</span>
+                <label className="label">
+                  <span className="label-text">Password</span>
                 </label>
                 <input
                   value={input.password}
                   type="password"
                   placeholder="password"
                   name="password"
-                  class="input input-bordered"
+                  className="input input-bordered"
                   onChange={handelChangeSignin}
                 />
               </li>
               <li>
                 {!input.password || !input.username ? (
-                  <button className="btn mt-4 btn-disabled" onClick="">
-                    Sign in
-                  </button>
+                  <button className="btn mt-4 btn-disabled">Sign in</button>
                 ) : (
                   <button className="btn mt-4">Sign in</button>
                 )}
@@ -147,49 +145,47 @@ export default function Login() {
             {" "}
             <form onSubmit={handelSignup} className="text-base-content">
               <li>
-                <label class="label">
-                  <span class="label-text">Username</span>
+                <label className="label">
+                  <span className="label-text">Username</span>
                 </label>
                 <input
                   value={input.username}
                   type="text"
                   placeholder="username"
                   name="username"
-                  class="input input-bordered"
+                  className="input input-bordered"
                   onChange={handelChangeSignup}
                 />
               </li>
               <li>
-                <label class="label">
-                  <span class="label-text">Email</span>
+                <label className="label">
+                  <span className="label-text">Email</span>
                 </label>
                 <input
                   value={input.email}
                   type="text"
                   placeholder="Email"
                   name="email"
-                  class="input input-bordered"
+                  className="input input-bordered"
                   onChange={handelChangeSignup}
                 />
               </li>
               <li>
-                <label class="label">
-                  <span class="label-text">Password</span>
+                <label className="label">
+                  <span className="label-text">Password</span>
                 </label>
                 <input
                   value={input.password}
                   type="password"
                   placeholder="password"
                   name="password"
-                  class="input input-bordered"
+                  className="input input-bordered"
                   onChange={handelChangeSignup}
                 />
               </li>
               <li>
                 {!input.password || !input.username || !input.email ? (
-                  <button className="btn mt-4 btn-disabled" onClick="">
-                    Sign up
-                  </button>
+                  <button className="btn mt-4 btn-disabled">Sign up</button>
                 ) : (
                   <button className="btn mt-4">Sign up</button>
                 )}

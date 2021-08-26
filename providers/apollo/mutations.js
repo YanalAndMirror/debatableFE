@@ -172,6 +172,7 @@ export const CREATE_CLUB = gql`
       name
       photo
       slug
+      views
     }
   }
 `;

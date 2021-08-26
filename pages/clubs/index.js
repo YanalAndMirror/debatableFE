@@ -38,30 +38,36 @@ export default function clubs() {
   if (loading) return <Loading />;
 
   let otherClubsCards = data.clubs.otherClubs.map((club) => (
-    <div class="card text-center border-2">
-      <figure class="">
-        <img src={club.photo} class="rounded-xl h-56" />
+    <div className="card text-center border-2" key={club._id}>
+      <figure className="">
+        <img src={club.photo} className="rounded-xl h-56" />
       </figure>
-      <div class="card-body">
-        <h2 class="card-title">{club.name}</h2>
-        <div class=" justify-end card-actions">
-          <button class="btn " onClick={() => join(club._id)}>
-            Join
-          </button>
+      <div className="card-body">
+        <h2 className="card-title">{club.name}</h2>
+        <div className=" justify-end card-actions">
+          {user && (
+            <button className="btn " onClick={() => join(club._id)}>
+              Join
+            </button>
+          )}
         </div>
       </div>
     </div>
   ));
   let myClubsCards = data.clubs.myClubs.map((club) => (
     <div
-      class="card text-center border-2"
+      key={club._id}
+      className="card text-center border-2"
       onClick={() => router.push(`/clubs/${club.slug}`)}
     >
-      <figure class="">
-        <img src={club.photo} class="rounded-xl h-56 border-b-0 object-cover" />
+      <figure className="">
+        <img
+          src={club.photo}
+          className="rounded-xl h-56 border-b-0 object-cover"
+        />
       </figure>
-      <div class="card-body">
-        <h2 class="card-title">{club.name}</h2>
+      <div className="card-body">
+        <h2 className="card-title">{club.name}</h2>
       </div>
     </div>
   ));
@@ -73,10 +79,13 @@ export default function clubs() {
 
       {user && (
         <>
-          <div class="justify-between card-actions">
+          <div className="justify-between card-actions">
             <div className="text-4xl">My Clubs</div>
 
-            <button class="btn " onClick={() => router.push(`/clubs/create`)}>
+            <button
+              className="btn "
+              onClick={() => router.push(`/clubs/create`)}
+            >
               Create
             </button>
           </div>

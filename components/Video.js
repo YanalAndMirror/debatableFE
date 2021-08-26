@@ -23,11 +23,11 @@ const Video = ({ stream, muted, mute, thisHost, side, kick, isMe }) => {
   return (
     <>
       <div className="relative flex items-center justify-center h-full  overflow-hidden">
-        <span class="absolute top-0 left-0 flex  z-40  bg-black bg-opacity-25 text-white">
+        <span className="absolute top-0 left-0 flex  z-40  bg-black bg-opacity-25 text-white text-2xl">
           {(!stream.stream.audioActive || muted) && <FiMicOff />}
           {JSON.parse(stream.stream.connection.data).clientData.username}
         </span>
-        <ul class="relative z-30  menu px-3 mt-48 shadow-lg bg-base-100 rounded-box horizontal transition-opacity duration-1000 ease-out opacity-0 hover:opacity-100">
+        <ul className="relative z-30  menu px-3 mt-48 shadow-lg bg-base-100 rounded-box horizontal transition-opacity duration-1000 ease-out opacity-0 hover:opacity-100">
           {thisHost && (
             <>
               <li>
@@ -93,14 +93,14 @@ const Video = ({ stream, muted, mute, thisHost, side, kick, isMe }) => {
                 type="range"
                 max="100"
                 value={volume.number}
-                class="range range-xs"
+                className="range range-xs"
               />
             </a>
           </li>
         </ul>
 
         <video
-          class="absolute z-10 w-full h-full"
+          className="absolute z-10 w-full h-full"
           autoPlay
           ref={userVideo}
           muted={muted || isMe}

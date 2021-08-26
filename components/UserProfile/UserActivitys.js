@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 export default function UserActivitys({ notfications }) {
   notfications = notfications?.map((notfication) => (
-    <li>
+    <li key={notfication.argue}>
       <a>{notfication.text}</a>
     </li>
   ));

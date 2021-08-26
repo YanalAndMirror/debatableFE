@@ -1,19 +1,19 @@
-import { useQuery } from '@apollo/client';
-import { useState } from 'react';
-import Body from '../components/Body/Body';
-import Header from '../components/Header';
-import { getDebates } from '../providers/apollo/queries';
-import { Tab } from '@headlessui/react';
-import { ImSearch } from 'react-icons/im';
-import Head from 'next/head';
-import Loading from '../components/Loading';
+import { useQuery } from "@apollo/client";
+import { useState } from "react";
+import Body from "../components/Body/Body";
+import Header from "../components/Header";
+import { getDebates } from "../providers/apollo/queries";
+import { Tab } from "@headlessui/react";
+import { ImSearch } from "react-icons/im";
+import Head from "next/head";
+import Loading from "../components/Loading";
 export default function Home() {
   const [page, setPage] = useState({
     debatesStart: 0,
     debatesAmount: 9,
-    debatesOrder: 'hot',
+    debatesOrder: "hot",
   });
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   const { loading, data } = useQuery(getDebates, {
     variables: page,
@@ -36,15 +36,15 @@ export default function Home() {
                     setPage({
                       debatesStart: 0,
                       debatesAmount: 9,
-                      debatesOrder: 'hot',
+                      debatesOrder: "hot",
                     })
                   }
                 >
                   <Tab
                     className={
-                      page.debatesOrder === 'hot'
-                        ? 'tab tab-bordered tab-active'
-                        : 'tab tab-bordered'
+                      page.debatesOrder === "hot"
+                        ? "tab tab-bordered tab-active"
+                        : "tab tab-bordered"
                     }
                   >
                     Featured
@@ -55,15 +55,15 @@ export default function Home() {
                     setPage({
                       debatesStart: 0,
                       debatesAmount: 9,
-                      debatesOrder: 'popularity',
+                      debatesOrder: "popularity",
                     })
                   }
                 >
                   <Tab
                     className={
-                      page.debatesOrder === 'popularity'
-                        ? 'tab tab-bordered tab-active'
-                        : 'tab tab-bordered'
+                      page.debatesOrder === "popularity"
+                        ? "tab tab-bordered tab-active"
+                        : "tab tab-bordered"
                     }
                   >
                     Popular
@@ -74,15 +74,15 @@ export default function Home() {
                     setPage({
                       debatesStart: 0,
                       debatesAmount: 9,
-                      debatesOrder: 'new',
+                      debatesOrder: "new",
                     })
                   }
                 >
                   <Tab
                     className={
-                      page.debatesOrder === 'new'
-                        ? 'tab tab-bordered tab-active'
-                        : 'tab tab-bordered'
+                      page.debatesOrder === "new"
+                        ? "tab tab-bordered tab-active"
+                        : "tab tab-bordered"
                     }
                   >
                     New
@@ -92,19 +92,19 @@ export default function Home() {
             </Tab.Group>
           </div>
           {/* search  */}
-          <div class="form-control mr-28">
-            <div class="relative">
+          <div className="form-control mr-28">
+            <div className="relative">
               <input
                 type="text"
                 placeholder="Search"
-                class="w-full pr-16 input input-bordered"
+                className="w-full pr-16 input input-bordered"
                 onChange={(e) => setQuery(e.target.value)}
               />
               <button
-                class="absolute top-0 right-0 rounded-l-none btn"
+                className="absolute top-0 right-0 rounded-l-none btn"
                 onClick={() => setPage({ ...page, debatesKeyword: query })}
               >
-                <ImSearch />{' '}
+                <ImSearch />{" "}
               </button>
             </div>
           </div>
