@@ -1,18 +1,20 @@
-import React from 'react';
-import Rating from 'react-rating';
-import { useQuery } from '@apollo/client';
-import { currentUser } from '../../providers/apollo/queries';
+import React from "react";
+import Rating from "react-rating";
+import { useQuery } from "@apollo/client";
+import { currentUser } from "../../providers/apollo/queries";
 
-export default function VotingBar({ argue, doVote, color }) {
+export default function VotingBar({ argue, doVote, color, main }) {
   const user = useQuery(currentUser).data.currentUser;
   return (
     <div className="dropdown dropdown-hover dropdown-top ">
       <div tabindex="0">
         <progress
           className={
-            color === 'green'
-              ? `progress progress-success w-1/6`
-              : `progress progress-error w-1/6`
+            main === true && !argue.argueType
+              ? `progress w-2/6`
+              : argue.argueType === "agree"
+              ? `progress progress-success w-2/6`
+              : `progress progress-error w-2/6`
           }
           value={
             argue.votes.number > 0
@@ -37,7 +39,7 @@ export default function VotingBar({ argue, doVote, color }) {
                   Disagree
                 </div>,
                 <div className="badge badge-outline rounded-none">
-                  Neither{' '}
+                  Neither{" "}
                 </div>,
                 <div className="badge badge-outline rounded-none ">Agree</div>,
                 <div className="badge badge-outline rounded-none ">
@@ -47,7 +49,7 @@ export default function VotingBar({ argue, doVote, color }) {
               fullSymbol={[
                 <div
                   className={
-                    color === 'green'
+                    color === "green"
                       ? `badge badge-outline rounded-none bg-green-100`
                       : `badge badge-outline rounded-none bg-red-100`
                   }
@@ -56,7 +58,7 @@ export default function VotingBar({ argue, doVote, color }) {
                 </div>,
                 <div
                   className={
-                    color === 'green'
+                    color === "green"
                       ? `badge badge-outline rounded-none bg-green-200`
                       : `badge badge-outline rounded-none bg-red-200`
                   }
@@ -65,16 +67,16 @@ export default function VotingBar({ argue, doVote, color }) {
                 </div>,
                 <div
                   className={
-                    color === 'green'
+                    color === "green"
                       ? `badge badge-outline rounded-none bg-green-300`
                       : `badge badge-outline rounded-none bg-red-300`
                   }
                 >
-                  Neither{' '}
+                  Neither{" "}
                 </div>,
                 <div
                   className={
-                    color === 'green'
+                    color === "green"
                       ? `badge badge-outline rounded-none bg-green-400`
                       : `badge badge-outline rounded-none bg-red-400`
                   }
@@ -83,7 +85,7 @@ export default function VotingBar({ argue, doVote, color }) {
                 </div>,
                 <div
                   className={
-                    color === 'green'
+                    color === "green"
                       ? `badge badge-outline rounded-none bg-green-500`
                       : `badge badge-outline rounded-none bg-red-500`
                   }
@@ -94,7 +96,7 @@ export default function VotingBar({ argue, doVote, color }) {
               onChange={(e) => doVote(argue._id, e)}
             />
           ) : (
-            'You need to be signed in to vote'
+            "You need to be signed in to vote"
           )}
         </li>
       </ul>

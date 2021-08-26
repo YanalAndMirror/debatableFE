@@ -2,22 +2,77 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Login from "./Login";
 import { BiAddToQueue } from "react-icons/bi";
+
 import { userVar } from "../providers/apollo/vars";
 import { useQuery } from "@apollo/client";
 import { currentUser, getUser } from "../providers/apollo/queries";
 import { CgMediaLive } from "react-icons/cg";
+import { TiGroup } from "react-icons/ti";
+import { io } from "socket.io-client";
+import client from "./../providers/apollo/client";
 import LoggedIn from "./LoggedIn";
 import ThemeMenu from "./ThemeMenu";
 import Notifications from "./Notifications";
+import { toast } from "react-toastify";
 
 export default function Nav() {
   const { data } = useQuery(getUser);
   const [theme, setTheme] = useState(null);
+  const [socket, setSocket] = useState(false);
+
   const user = useQuery(currentUser).data.currentUser;
   useEffect(() => {
-    if (data) userVar(data.user);
+    if (data) {
+      userVar(data.user);
+      if (data.user) {
+        if (typeof window !== undefined && !socket) {
+          setSocket(
+            io(process.env.BACKEND, {
+              query: {
+                token: localStorage.getItem("token"),
+              },
+            })
+          );
+        }
+      }
+    }
   }, [data]);
-
+  useEffect(() => {
+    if (socket) {
+      socket.on("notifcation", (notification) => {
+        const { user } = client.readQuery({
+          query: getUser,
+        });
+        if (user) {
+          client.writeQuery({
+            query: getUser,
+            data: {
+              user: {
+                ...user,
+                notifications: [
+                  ...user.notifications.filter(
+                    (n) =>
+                      n.debate.slug !== notification.debate.slug ||
+                      n.seen === true
+                  ),
+                  { ...notification, __typename: "Notification", seen: false },
+                ],
+              },
+            },
+          });
+        }
+        toast.info(notification.text, {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+    }
+  }, [socket]);
   useEffect(() => {
     document.documentElement.setAttribute(
       "data-theme",
@@ -37,13 +92,18 @@ export default function Nav() {
             <span className="btn btn-ghost btn-sm rounded-btn">
               <Link href="/tags">Explore</Link>
             </span>
-            <Link href="/livedebates">
+            <Link href="/live">
               <span className="btn btn-ghost btn-sm rounded-btn">
                 <CgMediaLive className="mr-1" size="24px" />
                 Live
               </span>
             </Link>
-
+            <Link href="/clubs">
+              <span className="btn btn-ghost btn-sm rounded-btn">
+                <TiGroup className="mr-1" size="24px" />
+                Clubs
+              </span>
+            </Link>
             {user && (
               <span className="btn btn-ghost btn-sm rounded-btn">
                 <Link href="/create">
@@ -58,26 +118,6 @@ export default function Nav() {
         </div>
         <div className="flex-none">
           <div className="dropdown dropdown-end">
-            <div tabIndex="0">
-              <button className="btn btn-square btn-ghost">
-                <div className="indicator">
-                  <div className="indicator-item badge badge-secondary badge-xs"></div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    className="inline-block w-6 h-6 stroke-current"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                    ></path>
-                  </svg>
-                </div>
-              </button>
-            </div>
             <Notifications user={user} />
           </div>
         </div>

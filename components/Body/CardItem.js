@@ -1,14 +1,14 @@
-import React from 'react';
-import { AiOutlineEye } from 'react-icons/ai';
-import { FaRegComments } from 'react-icons/fa';
-import { BsPeople } from 'react-icons/bs';
-import { BsArrowUpDown } from 'react-icons/bs';
-import Link from 'next/link';
+import React from "react";
+import { AiOutlineEye } from "react-icons/ai";
+import { FaRegComments } from "react-icons/fa";
+import { BsPeople } from "react-icons/bs";
+import { BsArrowUpDown } from "react-icons/bs";
+import Link from "next/link";
 
 export default function CardItem({ debate }) {
   return (
     <div className="card h-max border-2 m-4 text-base-content">
-      <Link href={'/' + debate.slug}>
+      <Link href={"/" + debate.slug}>
         <figure>
           <img
             src={debate.photo}
@@ -18,29 +18,31 @@ export default function CardItem({ debate }) {
       </Link>
 
       <div className="card-body h-max">
-        <Link href={'/' + debate.slug}>
+        <Link href={"/" + debate.slug}>
           <h2 className="card-title mt-0 cursor-pointer">{debate.title}</h2>
         </Link>
 
         <p>
           <div className="card-actions">
-            <button className="btn btn-outline btn-sm">
+            <span className="badge badge-lg ">
               <AiOutlineEye className="mr-1" /> {debate.views}
-            </button>
-            <button className="btn btn-outline btn-sm">
+            </span>
+            <span className="badge badge-lg ">
               <FaRegComments className="mr-1" /> {debate.argueCount}
-            </button>
-            <button className="btn btn-outline btn-sm">
+            </span>
+            <span className="badge badge-lg ">
               <BsPeople className="mr-1" /> {debate.participants}
-            </button>
-            <button className="btn btn-outline btn-sm">
+            </span>
+            <span className="badge badge-lg ">
               <BsArrowUpDown className="mr-1" /> {debate.argueVotes}
-            </button>
+            </span>
           </div>
         </p>
         <div className="card-actions">
           {debate.tags?.map((tag) => {
-            return <div className="badge badge-outline">{tag.title}</div>;
+            return (
+              <div className="badge badge-error badge-outline">{tag.title}</div>
+            );
           })}
         </div>
       </div>

@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
-import axios from 'axios';
-import { useMutation, useQuery } from '@apollo/client';
-import { USER_UPDATE } from '../../providers/apollo/mutations';
-import { useRouter } from 'next/dist/client/router';
-import { Dialog } from '@headlessui/react';
+import React, { useRef, useState } from "react";
+import axios from "axios";
+import { useMutation, useQuery } from "@apollo/client";
+import { USER_UPDATE } from "../../providers/apollo/mutations";
+import { useRouter } from "next/dist/client/router";
+import { Dialog } from "@headlessui/react";
 export default function UpdateModal({ user, isOpen, setIsOpen }) {
   const [updateUser] = useMutation(USER_UPDATE);
   let completeButtonRef = useRef(null);
@@ -20,7 +20,7 @@ export default function UpdateModal({ user, isOpen, setIsOpen }) {
       updateUser({
         variables: profile,
       });
-      router.push('/');
+      router.push("/");
     } catch (e) {
       console.log(e);
     }
@@ -28,8 +28,11 @@ export default function UpdateModal({ user, isOpen, setIsOpen }) {
   };
   const uploadImage = async (e) => {
     const formData = new FormData();
-    formData.append('file', e.target?.files[0]);
-    const res = await axios.post(`http://localhost:4000/uploadImage`, formData);
+    formData.append("file", e.target?.files[0]);
+    const res = await axios.post(
+      process.env.BACKEND + `/uploadImage`,
+      formData
+    );
     setProfile({ ...profile, photo: res.data });
   };
 
@@ -119,7 +122,7 @@ export default function UpdateModal({ user, isOpen, setIsOpen }) {
             </p>
           </div>
         )}
-      </div>{' '}
+      </div>{" "}
     </div>
   );
 }
