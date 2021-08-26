@@ -2,10 +2,11 @@ import { useQuery } from '@apollo/client';
 import Link from 'next/link';
 import React from 'react';
 import { getTags } from '../providers/apollo/queries';
-
+import ClipLoader from 'react-spinners/ClipLoader';
+import Loading from './Loading';
 export default function Header() {
   const { loading, data } = useQuery(getTags);
-  if (loading) return <>Loading</>;
+  if (loading) return <Loading />;
   const myTags = data.tags.slice(0, 9).map((tag) => (
     <Link href={'tag/' + tag.title}>
       <div class="col-span-4 sm:col-span-4 md:col-span-2 lg:col-span-1 xl:col-span-1 flex flex-col items-center cursor-pointer">

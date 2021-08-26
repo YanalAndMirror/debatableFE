@@ -1,17 +1,18 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { useRouter } from "next/router";
-import React from "react";
-import Body from "../../../components/Body/Body";
-import useClipboard from "react-use-clipboard";
-import { JOIN_CLUB } from "../../../providers/apollo/mutations";
+import { useMutation, useQuery } from '@apollo/client';
+import { useRouter } from 'next/router';
+import React from 'react';
+import Body from '../../../components/Body/Body';
+import useClipboard from 'react-use-clipboard';
 
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 import {
   currentUser,
   getClub,
   getDebates,
-} from "../../../providers/apollo/queries";
+} from '../../../providers/apollo/queries';
+import Head from 'next/head';
+import Loading from '../../../components/Loading';
 
 export default function club() {
   const router = useRouter();
@@ -20,21 +21,22 @@ export default function club() {
   const myClub = useQuery(getClub, {
     variables: { slug: clubSlug },
   });
-  const [joinClub] = useMutation(JOIN_CLUB);
 
   const { loading, data } = useQuery(getDebates, {
     variables: { debatesClub: clubSlug },
   });
   const [isCopied, setCopied] = useClipboard(
-    `${typeof window !== "undefined" ? window.location.protocol : ""}//${
-      typeof window !== "undefined" ? window.location.host : ""
+    `${typeof window !== 'undefined' ? window.location.protocol : ''}//${
+      typeof window !== 'undefined' ? window.location.host : ''
     }/invite/${myClub?.data?.club?.inviteLink}`
   );
-  if (loading || myClub.loading) return <>Loading</>;
-  console.log(myClub.data.club);
-  console.log(user);
+  if (loading || myClub.loading) return <Loading />;
   return (
     <div className="container mx-auto">
+      {' '}
+      <Head>
+        <title>{myClub.data.club.name}</title>
+      </Head>
       <div class="justify-between card-actions">
         <div className="text-4xl">Club Debates</div>
         <div>
@@ -49,8 +51,8 @@ export default function club() {
               class="btn ml-2"
               onClick={() => {
                 setCopied();
-                toast("Copied to clipboard", {
-                  position: "bottom-center",
+                toast('Copied to clipboard', {
+                  position: 'bottom-center',
                   autoClose: 5000,
                   hideProgressBar: false,
                   closeOnClick: true,
@@ -65,7 +67,6 @@ export default function club() {
           )}
         </div>
       </div>
-
       <Body debates={data.debates} />
     </div>
   );

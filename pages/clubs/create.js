@@ -1,4 +1,5 @@
 import { useMutation } from '@apollo/client';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import instance from '../../components/utils/instance';
@@ -45,6 +46,10 @@ export default function createClubs() {
   };
   return (
     <div className=" min-h-full">
+      <Head>
+        <title>Create a club</title>
+      </Head>
+
       <div className="md:container md:mx-auto mt-36 text-base-content ">
         <div class="form-control ">
           <label class="label w-20">

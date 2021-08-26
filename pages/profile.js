@@ -6,6 +6,7 @@ import { currentUser, getUser } from '../providers/apollo/queries';
 import UpdateModal from '../components/UserProfile/UpdateModal';
 import { Tab } from '@headlessui/react';
 import CardList from '../components/Body/CardList';
+import Head from 'next/head';
 
 export default function profile() {
   const user = useQuery(currentUser).data.currentUser;
@@ -14,6 +15,10 @@ export default function profile() {
   const notfications = data?.user.notifications;
   return (
     <>
+      <Head>
+        <title>Profile</title>
+      </Head>
+
       <div className="card text-center ">
         <center>
           <div className="avatar">

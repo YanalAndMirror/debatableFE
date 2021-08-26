@@ -1,12 +1,13 @@
-import { useQuery } from "@apollo/client";
-import router from "next/router";
-import React from "react";
-import { getRooms } from "../../providers/apollo/queries";
+import { useQuery } from '@apollo/client';
+import Head from 'next/head';
+import router from 'next/router';
+import React from 'react';
+import Loading from '../../components/Loading';
+import { getRooms } from '../../providers/apollo/queries';
 
 export default function liveDebates() {
   const { data, loading } = useQuery(getRooms);
-  if (loading) return <>Loading</>;
-  console.log(data.rooms);
+  if (loading) return <Loading />;
   const rooms = data.rooms.map((room) => (
     <>
       <div class="card border-2">
@@ -42,6 +43,10 @@ export default function liveDebates() {
 
   return (
     <div className="md:container md:mx-auto ">
+      <Head>
+        <title>Live</title>
+      </Head>
+
       <div className="grid md:grid-cols-3 gap-4 mt-4 ml-32 mr-32">{rooms}</div>
     </div>
   );

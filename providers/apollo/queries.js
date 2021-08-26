@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 export const currentUser = gql`
   query currentUser {
     currentUser @client {
@@ -113,6 +113,9 @@ export const getDebate = gql`
           number
           amount
         }
+      }
+      user {
+        username
       }
       room {
         live

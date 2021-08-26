@@ -1,27 +1,29 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { useRouter } from "next/router";
-import { BsArrowUpDown } from "react-icons/bs";
-import VotingBar from "../components/Debate/VotingBar";
-import { currentUser, getDebate, getUser } from "../providers/apollo/queries";
-import { AiOutlinePlus } from "react-icons/ai";
+import { useMutation, useQuery } from '@apollo/client';
+import { useRouter } from 'next/router';
+import { BsArrowUpDown } from 'react-icons/bs';
+import VotingBar from '../components/Debate/VotingBar';
+import { currentUser, getDebate, getUser } from '../providers/apollo/queries';
+import { AiOutlinePlus } from 'react-icons/ai';
+import Head from 'next/head';
 
-import { ShareSocial } from "react-share-social";
-import { useEffect, useState } from "react";
+import { ShareSocial } from 'react-share-social';
+import { useEffect, useState } from 'react';
 import {
   CREATE_ARGUE,
   VOTE_ARGUE,
   FOLLOW_DEBATE,
   CREATE_ROOM,
-} from "../providers/apollo/mutations";
-import FadeIn from "react-fade-in";
-import Pyramid from "../components/Pyramid";
+} from '../providers/apollo/mutations';
+import FadeIn from 'react-fade-in';
+import Pyramid from '../components/Pyramid';
+import Loading from '../components/Loading';
 export default function Home() {
   const router = useRouter();
   const user = useQuery(currentUser).data.currentUser;
   const [content, setContent] = useState(null);
   const [input, setInput] = useState(null);
   const [room, setRoom] = useState({});
-  const [follow, setFollow] = useState("follow");
+  const [follow, setFollow] = useState('follow');
   const { debateSlug, path } = router.query;
   const { loading, data } = useQuery(getDebate, {
     variables: { slug: debateSlug },
@@ -42,7 +44,7 @@ export default function Home() {
     },
   });
 
-  if (loading) return <>loading</>;
+  if (loading) return <Loading />;
   const doVote = (argue, value) => {
     vote({
       variables: { argue, value },
@@ -53,8 +55,10 @@ export default function Home() {
     (argue) =>
       (!parent && argue.parent == parent) || (parent && parent === argue._id)
   );
+  console.log(data.debate.username);
+
   const handleFollowDebate = () => {
-    setFollow("followed");
+    setFollow('followed');
     followDebate({
       variables: {
         followDebate: data?.debate._id,
@@ -102,12 +106,12 @@ export default function Home() {
   };
   const changeParent = (argueId) => {
     setParent(argueId);
-    if (argueId) router.push(debateSlug + "?path=" + argueId);
+    if (argueId) router.push(debateSlug + '?path=' + argueId);
   };
 
   let agreeArgues = data.debate.argues
     .filter(
-      (argue) => argue.parent === mainArgue._id && argue.argueType === "agree"
+      (argue) => argue.parent === mainArgue._id && argue.argueType === 'agree'
     )
     .map((argue) => (
       <FadeIn>
@@ -117,9 +121,9 @@ export default function Home() {
               <BsArrowUpDown />
               {argue.votes.number > 0
                 ? argue.votes.amount / argue.votes.number +
-                  "/5 by " +
+                  '/5 by ' +
                   argue.votes.number +
-                  " users"
+                  ' users'
                 : 0}
             </div>
             <VotingBar argue={argue} doVote={doVote} color="green" />
@@ -132,7 +136,7 @@ export default function Home() {
   let disagreeArgues = data.debate.argues
     .filter(
       (argue) =>
-        argue.parent === mainArgue._id && argue.argueType === "disagree"
+        argue.parent === mainArgue._id && argue.argueType === 'disagree'
     )
     .map((argue) => (
       <FadeIn>
@@ -142,9 +146,9 @@ export default function Home() {
               <BsArrowUpDown />
               {argue.votes.number > 0
                 ? argue.votes.amount / argue.votes.number +
-                  "/5 by " +
+                  '/5 by ' +
                   argue.votes.number +
-                  " users"
+                  ' users'
                 : 0}
             </div>
             <VotingBar argue={argue} doVote={doVote} color="red" />
@@ -156,6 +160,10 @@ export default function Home() {
     ));
   return (
     <>
+      <Head>
+        <title>{mainArgue.content}</title>
+      </Head>
+
       <Pyramid
         debate={data.debate}
         parent={parent}
@@ -171,9 +179,9 @@ export default function Home() {
                     <BsArrowUpDown />
                     {mainArgue.votes.number > 0
                       ? mainArgue.votes.amount / mainArgue.votes.number +
-                        "/5 by " +
+                        '/5 by ' +
                         mainArgue.votes.number +
-                        " users"
+                        ' users'
                       : 0}
                   </div>
                   <div>
@@ -198,7 +206,7 @@ export default function Home() {
                     )}
                     <button className="btn" onClick={handleFollowDebate}>
                       {followed?.includes(data?.debate._id)
-                        ? "followed"
+                        ? 'followed'
                         : follow}
                     </button>
                     <div class="dropdown dropdown-end">
@@ -213,11 +221,11 @@ export default function Home() {
                           <ShareSocial
                             url={window?.location?.href}
                             socialTypes={[
-                              "twitter",
+                              'twitter',
 
-                              "facebook",
-                              "reddit",
-                              "email",
+                              'facebook',
+                              'reddit',
+                              'email',
                             ]}
                           />
                         </li>
@@ -232,8 +240,8 @@ export default function Home() {
                 color="green"
                 doVote={doVote}
               />
-
               <h2 className="card-title">{mainArgue.content}</h2>
+              by {data.debate.user.username}
             </div>
           </FadeIn>
         </div>
@@ -241,13 +249,13 @@ export default function Home() {
           <div className="grid grid-cols-2 divide-x h-full">
             <button
               className="btn  btn-success w-3/6 mx-auto"
-              onClick={() => setInput(input !== "agree" ? "agree" : null)}
+              onClick={() => setInput(input !== 'agree' ? 'agree' : null)}
             >
               I Agree <AiOutlinePlus size="20px" />
             </button>
             <button
               className="btn  btn-error w-3/6 mx-auto"
-              onClick={() => setInput(input !== "disagree" ? "disagree" : null)}
+              onClick={() => setInput(input !== 'disagree' ? 'disagree' : null)}
             >
               I Disagree <AiOutlinePlus size="20px" />
             </button>
@@ -256,7 +264,7 @@ export default function Home() {
         <div class="grid grid-cols-2 gap-4 mb-2">
           {user && input && (
             <>
-              {input !== "agree" && <span className=""></span>}
+              {input !== 'agree' && <span className=""></span>}
               <div class="form-control">
                 <div class="relative">
                   <input
@@ -264,18 +272,18 @@ export default function Home() {
                     type="text"
                     placeholder="Argue"
                     class={
-                      input === "agree"
-                        ? "w-full pr-16 input input-success  input-bordered"
-                        : "w-full pr-16 input input-error input-bordered"
+                      input === 'agree'
+                        ? 'w-full pr-16 input input-success  input-bordered'
+                        : 'w-full pr-16 input input-error input-bordered'
                     }
                     onChange={(e) => setContent(e.target.value)}
                   />
                   <button
                     onClick={addArgue}
                     class={
-                      input === "agree"
-                        ? "absolute top-0 right-0 rounded-l-none btn btn-success"
-                        : "absolute top-0 right-0 rounded-l-none btn bg-red-600 hover:bg-red-600"
+                      input === 'agree'
+                        ? 'absolute top-0 right-0 rounded-l-none btn btn-success'
+                        : 'absolute top-0 right-0 rounded-l-none btn bg-red-600 hover:bg-red-600'
                     }
                   >
                     {input}
