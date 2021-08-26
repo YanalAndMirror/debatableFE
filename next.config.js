@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    BACKEND: "http://192.168.2.168:4000",
+    BACKEND: "http://localhost:4000",
   },
   async rewrites() {
     return [
