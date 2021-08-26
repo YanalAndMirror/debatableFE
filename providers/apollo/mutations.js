@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const USER_LOGIN = gql`
   mutation signin($username: String!, $password: String!) {
@@ -180,6 +180,23 @@ export const ROOMS_STATUE = gql`
   mutation roomStatus($slug: String, $status: String) {
     roomStatus(slug: $slug, status: $status) {
       live
+    }
+  }
+`;
+
+export const CLEAR_NOTIFICATION = gql`
+  mutation clearNotifications {
+    clearNotifications {
+      notifications {
+        text
+        debate {
+          title
+          photo
+          slug
+        }
+        seen
+        argue
+      }
     }
   }
 `;

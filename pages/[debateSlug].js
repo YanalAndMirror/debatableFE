@@ -2,8 +2,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { BsArrowUpDown } from "react-icons/bs";
 import VotingBar from "../components/Debate/VotingBar";
-import { getDebate, getUser } from "../providers/apollo/queries";
-import { AiFillPlusSquare } from "react-icons/ai";
+import { currentUser, getDebate, getUser } from "../providers/apollo/queries";
 import { AiOutlinePlus } from "react-icons/ai";
 
 import { ShareSocial } from "react-share-social";
@@ -18,6 +17,7 @@ import FadeIn from "react-fade-in";
 import Pyramid from "../components/Pyramid";
 export default function Home() {
   const router = useRouter();
+  const user = useQuery(currentUser).data.currentUser;
   const [content, setContent] = useState(null);
   const [input, setInput] = useState(null);
   const [room, setRoom] = useState({});
@@ -190,9 +190,11 @@ export default function Home() {
                         </span>
                       </button>
                     ) : (
-                      <button className="btn m-1" onClick={handleCreateRoom}>
-                        Create Live Debate
-                      </button>
+                      user && (
+                        <button className="btn m-1" onClick={handleCreateRoom}>
+                          Create Live Debate
+                        </button>
+                      )
                     )}
                     <button className="btn" onClick={handleFollowDebate}>
                       {followed?.includes(data?.debate._id)
@@ -252,7 +254,7 @@ export default function Home() {
           </div>
         </div>
         <div class="grid grid-cols-2 gap-4 mb-2">
-          {input && (
+          {user && input && (
             <>
               {input !== "agree" && <span className=""></span>}
               <div class="form-control">

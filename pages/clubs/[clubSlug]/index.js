@@ -26,7 +26,9 @@ export default function club() {
     variables: { debatesClub: clubSlug },
   });
   const [isCopied, setCopied] = useClipboard(
-    `http://localhost:3000/invite/${myClub?.data?.club?.inviteLink}`
+    `${typeof window !== "undefined" ? window.location.protocol : ""}//${
+      typeof window !== "undefined" ? window.location.host : ""
+    }/invite/${myClub?.data?.club?.inviteLink}`
   );
   if (loading || myClub.loading) return <>Loading</>;
   console.log(myClub.data.club);

@@ -1,18 +1,18 @@
-import React from 'react';
-import { USE_INVITE_LINK } from '../../providers/apollo/mutations';
-import { useRouter } from 'next/router';
-import { useMutation } from '@apollo/client';
+import React from "react";
+import { USE_INVITE_LINK } from "../../providers/apollo/mutations";
+import { useRouter } from "next/router";
+import { useMutation } from "@apollo/client";
 
 export default function invite() {
   const router = useRouter();
 
   const { invite } = router.query;
   const useInviteLinkInviteLink = invite;
-  let test = '';
+  let test = "";
   const [joinClub] = useMutation(USE_INVITE_LINK, {
     onCompleted(data) {
       if (!data.useInviteLink) router.push(`/clubs/`);
-      router.push(`/clubs/${data.useInviteLink.slug}`);
+      else router.push(`/clubs/${data.useInviteLink.slug}`);
     },
   });
 
