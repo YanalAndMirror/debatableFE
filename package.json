@@ -16,7 +16,7 @@
     "dotenv": "^10.0.0",
     "graphql": "^15.5.1",
     "js-cookie": "^3.0.0",
-    "next": "latest",
+    "next": "^11.1.0",
     "openvidu-browser": "^2.19.0",
     "react": "^17.0.2",
     "react-countdown": "^2.3.2",
