@@ -39,7 +39,6 @@ const client = new ApolloClient({
   }),
   request: (operation, forward) => {
     let token = localStorage.getItem("token");
-    console.log(token);
     if (token) {
       operation.setContext({
         headers: {},

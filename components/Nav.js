@@ -14,6 +14,7 @@ import LoggedIn from "./LoggedIn";
 import ThemeMenu from "./ThemeMenu";
 import Notifications from "./Notifications";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 export default function Nav() {
   const { data } = useQuery(getUser);
@@ -29,7 +30,7 @@ export default function Nav() {
           setSocket(
             io(process.env.BACKEND, {
               query: {
-                token: localStorage.getItem("token"),
+                token: Cookies.get("token"),
               },
             })
           );
