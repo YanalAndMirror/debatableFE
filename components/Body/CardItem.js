@@ -43,7 +43,7 @@ export default function CardItem({ debate }) {
             return (
               <div
                 className="badge badge-error badge-outline cursor-pointer"
-                onClick={() => router.push("tag/" + tag.slug)}
+                onClick={() => router.push("tag/" + tag.title)}
                 key={tag._id}
               >
                 {tag.title}

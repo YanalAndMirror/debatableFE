@@ -85,7 +85,6 @@ export const getDebates = gql`
         title
         photo
         _id
-        slug
       }
       slug
       participants
