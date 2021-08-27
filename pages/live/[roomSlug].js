@@ -328,7 +328,10 @@ export default function profile() {
       </div>
       <span className="text-3xl ml-4">
         {debate.title}{" "}
-        <label htmlFor="my-modal-2" className="badge badge-info modal-button">
+        <label
+          htmlFor="my-modal-2"
+          className="badge badge-info modal-button cursor-pointer"
+        >
           <AiFillEye />
           {users.length}
         </label>
@@ -407,7 +410,9 @@ export default function profile() {
             <div className=" row-span-1">
               {timer.active && (
                 <Countdown
-                  date={+timer.timestamp + timer.time * 60 * 1000 - 1000}
+                  date={
+                    +timer.timestamp + Math.floor(timer.time) * 60 * 1000 - 1000
+                  }
                   onComplete={() =>
                     setTimer({ timestamp: Date.now(), time: 0, active: false })
                   }
@@ -464,7 +469,7 @@ export default function profile() {
                         className="w-full pr-16 input input-secondary input-bordered"
                         type="number"
                         value={input2}
-                        placeholder="timer"
+                        placeholder="timer (m)"
                         onChange={(e) => setInput2(e.target.value)}
                       />
                       <button className="absolute top-0 right-0 rounded-l-none btn">

@@ -73,6 +73,11 @@ export default function Nav() {
         });
       });
     }
+    return () => {
+      if (socket) {
+        socket.off("notifcation");
+      }
+    };
   }, [socket]);
   useEffect(() => {
     document.documentElement.setAttribute(
