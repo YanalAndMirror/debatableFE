@@ -24,7 +24,7 @@ export default function Home() {
   const [follow, setFollow] = useState("follow");
   const { debateSlug, path } = router.query;
   const { loading, data } = useQuery(getDebate, {
-    variables: { slug: debateSlug ?? " noSlug" },
+    variables: { slug: debateSlug },
   });
   const followed = useQuery(getUser).data?.user?.followed;
   const [parent, setParent] = useState(path ?? null);

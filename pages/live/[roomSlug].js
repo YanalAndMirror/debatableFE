@@ -72,7 +72,7 @@ export default function profile() {
       data: JSON.stringify({ user: data.currentUser._id, side }),
       type: "vote",
     });
-    addRoomVote({ variables: { slug: roomSlug ?? " slug", side } });
+    addRoomVote({ variables: { slug: roomSlug, side } });
   };
   const resetThenJoin = () => {
     unstable_batchedUpdates(() => {

@@ -19,7 +19,7 @@ export default function club() {
   const { clubSlug } = router.query;
   const user = useQuery(currentUser).data.currentUser;
   const myClub = useQuery(getClub, {
-    variables: { slug: clubSlug ?? " slug" },
+    variables: { slug: clubSlug },
   });
 
   const { loading, data } = useQuery(getDebates, {
