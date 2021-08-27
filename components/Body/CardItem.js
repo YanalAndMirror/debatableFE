@@ -4,8 +4,10 @@ import { FaRegComments } from "react-icons/fa";
 import { BsPeople } from "react-icons/bs";
 import { BsArrowUpDown } from "react-icons/bs";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function CardItem({ debate }) {
+  const router = useRouter();
   return (
     <div className="card h-max border-2 m-4 text-base-content">
       <Link href={"/" + debate.slug}>
@@ -39,7 +41,11 @@ export default function CardItem({ debate }) {
         <div className="card-actions">
           {debate.tags?.map((tag) => {
             return (
-              <div className="badge badge-error badge-outline" key={tag._id}>
+              <div
+                className="badge badge-error badge-outline cursor-pointer"
+                onClick={() => router.push("tag/" + tag.slug)}
+                key={tag._id}
+              >
                 {tag.title}
               </div>
             );

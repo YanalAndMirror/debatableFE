@@ -105,6 +105,7 @@ export default function Home() {
   const changeParent = (argueId) => {
     setParent(argueId);
     if (argueId) router.push(debateSlug + "?path=" + argueId);
+    else router.push(debateSlug);
   };
 
   let agreeArgues = data.debate.argues
