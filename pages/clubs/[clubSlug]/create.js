@@ -20,7 +20,7 @@ export default function create() {
   const router = useRouter();
   const { clubSlug } = router.query;
   const myClub = useQuery(getClub, {
-    variables: { slug: clubSlug ?? " slug" },
+    variables: { slug: clubSlug },
   });
   if (loading || myClub.loading) return <Loading />;
   if (clubSlug !== "public" && !myClub.data.club) return <>403</>;
