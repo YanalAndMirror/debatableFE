@@ -44,18 +44,20 @@ export default function Home() {
             Previous Page
           </button>
         )}
-        <button
-          className="btn btn-outline btn-wide"
-          onClick={() =>
-            setPage({
-              ...page,
-              debatesStart: page.debatesAmount,
-              debatesAmount: page.debatesAmount + 9,
-            })
-          }
-        >
-          Next Page
-        </button>
+        {data.debates.length > 8 && (
+          <button
+            className="btn btn-outline btn-wide"
+            onClick={() =>
+              setPage({
+                ...page,
+                debatesStart: page.debatesAmount,
+                debatesAmount: page.debatesAmount + 9,
+              })
+            }
+          >
+            Next Page
+          </button>
+        )}
       </div>
     </>
   );

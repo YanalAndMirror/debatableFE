@@ -1,13 +1,13 @@
 module.exports = {
   env: {
-    BACKEND: "https://debatable-be-eydhl.ondigitalocean.app",
+    BACKEND: 'http://localhost:4000',
   },
   //
   async rewrites() {
     return [
       {
-        source: "/create",
-        destination: "/clubs/public/create",
+        source: '/create',
+        destination: '/clubs/public/create',
       },
     ];
   },
