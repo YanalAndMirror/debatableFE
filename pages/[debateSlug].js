@@ -12,6 +12,7 @@ import {
   VOTE_ARGUE,
   FOLLOW_DEBATE,
   CREATE_ROOM,
+  UNFOLLOW_DEBATE,
 } from "../providers/apollo/mutations";
 import FadeIn from "react-fade-in";
 import Pyramid from "../components/Pyramid";
@@ -21,7 +22,7 @@ export default function Home() {
   const user = useQuery(currentUser).data.currentUser;
   const [content, setContent] = useState("");
   const [input, setInput] = useState(null);
-  const [follow, setFollow] = useState("follow");
+  const [follow, setFollow] = useState("");
   const { debateSlug, path } = router.query;
   const { loading, data } = useQuery(getDebate, {
     variables: { slug: debateSlug },
@@ -35,6 +36,7 @@ export default function Home() {
   const [vote] = useMutation(VOTE_ARGUE);
   const [createArgue] = useMutation(CREATE_ARGUE);
   const [followDebate] = useMutation(FOLLOW_DEBATE);
+  const [unFollowDebate] = useMutation(UNFOLLOW_DEBATE);
   const [createRoom] = useMutation(CREATE_ROOM, {
     onCompleted: (data) => {
       console.log(data);
@@ -63,6 +65,14 @@ export default function Home() {
       },
     });
   };
+  const handleUnFollowDebate = () => {
+    setFollow("follow");
+    unFollowDebate({
+      variables: {
+        followDebate: data?.debate._id,
+      },
+    });
+  };
   const handleCreateRoom = () => {
     createRoom({
       variables: {
@@ -72,6 +82,7 @@ export default function Home() {
     });
   };
   const addArgue = () => {
+    handleFollowDebate();
     createArgue({
       variables: {
         argue: {
@@ -209,10 +220,23 @@ export default function Home() {
                       )
                     )}
                     {user && (
-                      <button className="btn" onClick={handleFollowDebate}>
-                        {followed?.includes(data?.debate._id)
+                      <button
+                        className="btn"
+                        onClick={() => {
+                          if (
+                            (follow === "" &&
+                              followed?.includes(data?.debate._id)) ||
+                            follow === "followed"
+                          )
+                            handleUnFollowDebate();
+                          else handleFollowDebate();
+                        }}
+                      >
+                        {follow !== ""
+                          ? follow
+                          : followed?.includes(data?.debate._id)
                           ? "followed"
-                          : follow}
+                          : "follow"}
                       </button>
                     )}
                     <div className="dropdown dropdown-end">

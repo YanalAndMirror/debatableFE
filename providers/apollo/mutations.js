@@ -136,6 +136,13 @@ export const FOLLOW_DEBATE = gql`
     }
   }
 `;
+export const UNFOLLOW_DEBATE = gql`
+  mutation FollowMutation($followDebate: String!) {
+    unfollow(debate: $followDebate) {
+      _id
+    }
+  }
+`;
 export const CREATE_ROOM = gql`
   mutation Mutation($debate: String, $title: String) {
     createRoom(room: { debate: $debate, title: $title }) {
