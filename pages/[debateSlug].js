@@ -126,8 +126,11 @@ export default function Home() {
                 : 0}
             </div>
             <VotingBar argue={argue} doVote={doVote} color="green" />
-
             <p onClick={() => changeParent(argue._id)}>{argue.content}</p>
+
+            <cite className="text-sm text-gray-500">
+              by {argue.user.username}
+            </cite>
           </div>
         </div>
       </FadeIn>
@@ -151,8 +154,10 @@ export default function Home() {
                 : 0}
             </div>
             <VotingBar argue={argue} doVote={doVote} color="red" />
-
             <p onClick={() => changeParent(argue._id)}>{argue.content}</p>
+            <cite className="text-sm text-gray-500">
+              by {argue.user.username}
+            </cite>
           </div>
         </div>
       </FadeIn>
@@ -242,7 +247,9 @@ export default function Home() {
                 doVote={doVote}
               />
               <h2 className="card-title">{mainArgue.content}</h2>
-              by {data.debate.user.username}
+              <cite className="text-sm text-gray-500">
+                by {mainArgue.user.username}
+              </cite>
             </div>
           </FadeIn>
         </div>
