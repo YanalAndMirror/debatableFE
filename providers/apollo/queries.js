@@ -113,6 +113,9 @@ export const getDebate = gql`
           number
           amount
         }
+        user {
+          username
+        }
       }
       user {
         username
