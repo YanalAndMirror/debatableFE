@@ -15,7 +15,7 @@ export default function Notifications({ user }) {
   let notSeen = data?.user?.notifications.filter((n) => !n.seen);
   notifications = data?.user?.notifications.map((notification) => (
     <li key={notification.argue}>
-      <Link href={`/${notification.debate.slug}`}>
+      <Link href={`/${notification.debate.slug}?path=${notification.argue}`}>
         <a>
           <div className="card sm:card-side border-2">
             <img src={notification.debate.photo} className="mb-8  w-20 h-20" />

@@ -5,7 +5,7 @@ import { BiAddToQueue } from "react-icons/bi";
 
 import { userVar } from "../providers/apollo/vars";
 import { useQuery } from "@apollo/client";
-import { currentUser, getUser } from "../providers/apollo/queries";
+import { currentUser, getDebate, getUser } from "../providers/apollo/queries";
 import { CgMediaLive } from "react-icons/cg";
 import { TiGroup } from "react-icons/ti";
 import { io } from "socket.io-client";
@@ -38,6 +38,16 @@ export default function Nav() {
       }
     }
   }, [data]);
+  const refetch = async (slug) => {
+    await client.refetchQueries({
+      include: [
+        {
+          query: getDebate,
+          variables: { slug },
+        },
+      ],
+    });
+  };
   useEffect(() => {
     if (socket) {
       socket.on("notifcation", (notification) => {
@@ -45,6 +55,7 @@ export default function Nav() {
           query: getUser,
         });
         if (user) {
+          refetch(notification.debate.slug);
           client.writeQuery({
             query: getUser,
             data: {
