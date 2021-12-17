@@ -1,6 +1,6 @@
 module.exports = {
     env: {
-        BACKEND: "https://debatable-fe-4jwsr.ondigitalocean.app",
+        BACKEND: "https://debatable-be-kwqk3.ondigitalocean.app/",
     },
     //
     async rewrites() {
